@@ -26,7 +26,7 @@ export default {
     },
     // Payment APIs
     initializePayment(paymentData) {
-        return apiClient.post('/payments/', paymentData);
+        return apiClient.post(`/payments/${paymentData.eventId}/`, paymentData);
     },
     verifyPayment(reference) {
         return apiClient.get(`/payments/verify_payment/?reference=${reference}`);
