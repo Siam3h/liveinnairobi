@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import PaymentProcessor from './PaymentProcessor.vue';
+    import PaymentProcessor from 'components/PaymentProcessor.vue';
     import api from '../api';
 
     export default {
