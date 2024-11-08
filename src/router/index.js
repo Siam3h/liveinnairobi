@@ -1,15 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import LandingPage from '../pages/LandingPage.vue';
-import Contacts from '../pages/Contacts.vue';
-import Events from '../pages/Events.vue';
-import Blogs from '../pages/Blogs.vue';
-import About from '../pages/About.vue';
-//import BlogList from '../components/BlogList.vue';
-import BlogDetail from '../components/BlogDetail.vue'; 
-//import EventList from '../components/EventList.vue';
-import EventDetail from '../components/EventDetail.vue'; 
-import ProcessPayment from '../components/ProcessPayment.vue'; 
 
+const LandingPage = () => import('../pages/LandingPage.vue');
+const Contacts = () => import('../pages/Contacts.vue');
+const Events = () => import('../pages/Events.vue');
+const Blogs = () => import('../pages/Blogs.vue');
+const About = () => import('../pages/About.vue');
+const BlogDetail = () => import('../components/BlogDetail.vue');
+const EventDetail = () => import('../components/EventDetail.vue');
+const ProcessPayment = () => import('../components/ProcessPayment.vue');
+const NotFound = () => import('../pages/NotFound.vue');
 
 const routes = [
     {
@@ -50,10 +49,14 @@ const routes = [
     {
         path: '/process-payment/:id',
         name: 'process-payment',
-        component: ProcessPayment, 
+        component: ProcessPayment,
         props: true,
-    }
-
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: NotFound,
+    },
 ];
 
 const router = createRouter({

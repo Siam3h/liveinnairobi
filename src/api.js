@@ -7,6 +7,8 @@ const apiClient = axios.create({
     },
 });
 
+
+
 export default {
     // Blog APIs
     getBlogs(page = 1) {
