@@ -2,10 +2,12 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-    base: '/liveinnairobi/',
+    base: '/',  
     plugins: [vue()],
     resolve: {
-        alias: { '@': '/src' },
+        alias: {
+            '@': '/src',
+        },
     },
     server: {
         proxy: {
@@ -27,5 +29,4 @@ export default defineConfig({
             },
         },
     },
-
 });
