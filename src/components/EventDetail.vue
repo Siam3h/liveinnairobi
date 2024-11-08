@@ -2,7 +2,7 @@
     <div>
         <!-- Only render PaymentProcessor when event data is fully loaded -->
         <PaymentProcessor v-if="event" :event="event" />
-        <div v-else>Loading event details...</div>
+        <div v-else>Loading...</div>
     </div>
 </template>
 
