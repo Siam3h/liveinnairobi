@@ -12,19 +12,19 @@ export default defineConfig({
     server: {
         proxy: {
             '/api/v1/blogs': {
-                target: 'http://127.0.0.1:8000',
+                target: 'https://liveinnbobackend-production.up.railway.app/',
                 changeOrigin: true,
             },
             '/api/v1/events': {
-                target: 'http://127.0.0.1:8000',
+                target: 'https://liveinnbobackend-production.up.railway.app/',
                 changeOrigin: true,
             },
             '/api/v1/payments': {
-                target: 'http://127.0.0.1:8000',
+                target: 'https://liveinnbobackend-production.up.railway.app/',
                 changeOrigin: true,
             },
             '/api/v1/users': {
-                target: 'http://127.0.0.1:8000',
+                target: 'https://liveinnbobackend-production.up.railway.app/',
                 changeOrigin: true,
             },
         },
