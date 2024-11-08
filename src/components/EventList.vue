@@ -15,7 +15,7 @@
                         <div v-for="event in events" :key="event.id" class="bg-white overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                             <img v-if="event.thumbnail_img" :src="event.thumbnail_img" alt="Event Thumbnail" class="w-full h-48 object-cover">
                             <h3 class="text-2xl font-semibold text-gray-900 m-2">
-                                <router-link :to="`/event_detail/${event.id}`"
+                                <router-link :to="`/events/event/${event.id}`"
                                              class="bg-red-500 text-white px-6 py-3 rounded-lg text-lg font-bold shadow-lg hover:bg-red-600 transition duration-300 inline-flex items-center">
                                     {{ event.title }}
                                 </router-link>
