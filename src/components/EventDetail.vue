@@ -23,11 +23,11 @@
             };
         },
         created() {
-            const eventId = this.$route.params.id;
-            this.fetchEvent(eventId);
+            //const eventId = this.$route.params.id;
+            this.fetchEventDetails();
         },
         methods: {
-            async fetchEvent(eventId) {
+            async fetchEventDetails() {
                 try {
                     const response = await api.getEvent(eventId);
                     this.event = response.data;
