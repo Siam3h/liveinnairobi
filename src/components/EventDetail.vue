@@ -86,10 +86,10 @@
             async fetchEventDetails() {
                 const slug = this.$route.params.eventId;
                 try {
-                    const response = await api.getEvent(eventId);
+                    const response = await api.getEvents(eventId);
                     this.event = response.data.results;
                 } catch (error) {
-                    console.error('Error fetching blog details:', error);
+                    console.error('Error fetching event details:', error);
                 } finally {
                     this.loading = false;
                 }
