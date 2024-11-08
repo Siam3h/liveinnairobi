@@ -1,13 +1,10 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
-// https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
     plugins: [vue()],
     resolve: {
-        alias: {
-            '@': '/src',
-        },
+        alias: { '@': '/src' },
     },
     server: {
         proxy: {
@@ -29,5 +26,5 @@ export default defineConfig({
             },
         },
     },
-    base: '/' 
-});
+    base: mode === 'production' ? '/subdirectory-name/' : '/',
+}));
