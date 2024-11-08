@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
+    base: '/',
     plugins: [vue()],
     resolve: {
         alias: { '@': '/src' },
@@ -26,5 +27,5 @@ export default defineConfig(({ mode }) => ({
             },
         },
     },
-    base: mode === 'production' ? '/subdirectory-name/' : '/',
-}));
+
+});
