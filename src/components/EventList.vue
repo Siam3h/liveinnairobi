@@ -5,8 +5,10 @@
             <div class="text-center mb-12">
                 <h1 class="text-4xl font-extrabold text-gray-900 mb-6" style="font-family: 'Raleway', sans-serif;">Explore Our Events</h1>
             </div>
+
             <!-- Loading state -->
             <div v-if="loading" class="text-gray-500">Loading events...</div>
+
             <div v-else>
                 <div v-if="events && events.length > 0">
                     <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -15,12 +17,10 @@
                             <h3 class="text-2xl font-semibold text-gray-900 m-2">
                                 <router-link :to="`/event_detail/${event.id}`"
                                              class="bg-red-500 text-white px-6 py-3 rounded-lg text-lg font-bold shadow-lg hover:bg-red-600 transition duration-300 inline-flex items-center">
-                                    {{ event.title }}</a>
+                                    {{ event.title }}
+                                </router-link>
                             </h3>
-                            <!--  <div class="flex items-center text-gray-500 mb-2">
-        <span class="bg-red-500 text-white font-bold rounded-full py-1 px-3">{{ event.created_at|date:"M" }}</span>
-        <span class="text-4xl font-extrabold ml-2 text-gray-800">{{ event.created_at|date:"d" }}</span>
-    </div> -->
+
                             <!-- Location -->
                             <div class="text-sm text-gray-500 m-4">
                                 <span class="inline-flex items-center">
@@ -30,6 +30,7 @@
                                     {{ event.location }}
                                 </span>
                             </div>
+
                             <!-- Price Button -->
                             <div class="m-6 text-right">
                                 <router-link :to="`/process-payment/${event.id}`"
@@ -39,14 +40,15 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 ml-2">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                     </svg>
-                                    </a>
+                                </router-link>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <!-- No events available message -->
-            <div v-if="events && events.length < 0">
+            <div v-if="events && events.length < 1">
                 <p class="text-gray-500">No events available at the moment.</p>
             </div>
         </div>
@@ -54,33 +56,33 @@
 </template>
 
 <script>
-import api from '../api';
+    import api from '../api';
 
-export default {
-  data() {
-    return {
-      events: [], // Initialize the events array properly
-      loading: true, // Initialize loading as true to show the loading state
+    export default {
+        data() {
+            return {
+                events: [], // Initialize the events array properly
+                loading: true, // Initialize loading as true to show the loading state
+            };
+        },
+        created() {
+            this.fetchEvents();
+        },
+        methods: {
+            async fetchEvents() {
+                try {
+                    const response = await api.getEvents();
+                    this.events = response.data.results; // Update events with the `results` key from paginated API response
+                } catch (error) {
+                    console.error('Error fetching events:', error);
+                } finally {
+                    this.loading = false; // Set loading to false after fetching
+                }
+            }
+        }
     };
-  },
-  created() {
-    this.fetchEvents();
-  },
-  methods: {
-    async fetchEvents() {
-      try {
-        const response = await api.getEvents();
-        this.events = response.data.results; // Update events with the `results` key from paginated API response
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      } finally {
-        this.loading = false; // Set loading to false after fetching
-      }
-    }
-  }
-};
 </script>
 
 <style scoped>
-/* Add any styles you need for your component */
+    /* Add any styles you need for your component */
 </style>
