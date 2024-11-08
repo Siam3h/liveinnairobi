@@ -87,7 +87,7 @@
                 const slug = this.$route.params.eventId;
                 try {
                     const response = await api.getEvent(eventId);
-                    this.event = response.data;
+                    this.event = response.data.results;
                 } catch (error) {
                     console.error('Error fetching blog details:', error);
                 } finally {
