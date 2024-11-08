@@ -22,7 +22,7 @@ export default {
         return apiClient.get(`/events/?page=${page}`);
     },
     getEvent(eventId) {
-        return apiClient.get(`/events/${eventId}/`);
+        return apiClient.get(`/events/event/${eventId}/`);
     },
     // Payment APIs
     initializePayment(paymentData) {
