@@ -43,8 +43,9 @@ const routes = [
     },
     {
         path: '/events/event/:id',
-        name: 'event-detail',
+        name: 'EventDetail',
         component: EventDetail,
+        props: true,
     },
     {
         path: '/process-payment/:id',
