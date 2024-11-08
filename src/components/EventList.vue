@@ -13,7 +13,9 @@
                         <div v-for="event in events" :key="event.id" class="bg-white overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                             <img v-if="event.thumbnail_img" :src="event.thumbnail_img" alt="Event Thumbnail" class="w-full h-48 object-cover">
                             <h3 class="text-2xl font-semibold text-gray-900 m-2">
-                                <a href="{% url 'event_detail' event.id %}" class="hover:text-red-500 transition-colors">{{ event.title }}</a>
+                                <router-link :to="`/event_detail/${event.id}`"
+                                             class="bg-red-500 text-white px-6 py-3 rounded-lg text-lg font-bold shadow-lg hover:bg-red-600 transition duration-300 inline-flex items-center">
+                                    {{ event.title }}</a>
                             </h3>
                             <!--  <div class="flex items-center text-gray-500 mb-2">
         <span class="bg-red-500 text-white font-bold rounded-full py-1 px-3">{{ event.created_at|date:"M" }}</span>
@@ -30,13 +32,14 @@
                             </div>
                             <!-- Price Button -->
                             <div class="m-6 text-right">
-                                <a href="{% url 'process_payment' event.id %}" class="bg-red-500 text-white px-6 py-3 rounded-lg text-lg font-bold shadow-lg hover:bg-red-600 transition duration-300 inline-flex items-center">
+                                <router-link :to="`/process-payment/${event.id}`"
+                                             class="bg-red-500 text-white px-6 py-3 rounded-lg text-lg font-bold shadow-lg hover:bg-red-600 transition duration-300 inline-flex items-center">
                                     <!-- Format Price in Kenyan Shillings (KES) -->
                                     KES {{ event.price }}
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 ml-2">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                     </svg>
-                                </a>
+                                    </a>
                             </div>
                         </div>
                     </div>
