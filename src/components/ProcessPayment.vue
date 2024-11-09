@@ -46,7 +46,7 @@
                 this.error = null;
 
                 try {
-                    const paymentData = { eventId: this.event.id, amount: this.event.price };
+                    const paymentData = { eventId: this.event.event_id, amount: this.event.price };
                     // Replace with actual payment initialization API call
                     await this.$api.initializePayment(paymentData);
                     this.success = true; // Payment was successful
