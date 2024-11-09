@@ -22,8 +22,6 @@
         },
         methods: {
             async fetchEventDetails() {
-                const eventId = this.^*(
-            }
                 try {
                     // Fetch the event details using the event ID from the route params
                     const response = await api.getEvent(this.$route.params.eventId);
@@ -32,6 +30,7 @@
                 } catch (error) {
                     console.error("Failed to load event:", error);
                 }
+            }
         }
     };
 </script>
