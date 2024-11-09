@@ -22,17 +22,16 @@
         },
         methods: {
             async fetchEventDetails() {
-                const eventId = this.$route.params.eventId
-
+                const eventId = this.^*(
+            }
                 try {
                     // Fetch the event details using the event ID from the route params
-                    const response = await api.getEvent(eventId);
-                    this.event = response.data;
+                    const response = await api.getEvent(this.$route.params.eventId);
+                    this.event = response.data
                     console.log(this.event)// Ensure event data is populated correctly
                 } catch (error) {
                     console.error("Failed to load event:", error);
                 }
-            },
         }
     };
 </script>
