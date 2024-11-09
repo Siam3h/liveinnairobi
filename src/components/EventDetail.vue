@@ -17,15 +17,21 @@
                 event: null, // Initialize event as null
             };
         },
-        async created() {
-            try {
-                // Fetch the event details using the event ID from the route params
-                const response = await api.getEvent(this.$route.params.eventId);
-                this.event = response.data.results
-                console.log(this.event)// Ensure event data is populated correctly
-            } catch (error) {
-                console.error("Failed to load event:", error);
-            }
+        created() {
+            this.fetchEventDetails();
+        },
+        methods: {
+            async fetchEventDetails() {
+                const eventId = this.$route.params.eventId
+            
+                try {
+                    // Fetch the event details using the event ID from the route params
+                    const response = await api.getEvent(eventId);
+                    this.event = response.data;
+                    console.log(this.event)// Ensure event data is populated correctly
+                } catch (error) {
+                    console.error("Failed to load event:", error);
+                }
         }
     };
 </script>
