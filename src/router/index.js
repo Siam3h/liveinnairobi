@@ -43,7 +43,7 @@ const routes = [
     },
     {
         path: '/events/event/:eventId',
-        name: 'EventDetail',
+        name: 'event-detail',
         component: EventDetail,
         props: true,
     },
