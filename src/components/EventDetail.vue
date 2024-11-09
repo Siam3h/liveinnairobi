@@ -21,7 +21,7 @@
             try {
                 // Fetch the event details using the event ID from the route params
                 const response = await api.getEvent(this.$route.params.eventId);
-                this.event.eventID = response.data.results[0]; // Ensure event data is populated correctly
+                this.event = response.data.results.id; // Ensure event data is populated correctly
             } catch (error) {
                 console.error("Failed to load event:", error);
             }
