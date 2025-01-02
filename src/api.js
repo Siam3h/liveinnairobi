@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'https://liveinnbobackend-production.up.railway.app/api/v1', 
+    baseURL: 'https://https://liveinnbo-backend.onrender.com/api/v1', 
     headers: {
         'Content-Type': 'application/json',
     },
