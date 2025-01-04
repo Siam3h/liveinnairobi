@@ -39,6 +39,7 @@ export default {
             const response = await api.getEvent(this.eventId);
             this.event = response.data;
 
+            // Check for reference in the query params
             const reference = new URLSearchParams(window.location.search).get('reference');
             if (reference) {
                 this.loading = true;
@@ -69,7 +70,14 @@ export default {
                 if (response.status === 200) {
                     this.success = true;
                     const { transactionId } = response.data;
-                    this.$router.push({ name: 'thank-you', params: { transactionId } });
+
+                    // Use the thankYou API method for redirection
+                    const thankYouResponse = await api.thankYou(transactionId);
+                    if (thankYouResponse.status === 200) {
+                        this.$router.push({ name:'thank-you', params:{transactionId}});
+                    } else {
+                        this.error = 'Failed to fetch thank-you page details.';
+                    }
                 } else {
                     this.error = 'Payment verification failed. Please contact support.';
                 }
@@ -79,8 +87,7 @@ export default {
             } finally {
                 this.loading = false;
             }
-        }
-
+        },
     },
 };
 </script>
