@@ -21,7 +21,7 @@ const routes = [
     { path: '/events/event/:eventId', name: 'event-detail', component: EventDetail, props: true },
     { path: '/process-payment/:eventId', name: 'process-payment', component: ProcessPayment, props: true },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
-    {path: '/thank-you/:transactionId', name: 'thank-you',component: ThankYou, props: true},
+    { path: '/thank-you/:transactionId', name: 'thank-you', component: ThankYou, props: true },
 ];
 
 const router = createRouter({

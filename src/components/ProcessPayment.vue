@@ -36,18 +36,15 @@ export default {
     },
     async mounted() {
         try {
-            const { eventId } = this.$route.params;
-            const response = await api.getEvent(eventId);
+            const response = await api.getEvent(this.eventId);
             this.event = response.data;
 
-            // Check if we have a reference in the query params for verification
             const reference = new URLSearchParams(window.location.search).get('reference');
             if (reference) {
                 this.loading = true;
                 await this.verifyPayment(reference);
             }
         } catch (err) {
-            console.error(err);
             this.error = 'Failed to load event details.';
         }
     },
@@ -71,7 +68,8 @@ export default {
                 const response = await api.verifyPayment(reference);
                 if (response.status === 200) {
                     this.success = true;
-                    console.log(response)
+                    const { transactionId } = response.data;
+                    this.$router.push({ name: 'thank-you', params: { transactionId } });
                 } else {
                     this.error = 'Payment verification failed. Please contact support.';
                 }
@@ -81,7 +79,8 @@ export default {
             } finally {
                 this.loading = false;
             }
-        },
+        }
+
     },
 };
 </script>
