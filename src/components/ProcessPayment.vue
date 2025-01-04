@@ -71,7 +71,7 @@ export default {
                 const response = await api.verifyPayment(reference);
                 if (response.status === 200) {
                     this.success = true;
-                    this.$router.push({ name:'thank-you'});
+                    console.log(response)
                 } else {
                     this.error = 'Payment verification failed. Please contact support.';
                 }
@@ -85,16 +85,3 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-.error-message {
-    color: red;
-}
-.pay-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-}
-</style>

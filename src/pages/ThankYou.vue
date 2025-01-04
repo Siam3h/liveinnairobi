@@ -9,36 +9,3 @@
         </div>
     </section>
 </template>
-
-<script>
-import axios from 'axios';
-
-export default {
-    props: {
-        transactionId: {
-            type: String,
-            required: true,
-        },
-    },
-    data() {
-        return {
-            transaction: null,
-        };
-    },
-    async mounted() {
-        try {
-            const response = await axios.get(`/api/v1/payments/thankyou/${this.transactionId}/`);
-            this.transaction = response.data;
-        } catch (error) {
-            console.error('Error fetching transaction details:', error);
-        }
-    },
-};
-</script>
-
-<style scoped>
-.thank-you-page {
-    text-align: center;
-    padding: 20px;
-}
-</style>
