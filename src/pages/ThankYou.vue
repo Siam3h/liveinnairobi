@@ -25,7 +25,7 @@ export default {
     },
     async created() {
         try {
-            const response = await api.getTransaction(this.$route.params.transactionId);
+            const response = await api.thankYou(this.$route.params.transactionId);
             this.transaction = response.data;
         } catch (err) {
             console.error(err);
