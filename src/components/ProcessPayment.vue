@@ -23,7 +23,16 @@
 import api from '../api';
 
 export default {
-    props: ['eventId', 'reference'],
+    props: {
+        eventId: {
+            type: String,
+            default: null,
+        },
+        reference: {
+            type: String,
+            default: null,
+        },
+    },
     data() {
         return {
             email: '',
@@ -36,16 +45,27 @@ export default {
     },
     async mounted() {
         try {
-            const response = await api.getEvent(this.eventId);
+            // Use eventId from props or fallback to route params
+            const eventId = this.eventId || this.$route.params.eventId;
+            if (!eventId) {
+                this.error = 'Event ID is missing.';
+                console.error('Event ID is missing.');
+                return;
+            }
+
+            console.log('Fetching event details for event ID:', eventId);
+            const response = await api.getEvent(eventId);
             this.event = response.data;
 
-            // Check for reference in the query params
+            // Check for payment reference in props or query params
             const reference = this.reference || new URLSearchParams(window.location.search).get('reference');
             if (reference) {
+                console.log('Found payment reference:', reference);
                 this.loading = true;
                 await this.verifyPayment(reference);
             }
         } catch (err) {
+            console.error('Error fetching event details:', err.response || err);
             this.error = 'Failed to load event details.';
         }
     },
@@ -53,14 +73,14 @@ export default {
         async initializePayment() {
             try {
                 const paymentData = {
-                    eventId: this.eventId,
+                    eventId: this.eventId || this.$route.params.eventId,
                     email: this.email,
                     phone: this.phone,
                 };
                 const response = await api.initializePayment(paymentData);
                 window.location.href = response.data.authorization_url;
             } catch (err) {
-                console.error(err);
+                console.error('Error initializing payment:', err);
                 this.error = 'Failed to initialize payment.';
             }
         },
@@ -70,6 +90,7 @@ export default {
                 if (response.status === 200) {
                     this.success = true;
                     const { transactionId } = response.data;
+
                     const thankYouResponse = await api.thankYou(transactionId);
                     if (thankYouResponse.status === 200) {
                         this.$router.push({ name: 'thank-you', params: { transactionId } });
@@ -80,7 +101,7 @@ export default {
                     this.error = 'Payment verification failed. Please contact support.';
                 }
             } catch (err) {
-                console.error(err);
+                console.error('Error verifying payment:', err.response || err);
                 this.error = 'Payment verification failed.';
             } finally {
                 this.loading = false;

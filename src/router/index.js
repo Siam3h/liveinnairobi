@@ -25,6 +25,7 @@ const routes = [
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
 ];
 
+
 const router = createRouter({
     history: createWebHistory(),
     routes,
