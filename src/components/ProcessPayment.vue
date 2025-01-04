@@ -45,7 +45,9 @@ export default {
     },
     async mounted() {
         try {
-            // Use eventId from props or fallback to route params
+            console.log('Props:', this.eventId);
+            console.log('Route Params:', this.$route.params);
+
             const eventId = this.eventId || this.$route.params.eventId;
             if (!eventId) {
                 this.error = 'Event ID is missing.';
@@ -53,11 +55,10 @@ export default {
                 return;
             }
 
-            console.log('Fetching event details for event ID:', eventId);
+            console.log('Using event ID:', eventId);
             const response = await api.getEvent(eventId);
             this.event = response.data;
 
-            // Check for payment reference in props or query params
             const reference = this.reference || new URLSearchParams(window.location.search).get('reference');
             if (reference) {
                 console.log('Found payment reference:', reference);
