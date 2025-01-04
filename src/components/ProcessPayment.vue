@@ -67,11 +67,12 @@ export default {
         async verifyPayment(reference) {
             try {
                 const response = await api.verifyPayment(reference);
+                console.log(response)
                 if (response.status === 200) {
                     this.success = true;
                     const { transactionId } = response.data;
-
-                    // Use the thankYou API method for redirection
+                    console.log(transactionId)
+                    console.log(response.data)
                     const thankYouResponse = await api.thankYou(transactionId);
                     if (thankYouResponse.status === 200) {
                         this.$router.push({ name:'thank-you', params:{transactionId}});
