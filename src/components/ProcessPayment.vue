@@ -71,7 +71,7 @@ export default {
                 const response = await api.verifyPayment(reference);
                 if (response.status === 200) {
                     this.success = true;
-                    this.$router.push({ name: 'thank-you' });
+                    this.$router.push({ name:'thank-you'});
                 } else {
                     this.error = 'Payment verification failed. Please contact support.';
                 }
