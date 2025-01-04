@@ -58,6 +58,7 @@ export default {
             console.log('Using event ID:', eventId);
             const response = await api.getEvent(eventId);
             this.event = response.data;
+            console.log('Event response data:', this.event);
 
             const reference = this.reference || new URLSearchParams(window.location.search).get('reference');
             if (reference) {
