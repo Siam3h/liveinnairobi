@@ -139,7 +139,7 @@
   <script>
   import Navbar from '../components/Navbar.vue';
   import Footer from '../components/Footer.vue';
-  import api from '../services/api';
+  import api from '../services/apiClient';
   
   export default {
     components: {
