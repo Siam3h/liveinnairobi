@@ -27,12 +27,13 @@
 
             const response = await apiClient.verifyPayment(this.reference);
             this.message = response.data.message;
-            console.log('Verification Message:', this.message);
-            console.log('response data:', response.data);
+
+            alert("Thank You for Your Purchase!"); 
 
             setTimeout(() => {
-                this.$router.push(`/thank-you/${response.data.transaction_id}`);
+                this.$router.push(`/`);
             }, 1000);
+      
             } catch (error) {
             console.error('Verification Error:', error);
 
