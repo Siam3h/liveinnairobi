@@ -20,7 +20,7 @@
     },
     async created() {
       try {
-        const response = await apiClient.get(`/payments/verify_payment?reference=${this.reference}`);
+        const response = await apiClient.verifyPayment(`/payments/verify_payment?reference=${this.reference}`);
         this.message = response.data.message;
   
         // Redirect to Thank You page after 1 second
