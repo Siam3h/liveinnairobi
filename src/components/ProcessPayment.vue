@@ -3,8 +3,7 @@
         <h2 v-if="loading">Verifying your payment...</h2>
 
         <div v-if="!loading && !success && !error">
-            <h2>Payment for {{ event?.title || 'Unknown Event' }}</h2>
-            <p v-if="!event">Event details could not be loaded.</p>
+            <h2>Payment for {{ event?.title }}</h2>
             <form @submit.prevent="initializePayment">
                 <label for="email">Email:</label>
                 <input type="email" v-model="email" required />
@@ -16,27 +15,39 @@
             </form>
         </div>
 
-        <div v-if="error" class="error-message">{{ error }}</div>
+        <div v-if="error" class="error-message">
+            <p>{{ error }}</p>
+        </div>
 
         <!-- Thank You Section -->
-        <div v-if="success && reference" class="reference-display">
+        <div v-if="!loading && !error && reference" class="reference-display">
             <h1>Thank You!</h1>
-            <p>Your payment for the event "<strong>{{ event?.title || 'Unknown Event' }}</strong>" was successful.</p>
+            <p>Your payment for the event "<strong>{{ event?.title }}</strong>" was successful.</p>
             <h3>Details:</h3>
-            <p><strong>Email:</strong> {{ email || 'Not Provided' }}</p>
+            <p><strong>Email:</strong> {{ email }}</p>
             <p><strong>Payment Reference:</strong> {{ reference }}</p>
         </div>
     </section>
 </template>
 
 <script>
-import api from "../api";
+import api from '../api';
 
 export default {
+    props: {
+        eventId: {
+            type: String,
+            default: null,
+        },
+        reference: {
+            type: String,
+            default: null,
+        },
+    },
     data() {
         return {
-            email: "",
-            phone: "",
+            email: '',
+            phone: '',
             event: null,
             loading: false,
             success: false,
@@ -45,82 +56,62 @@ export default {
     },
     async mounted() {
         try {
-            // Attempt to get eventId
-            const eventId = this.eventId || this.$route.params.eventId;
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('eventId');
+            const reference = urlParams.get('reference');
 
-            // Log both sources of eventId
-            console.log('eventId from props:', this.eventId);
-            console.log('eventId from route params:', this.$route.params.eventId);
-
-            // Handle missing eventId
-            if (!eventId) {
-                throw new Error('Event ID is missing. Unable to fetch event details.');
-            }
+            // Handle missing parameters
+            if (!eventId) throw new Error('Event ID is missing in the callback URL.');
+            if (!reference) throw new Error('Payment reference is missing in the callback URL.');
 
             // Fetch event details
-            const response = await api.getEvent(eventId);
-            this.event = response.data;
-            console.log('Event response data:', this.event);
+            const eventResponse = await api.getEvent(eventId);
+            this.event = eventResponse.data;
 
-            // Process reference for payment verification
-            const reference = this.reference || new URLSearchParams(window.location.search).get('reference');
-            if (reference) {
-                this.reference = reference; // Store for display
-                this.loading = true;
-                await this.verifyPayment(reference);
-            }
+            // Retrieve email from localStorage
+            this.email = localStorage.getItem('userEmail') || '';
+
+            // Verify payment
+            this.reference = reference;
+            this.loading = true;
+            await this.verifyPayment(reference);
         } catch (err) {
-            console.error('Error fetching event details:', err.message || err);
-            this.error = 'Failed to load event details.';
+            console.error('Error during payment verification:', err.message || err);
+            this.error = 'Failed to load event details. Please contact support.';
+        } finally {
+            this.loading = false;
         }
     },
-        methods: {
+    methods: {
         async initializePayment() {
             try {
-                // Validate input
-                if (!this.email || !this.phone) {
-                    throw new Error("Email and phone number are required.");
-                }
-
-                // Prepare payment data
                 const paymentData = {
                     eventId: this.eventId || this.$route.params.eventId,
                     email: this.email,
                     phone: this.phone,
+                    callback_url: `${window.location.origin}/verify_payment?eventId=${this.eventId}`,
                 };
-
-                // Call API to initialize payment
+                localStorage.setItem('userEmail', this.email); // Save email for callback
                 const response = await api.initializePayment(paymentData);
-                window.location.href = response.data.authorization_url;
+                window.location.href = response.data.authorization_url; // Redirect to Paystack
             } catch (err) {
-                console.error("Error initializing payment:", err.message || err);
-                this.error = "Failed to initialize payment.";
+                console.error('Error initializing payment:', err);
+                this.error = 'Failed to initialize payment.';
             }
         },
         async verifyPayment(reference) {
             try {
-                // Call API to verify payment
                 const response = await api.verifyPayment(reference);
                 if (response.status === 200) {
                     this.success = true;
-                    this.reference = reference; // Ensure reference is stored
 
-                    // Optional: Redirect to thank-you page with transaction ID
-                    const { transactionId } = response.data;
-                    const thankYouResponse = await api.thankYou(transactionId);
-                    if (thankYouResponse.status === 200) {
-                        this.$router.push({ name: "thank-you", params: { transactionId } });
-                    } else {
-                        console.warn("Unable to fetch thank-you page details.");
-                    }
+                    // Optionally, process the transaction further (e.g., show a thank-you page)
                 } else {
-                    throw new Error("Payment verification failed. Please contact support.");
+                    this.error = 'Payment verification failed. Please contact support.';
                 }
             } catch (err) {
-                console.error("Error verifying payment:", err.message || err);
-                this.error = "Payment verification failed.";
-            } finally {
-                this.loading = false;
+                console.error('Error verifying payment:', err.message || err);
+                this.error = 'Payment verification failed.';
             }
         },
     },
