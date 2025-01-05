@@ -17,6 +17,11 @@
 
         <div v-if="error" class="error-message">{{ error }}</div>
     </section>
+
+    <div v-if="reference" class="reference-display">
+        <h3>Your Payment Reference:</h3>
+        <p>{{ reference }}</p>
+    </div>
 </template>
 
 <script>
@@ -49,11 +54,11 @@ export default {
             console.log('Route Params:', this.$route.params);
 
             const eventId = this.eventId || this.$route.params.eventId;
-            if (!eventId) {
-                this.error = 'Event ID is missing.';
-                console.error('Event ID is missing.');
-                return;
-            }
+            //if (!eventId) {
+            //    this.error = 'Event ID is missing.';
+            //    console.error('Event ID is missing.');
+            //    return;
+            //}
 
             console.log('Using event ID:', eventId);
             const response = await api.getEvent(eventId);
