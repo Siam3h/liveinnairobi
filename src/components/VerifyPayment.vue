@@ -28,6 +28,7 @@
             const response = await apiClient.verifyPayment(this.reference);
             this.message = response.data.message;
             console.log('Verification Message:', this.message);
+            console.log('response data:', response.data);
 
             setTimeout(() => {
                 this.$router.push(`/thank-you/${response.data.transaction_id}`);
