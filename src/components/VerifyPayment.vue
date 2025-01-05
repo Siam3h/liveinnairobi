@@ -19,27 +19,33 @@
       };
     },
     async created() {
-      try {
-        console.log('Reference:', this.reference); // Debugging log
-        if (!this.reference) {
-          throw new Error('Payment reference is missing.');
+        try {
+            console.log('Reference:', this.reference); // Debugging log
+            if (!this.reference) {
+                throw new Error('Payment reference is missing.');
+            }
+
+            const response = await apiClient.verifyPayment(this.reference);
+            this.message = response.data.message;
+            console.log('Verification Message:', this.message);
+
+            setTimeout(() => {
+                this.$router.push(`/thank-you/${response.data.transaction_id}`);
+            }, 1000);
+            } catch (error) {
+            console.error('Verification Error:', error);
+
+            if (error.response && error.response.status === 400) {
+                this.message = 'Payment verification failed. Please check the reference.';
+            } else if (error.response && error.response.status === 500) {
+                this.message = 'Internal server error. Please try again later.';
+            } else {
+                this.message = 'An unexpected error occurred. Please try again.';
+            }
+            } finally {
+            this.loading = false;
         }
-  
-        // API call with reference
-        const response = await apiClient.verifyPayment(this.reference);
-        this.message = response.data.message;
-        console.log('Verification Message:', this.message);
-  
-        // Redirect to Thank You page
-        setTimeout(() => {
-          this.$router.push(`/thank-you/${response.data.transaction_id}`);
-        }, 1000);
-      } catch (error) {
-        console.error('Verification Error:', error);
-        this.message = 'Payment verification failed. Please try again.';
-      } finally {
-        this.loading = false;
-      }
+
     },
   };
   </script>
