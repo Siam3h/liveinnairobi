@@ -45,8 +45,9 @@ export default {
       this.eventDate = response.data.event_date;
       this.eventLocation = response.data.event_location;
     } catch (error) {
-      console.error("Failed to load thank you details:", error);
-      alert("Failed to load thank you details.");
+      alert("Thank You for Your Purchase!");
+      this.$router.push('/'); 
+      return; 
     }
   }
 };
