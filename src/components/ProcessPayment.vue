@@ -14,7 +14,7 @@
   </template>
   
   <script>
-  import apiClient from '@/services/apiClient';
+  import { apiClient } from '@/services/apiClient';
   
   export default {
     props: ['eventId'],
@@ -23,18 +23,23 @@
         email: '',
         phone: '',
         loading: false,
+        eventId:null, 
       };
+    },
+    async mounted() {
+        const eventID = this.eventID || this.$route.params.eventId;  
+        this.eventId = eventID;
     },
     methods: {
       async processPayment() {
         this.loading = true;
         try {
-          const response = await apiClient.initializePayment(`/payments/process/${this.eventId}/`, {
+          const response = await apiClient.post(`/payments/process/${this.eventId}/`, {
             email: this.email,
             phone: this.phone,
           });
           if (response.data.authorization_url) {
-            window.location.href = response.data.authorization_url; 
+            window.location.href = response.data.authorization_url; // Redirect to Paystack
           }
         } catch (error) {
           console.error(error);

@@ -26,6 +26,7 @@ export default {
     },
     // Payment APIs
     initializePayment(paymentData) {
+        console.log("Payment data:", paymentData); 
         return apiClient.post(`/payments/process/${paymentData.eventId}/`, paymentData);
     },
     verifyPayment(reference) {
