@@ -16,15 +16,18 @@
         </div>
 
         <div v-if="error" class="error-message">{{ error }}</div>
-    </section>
 
-    <div v-if="reference" class="reference-display">
-        <h1>Thank You!</h1>
-        <p>Your payment for {{ event?.title }} was successful.</p>
-        <h3>Your Payment Reference:</h3>
-        <p>{{ reference }}</p>
-    </div>
+        <!-- Thank You Section -->
+        <div v-if="success && reference" class="reference-display">
+            <h1>Thank You!</h1>
+            <p>Your payment for the event "<strong>{{ event?.title }}</strong>" was successful.</p>
+            <h3>Details:</h3>
+            <p><strong>Email:</strong> {{ email }}</p>
+            <p><strong>Payment Reference:</strong> {{ reference }}</p>
+        </div>
+    </section>
 </template>
+
 
 <script>
 import api from '../api';
