@@ -21,7 +21,7 @@
     },
     async created() {
       try {
-        const response = await apiClient.get(`/payments/thankyou/${this.transactionId}/`);
+        const response = await apiClient.thankYou(`/payments/thankyou/${this.transactionId}/`);
         this.eventTitle = response.data.event_title;
         this.eventDate = response.data.event_date;
         this.eventLocation = response.data.event_location;
