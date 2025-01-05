@@ -55,22 +55,7 @@ export default {
     },
     async mounted() {
         try {
-            console.log('Props:', this.eventId);
-            console.log('Route Params:', this.$route.params);
-
-            const eventId = this.eventId || this.$route.params;
             this.email = localStorage.getItem('userEmail') || '';
-            if (!eventId) {
-               this.error = 'Event ID is missing.';
-                console.error('Event ID is missing.');
-                return;
-            }
-
-            console.log('Using event ID:', eventId);
-            const response = await api.getEvent(eventId);
-            this.event = response.data;
-            console.log('Event response data:', this.event);
-
             const reference = this.reference || new URLSearchParams(window.location.search).get('reference');
             if (reference) {
                 console.log('Found payment reference:', reference);
@@ -78,7 +63,7 @@ export default {
                 await this.verifyPayment(reference);
             }
         } catch (err) {
-            console.error('Error fetching event details:', err.response || err);
+            console.error('Error fetching payment reference:', err.response || err);
             this.error = 'Failed to load event details.';
         }
     },
