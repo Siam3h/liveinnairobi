@@ -2,6 +2,7 @@
     <section>
         <h2 v-if="loading">Verifying your payment...</h2>
 
+        <!-- Payment Initialization Form -->
         <div v-if="!loading && !success && !error">
             <h2>Payment for {{ event?.title }}</h2>
             <form @submit.prevent="initializePayment">
@@ -15,6 +16,7 @@
             </form>
         </div>
 
+        <!-- Error Display -->
         <div v-if="error" class="error-message">
             <p>{{ error }}</p>
         </div>
@@ -52,27 +54,37 @@ export default {
             loading: false,
             success: false,
             error: null,
+            reference: null, // to store the payment reference
         };
     },
     async mounted() {
         try {
+            // Extracting parameters from URL query
             const urlParams = new URLSearchParams(window.location.search);
             const eventId = urlParams.get('eventId');
             const reference = urlParams.get('reference');
 
-            // Handle missing parameters
-            if (!eventId) throw new Error('Event ID is missing in the callback URL.');
-            if (!reference) throw new Error('Payment reference is missing in the callback URL.');
+            if (!eventId) {
+                throw new Error('Event ID is missing in the callback URL.');
+            }
+            if (!reference) {
+                throw new Error('Payment reference is missing in the callback URL.');
+            }
 
-            // Fetch event details
+            // Set reference to data property for later use
+            this.reference = reference;
+
+            // Fetch event details from the API
             const eventResponse = await api.getEvent(eventId);
+            if (!eventResponse.data) {
+                throw new Error('Failed to load event details.');
+            }
             this.event = eventResponse.data;
 
             // Retrieve email from localStorage
             this.email = localStorage.getItem('userEmail') || '';
 
-            // Verify payment
-            this.reference = reference;
+            // Start payment verification
             this.loading = true;
             await this.verifyPayment(reference);
         } catch (err) {
@@ -91,9 +103,17 @@ export default {
                     phone: this.phone,
                     callback_url: `${window.location.origin}/verify_payment?eventId=${this.eventId}`,
                 };
-                localStorage.setItem('userEmail', this.email); // Save email for callback
+
+                // Save email for later use
+                localStorage.setItem('userEmail', this.email);
+
                 const response = await api.initializePayment(paymentData);
-                window.location.href = response.data.authorization_url; // Redirect to Paystack
+                if (response && response.data && response.data.authorization_url) {
+                    // Redirect to Paystack's authorization page
+                    window.location.href = response.data.authorization_url;
+                } else {
+                    throw new Error('Failed to initialize payment.');
+                }
             } catch (err) {
                 console.error('Error initializing payment:', err);
                 this.error = 'Failed to initialize payment.';
@@ -104,8 +124,7 @@ export default {
                 const response = await api.verifyPayment(reference);
                 if (response.status === 200) {
                     this.success = true;
-
-                    // Optionally, process the transaction further (e.g., show a thank-you page)
+                    // Additional processing can be done here (e.g., thank you page)
                 } else {
                     this.error = 'Payment verification failed. Please contact support.';
                 }
