@@ -20,6 +20,9 @@ export default {
     };
   },
   async created() {
+    // Log the transactionId to check if it's being passed correctly
+    console.log("Transaction ID:", this.transactionId);
+
     // Check if the transactionId is provided
     if (!this.transactionId) {
       console.error("Transaction ID is missing or undefined.");
