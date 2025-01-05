@@ -34,12 +34,12 @@
             phone: this.phone,
           });
           if (response.data.authorization_url) {
-            window.location.href = response.data.authorization_url; // Redirect to Paystack
+            window.location.href = response.data.authorization_url; 
           }
         } catch (error) {
           console.error(error);
           this.loading = false;
-          alert("Payment processing failed!");
+          //alert("Payment processing failed!");
         }
       }
     }
