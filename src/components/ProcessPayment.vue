@@ -60,11 +60,11 @@ export default {
 
             const eventId = this.eventId || this.$route.params;
             this.email = localStorage.getItem('userEmail') || '';
-            //if (!eventId) {
-            //    this.error = 'Event ID is missing.';
-            //    console.error('Event ID is missing.');
-            //    return;
-            //}
+            if (!eventId) {
+               this.error = 'Event ID is missing.';
+                console.error('Event ID is missing.');
+                return;
+            }
 
             console.log('Using event ID:', eventId);
             const response = await api.getEvent(eventId);
