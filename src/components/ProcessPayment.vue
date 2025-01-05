@@ -60,15 +60,22 @@ export default {
             const eventId = urlParams.get('eventId');
             const reference = urlParams.get('reference');
 
+            if (!eventId) {
+                throw new Error('Event ID is missing in the callback URL.');
+            }
+            if (!reference) {
+                throw new Error('Payment reference is missing in the callback URL.');
+            }
+
             // Set reference to data property for later use
             this.reference = reference;
 
             // Fetch event details from the API
-            const eventResponse = await api.getEvent(eventId);
-            if (!eventResponse.data) {
-                throw new Error('Failed to load event details.');
-            }
-            this.event = eventResponse.data;
+            //const eventResponse = await api.getEvent(eventId);
+           // if (!eventResponse.data) {
+            //    throw new Error('Failed to load event details.');
+           // }
+            //this.event = eventResponse.data;
 
             // Retrieve email from localStorage
             this.email = localStorage.getItem('userEmail') || '';
