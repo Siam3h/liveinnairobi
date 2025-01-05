@@ -57,15 +57,15 @@ export default {
         try {
             // Extracting parameters from URL query
             const urlParams = new URLSearchParams(window.location.search);
-            const eventId = urlParams.get('eventId');
+            //const eventId = urlParams.get('eventId');
             const reference = urlParams.get('reference');
 
-            if (!eventId) {
-                throw new Error('Event ID is missing in the callback URL.');
-            }
-            if (!reference) {
-                throw new Error('Payment reference is missing in the callback URL.');
-            }
+            //if (!eventId) {
+                //throw new Error('Event ID is missing in the callback URL.');
+            //}
+            //if (!reference) {
+              //  throw new Error('Payment reference is missing in the callback URL.');
+            //}
 
             // Set reference to data property for later use
             this.reference = reference;
