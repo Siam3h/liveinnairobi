@@ -54,7 +54,7 @@ export default {
             // Fetch event details
             const response = await api.getEvent(eventId);
             this.event = response.data;
-            console.log("Event response data Id:", this.event[0]);
+            console.log("Event response data Id:", this.event);
 
             // Get reference from props or URL
             const reference = this.reference || new URLSearchParams(window.location.search).get("reference");
