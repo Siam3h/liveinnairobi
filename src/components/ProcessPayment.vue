@@ -45,30 +45,36 @@ export default {
     },
     async mounted() {
         try {
-            // Get event ID
+            // Attempt to get eventId
             const eventId = this.eventId || this.$route.params.eventId;
+
+            // Log both sources of eventId
+            console.log('eventId from props:', this.eventId);
+            console.log('eventId from route params:', this.$route.params.eventId);
+
+            // Handle missing eventId
             if (!eventId) {
-                throw new Error("Event ID is missing. Unable to fetch event details.");
+                throw new Error('Event ID is missing. Unable to fetch event details.');
             }
 
             // Fetch event details
             const response = await api.getEvent(eventId);
             this.event = response.data;
-            console.log("Event response data Id:", this.event);
+            console.log('Event response data:', this.event);
 
-            // Get reference from props or URL
-            const reference = this.reference || new URLSearchParams(window.location.search).get("reference");
+            // Process reference for payment verification
+            const reference = this.reference || new URLSearchParams(window.location.search).get('reference');
             if (reference) {
-                this.reference = reference; // Store reference for display
+                this.reference = reference; // Store for display
                 this.loading = true;
                 await this.verifyPayment(reference);
             }
         } catch (err) {
-            console.error("Error fetching event details:", err.message || err);
-            this.error = "Failed to load event details.";
+            console.error('Error fetching event details:', err.message || err);
+            this.error = 'Failed to load event details.';
         }
     },
-    methods: {
+        methods: {
         async initializePayment() {
             try {
                 // Validate input
