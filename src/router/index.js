@@ -9,7 +9,6 @@ const BlogDetail = () => import('../components/BlogDetail.vue');
 const EventDetail = () => import('../components/EventDetail.vue');
 const ProcessPayment = () => import('../components/ProcessPayment.vue');
 const VerifyPayment = () => import('../components/VerifyPayment.vue');
-const ThankYou = () => import('../components/ThankYou.vue');
 const NotFound = () => import('../pages/NotFound.vue');
 
 const routes = [
@@ -22,7 +21,6 @@ const routes = [
     { path: '/events/event/:eventId', name: 'event-detail', component: EventDetail, props: true },
     { path: '/process-payment/:eventId', name: 'process-payment', component: ProcessPayment, props: true },
     { path: '/payments/verify_payment', name: 'verify-payment', component: VerifyPayment, props: (route) => ({ reference: route.query.reference }) },
-    { path: '/thank-you/:transactionId', name: 'thank-you', component: ThankYou, props: true },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
 ];
 

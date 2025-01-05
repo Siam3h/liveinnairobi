@@ -32,7 +32,7 @@
 
             setTimeout(() => {
                 this.$router.push(`/`);
-            }, 1000);
+            }, 2000);
       
             } catch (error) {
             console.error('Verification Error:', error);
