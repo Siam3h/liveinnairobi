@@ -19,6 +19,8 @@
     </section>
 
     <div v-if="reference" class="reference-display">
+        <h1>Thank You!</h1>
+        <p>Your payment for {{ event?.title }} was successful.</p>
         <h3>Your Payment Reference:</h3>
         <p>{{ reference }}</p>
     </div>
