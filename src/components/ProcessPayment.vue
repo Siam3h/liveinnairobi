@@ -18,7 +18,7 @@
         <div v-if="error" class="error-message">{{ error }}</div>
 
         <!-- Thank You Section -->
-        <div v-if="success && reference" class="reference-display">
+        <div v-if="reference" class="reference-display">
             <h1>Thank You!</h1>
             <p>Your payment for the event "<strong>{{ event?.title }}</strong>" was successful.</p>
             <h3>Details:</h3>
@@ -55,8 +55,8 @@ export default {
     },
     async mounted() {
         try {
-            console.log('Props:', this.eventId);
-            console.log('Route Params:', this.$route.params);
+            //console.log('Props:', this.eventId);
+            //console.log('Route Params:', this.$route.params);
 
             const eventId = this.eventId || this.$route.params.eventId;
             //if (!eventId) {
@@ -65,7 +65,7 @@ export default {
             //    return;
             //}
 
-            console.log('Using event ID:', eventId);
+            //console.log('Using event ID:', eventId);
             const response = await api.getEvent(eventId);
             this.event = response.data;
             console.log('Event response data:', this.event);
