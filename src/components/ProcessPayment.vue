@@ -29,7 +29,7 @@
       async processPayment() {
         this.loading = true;
         try {
-          const response = await apiClient.post(`/payments/process/${this.eventId}/`, {
+          const response = await apiClient.initializePayment(`/payments/process/${this.eventId}/`, {
             email: this.email,
             phone: this.phone,
           });
@@ -39,7 +39,7 @@
         } catch (error) {
           console.error(error);
           this.loading = false;
-          //alert("Payment processing failed!");
+          alert("Payment processing failed!");
         }
       }
     }
