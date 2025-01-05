@@ -14,7 +14,7 @@
   </template>
   
   <script>
-  import { apiClient } from '@/services/apiClient';
+  import apiClient  from '@/services/apiClient';
   
   export default {
     props: ['eventId'],
@@ -23,12 +23,13 @@
         email: '',
         phone: '',
         loading: false,
-        eventId:null, 
+        // eslint-disable-next-line vue/no-dupe-keys
+        eventId: this.eventId, 
       };
     },
     async mounted() {
-        const eventID = this.eventID || this.$route.params.eventId;  
-        this.eventId = eventID;
+        const eventId = this.eventID || this.$route.params.eventId;
+        console.log(eventId);
     },
     methods: {
       async processPayment() {
