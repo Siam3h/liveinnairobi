@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h2>Proceed to Payment</h2>
+      <h2>Proceed to Payment for {{ event?.title }}</h2>
       <form @submit.prevent="processPayment">
         <label for="email">Email:</label>
         <input type="email" v-model="email" required />
@@ -24,7 +24,7 @@
         phone: '',
         loading: false,
         // eslint-disable-next-line vue/no-dupe-keys
-        eventId: this.eventId, 
+        eventId: null, 
       };
     },
     async mounted() {
@@ -35,12 +35,12 @@
       async processPayment() {
         this.loading = true;
         try {
-          const response = await apiClient.post(`/payments/process/${this.eventId}/`, {
+          const response = await apiClient.initializePayment(`/payments/process/${this.eventId}/`, {
             email: this.email,
             phone: this.phone,
           });
           if (response.data.authorization_url) {
-            window.location.href = response.data.authorization_url; // Redirect to Paystack
+            window.location.href = response.data.authorization_url; 
           }
         } catch (error) {
           console.error(error);
