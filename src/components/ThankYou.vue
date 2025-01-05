@@ -1,9 +1,6 @@
 <template>
   <div>
-    <h2>Thank You for Your Purchase!</h2>
-    <p>Event: {{ eventTitle }}</p>
-    <p>Date: {{ eventDate }}</p>
-    <p>Location: {{ eventLocation }}</p>
+
   </div>
 </template>
 
@@ -25,9 +22,9 @@ export default {
 
     // Check if the transactionId is provided
     if (!this.transactionId) {
-      console.error("Transaction ID is missing or undefined.");
-      alert("Transaction ID is missing.");
-      return;
+      alert("Thank You for Your Purchase!");
+      this.$router.push('/'); 
+      return; 
     }
 
     // Construct the correct URL
