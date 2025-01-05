@@ -21,26 +21,26 @@
         email: '',
         phone: '',
         loading: false,
-        eventId: null, // Initialize eventId as null
+        resolvedEventId: null, // Final resolved event ID
         error: '', // Add error message handling
       };
     },
-    async mounted() {
+    mounted() {
       try {
-        // Attempt to fetch eventId from localStorage or route params
-        const storedEventId = localStorage.getItem('eventId');
+        // Prioritize route parameter
         const routeEventId = this.$route.params.eventId;
+        const storedEventId = localStorage.getItem('eventId');
   
-        // Use storedEventId first, fallback to routeEventId
-        this.eventId = storedEventId || routeEventId;
+        // Use route param if available, otherwise fallback to localStorage
+        this.resolvedEventId = routeEventId || storedEventId;
   
-        if (!this.eventId) {
+        if (!this.resolvedEventId) {
           this.error = 'Event ID is missing. Please try again.';
           console.error('Event ID is missing.');
           return;
         }
   
-        console.log('Successfully loaded Event ID:', this.eventId);
+        console.log('Resolved Event ID:', this.resolvedEventId);
       } catch (err) {
         console.error('Error fetching Event ID:', err);
         this.error = 'Failed to retrieve Event ID.';
@@ -51,18 +51,18 @@
         this.loading = true;
   
         try {
-          if (!this.eventId) {
+          if (!this.resolvedEventId) {
             this.error = 'Event ID is missing. Cannot proceed with payment.';
             console.error('Event ID is missing.');
             return;
           }
   
-          console.log('Processing payment for Event ID:', this.eventId);
+          console.log('Processing payment for Event ID:', this.resolvedEventId);
   
           const response = await apiClient.initializePayment({
             email: this.email,
             phone: this.phone,
-            eventId: this.eventId, // Pass the correct eventId
+            eventId: this.resolvedEventId, // Use resolvedEventId
           });
   
           if (response.data.authorization_url) {
