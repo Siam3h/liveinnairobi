@@ -58,7 +58,7 @@ export default {
             console.log('Props:', this.eventId);
             console.log('Route Params:', this.$route.params);
 
-            const eventId = this.eventId || this.$route.params.eventId;
+            const eventId = this.eventId || this.$route.params;
             this.email = localStorage.getItem('userEmail') || '';
             //if (!eventId) {
             //    this.error = 'Event ID is missing.';
