@@ -61,8 +61,7 @@ export default {
             console.log('Event response data:', this.event);
 
             const reference = this.reference || new URLSearchParams(window.location.search).get('reference');
-            if (!reference) {
-                this.error = 'reference is missing.';
+            if (reference) {
                 console.log('Found payment reference:', reference);
                 this.loading = true;
                 await this.verifyPayment(reference);
