@@ -8,10 +8,10 @@
   </template>
   
   <script>
-   import apiClient from '@/services/apiClient';
+  import apiClient from '@/services/apiClient';
   
   export default {
-    props: ['reference'],
+    props: ['reference'], // Ensure 'reference' is passed as a prop
     data() {
       return {
         loading: true,
@@ -20,19 +20,31 @@
     },
     async created() {
       try {
-        const response = await apiClient.verifyPayment(`/payments/verify_payment?reference=${this.reference}`);
-        this.message = response.data.message;
-        console.log(this.message)
+        console.log('Reference:', this.reference); // Debugging log
+        if (!this.reference) {
+          throw new Error('Payment reference is missing.');
+        }
   
-        // Redirect to Thank You page after 1 second
+        // API call with reference
+        const response = await apiClient.verifyPayment(this.reference);
+        this.message = response.data.message;
+        console.log('Verification Message:', this.message);
+  
+        // Redirect to Thank You page
         setTimeout(() => {
           this.$router.push(`/thank-you/${response.data.transaction_id}`);
         }, 1000);
       } catch (error) {
-        console.error(error);
+        console.error('Verification Error:', error);
         this.message = 'Payment verification failed. Please try again.';
+      } finally {
+        this.loading = false;
       }
-    }
+    },
   };
   </script>
+  
+  <style scoped>
+  /* Add your styles here */
+  </style>
   
