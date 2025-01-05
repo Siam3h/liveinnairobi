@@ -45,26 +45,24 @@ export default {
     },
     async mounted() {
         try {
-            //console.log('Props:', this.eventId);
-            //console.log('Route Params:', this.$route.params);
+            console.log('Props:', this.eventId);
+            console.log('Route Params:', this.$route.params);
 
-            //const eventId = this.eventId || this.$route.params.eventId;
-            //if (!eventId) {
-              //  this.error = 'Event ID is missing.';
-                //console.error('Event ID is missing.');
-               // return;
-            //}
+            const eventId = this.eventId || this.$route.params.eventId;
+            if (!eventId) {
+                this.error = 'Event ID is missing.';
+                console.error('Event ID is missing.');
+                return;
+            }
 
-            //console.log('Using event ID:', eventId);
-            //const response = await api.getEvent(eventId);
-            //this.event = response.data;
-            //console.log('Event response data:', this.event);
+            console.log('Using event ID:', eventId);
+            const response = await api.getEvent(eventId);
+            this.event = response.data;
+            console.log('Event response data:', this.event);
 
             const reference = this.reference || new URLSearchParams(window.location.search).get('reference');
             if (!reference) {
                 this.error = 'reference is missing.';
-            }
-            else {
                 console.log('Found payment reference:', reference);
                 this.loading = true;
                 await this.verifyPayment(reference);
