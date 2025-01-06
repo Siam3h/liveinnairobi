@@ -13,19 +13,19 @@ export default defineConfig({
     server: {
         proxy: {
             '/api/v1/blogs': {
-                target: 'https://liveinnbobackend-production.up.railway.app',
+                target: 'https://liveinnbo-backend.onrender.com',
                 changeOrigin: true,
             },
             '/api/v1/events': {
-                target: 'https://liveinnbobackend-production.up.railway.app',
+                target: 'https://liveinnbo-backend.onrender.com',
                 changeOrigin: true,
             },
             '/api/v1/payments': {
-                target: 'https://liveinnbobackend-production.up.railway.app',
+                target: 'https://liveinnbo-backend.onrender.com',
                 changeOrigin: true,
             },
             '/api/v1/users': {
-                target: 'https://liveinnbobackend-production.up.railway.app',
+                target: 'https://liveinnbo-backend.onrender.com',
                 changeOrigin: true,
             },
         },

@@ -64,7 +64,7 @@
 </template>
 
 <script>
-    import api from '../api';
+    import api from '../services/apiClient';
     import Navbar from '../components/Navbar.vue';
     import Footer from '../components/Footer.vue';
 

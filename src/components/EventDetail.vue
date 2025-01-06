@@ -1,36 +1,42 @@
 <template>
-    <div>
-        <!-- Only render PaymentProcessor when event data is fully loaded -->
-        <PaymentProcessor v-if="event" :event="event" />
-        <div v-else>Loading Event Details...</div>
-    </div>
+    <section>
+        <h1>{{ event.title }}</h1>
+        <p>{{ event.description }}</p>
+        <button @click="redirectToPayment" class="pay-button">
+            Pay KES {{ event.price || 0 }}
+        </button>
+    </section>
 </template>
 
 <script>
-    import PaymentProcessor from '@/components/ProcessPayment.vue';
-    import api from '../api';
+import api from '../services/apiClient';
 
-    export default {
-        components: { PaymentProcessor },
-        data() {
-            return {
-                event: null, // Initialize event as null
-            };
+export default {
+    name: 'EventDetail',
+    data() {
+        return {
+            event: null,
+        };
+    },
+    async mounted() {
+        const { eventId } = this.$route.params;
+        const response = await api.getEvent(eventId);
+        this.event = response.data;
+    },
+    methods: {
+        redirectToPayment() {
+            this.$router.push({ name: 'process-payment', params: { eventId: this.event.id } });
         },
-        created() {
-            this.fetchEventDetails();
-        },
-        methods: {
-            async fetchEventDetails() {
-                try {
-                    // Fetch the event details using the event ID from the route params
-                    const response = await api.getEvent(this.$route.params.eventId);
-                    this.event = response.data
-                    console.log(this.event)// Ensure event data is populated correctly
-                } catch (error) {
-                    console.error("Failed to load event:", error);
-                }
-            }
-        }
-    };
+    },
+};
 </script>
+
+<style scoped>
+.pay-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+</style>

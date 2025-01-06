@@ -9,7 +9,6 @@ const apiClient = axios.create({
 });
 
 
-
 export default {
     // Blog APIs
     getBlogs(page = 1) {
@@ -27,11 +26,16 @@ export default {
     },
     // Payment APIs
     initializePayment(paymentData) {
-        return apiClient.post(`/payments/${paymentData.eventId}/`, paymentData);
+        console.log("Payment data:", paymentData); 
+        return apiClient.post(`/payments/process/${paymentData.eventId}/`, paymentData);
     },
     verifyPayment(reference) {
         return apiClient.get(`/payments/verify_payment/?reference=${reference}`);
     },
+    thankYou(transactionId) {
+        return apiClient.get(`/payments/thankyou/${transactionId}/`);
+    },
+    
     // User APIs
     getUsers() {
         return apiClient.get('/users/');
