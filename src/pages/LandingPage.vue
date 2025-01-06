@@ -139,7 +139,7 @@
   <script>
   import Navbar from '../components/Navbar.vue';
   import Footer from '../components/Footer.vue';
-  import api from '../api';
+  import apiClient from '@/services/apiClient';
   
   export default {
     components: {
@@ -168,7 +168,7 @@
     methods: {
       async fetchBlogs() {
         try {
-          const response = await api.getBlogs();
+          const response = await apiClient.getBlogs();
           this.blogs = response.data.results;
         } catch (error) {
           console.error('Error fetching blogs:', error);
@@ -178,7 +178,7 @@
       },
       async fetchEvents() {
         try {
-          const response = await api.getEvents();
+          const response = await apiClient.getEvents();
           this.events = response.data.results;
         } catch (error) {
           console.error('Error fetching events:', error);
