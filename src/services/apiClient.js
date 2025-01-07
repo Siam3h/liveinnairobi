@@ -24,9 +24,12 @@ export default {
     getEvent(eventId) {
         return apiClient.get(`/events/${eventId}/`);
     },
+    verifyTicket(ticketId) {
+        return apiClient.post(`/events/verify_ticket/${ticketId}`)
+    },
     // Payment APIs
     initializePayment(paymentData) {
-        console.log("Payment data:", paymentData); 
+        //console.log("Payment data:", paymentData); 
         return apiClient.post(`/payments/process/${paymentData.eventId}/`, paymentData);
     },
     verifyPayment(reference) {
