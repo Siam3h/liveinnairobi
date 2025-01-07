@@ -8,8 +8,8 @@
   </template>
   
   <script>
-  import jsQR from "jsqr"; // Install jsQR using `npm install jsqr`
-  import apiClient from "@/services/apiClient"; // Ensure this is configured to communicate with your backend
+  import jsQR from "jsqr"; 
+  import apiClient from "@/services/apiClient"; 
   
   export default {
     data() {
