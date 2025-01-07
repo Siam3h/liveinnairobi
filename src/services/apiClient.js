@@ -6,8 +6,6 @@ const apiClient = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-
-    withCredentials: true,
 });
 
 
@@ -27,7 +25,7 @@ export default {
         return apiClient.get(`/events/${eventId}/`);
     },
     verifyTicket(ticketId) {
-        return apiClient.post(`events/verify_ticket/${ticketId}`)
+        return apiClient.post(`/events/verify_ticket/${ticketId}`)
     },
     // Payment APIs
     initializePayment(paymentData) {
