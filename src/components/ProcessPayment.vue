@@ -3,6 +3,7 @@
       <h2>Process Payment</h2>
       <form @submit.prevent="processPayment">
         <input v-model="email" type="email" placeholder="Email" required />
+        <input v-model="name" type="name" placeholder="Full Name" required />
         <input v-model="phone" type="tel" placeholder="Phone Number" required />
         <button :disabled="loading" type="submit">Proceed to Payment</button>
       </form>
@@ -19,6 +20,7 @@
     data() {
       return {
         email: '',
+        name: '',
         phone: '',
         loading: false,
         resolvedEventId: null, // Final resolved event ID
@@ -61,6 +63,7 @@
   
           const response = await apiClient.initializePayment({
             email: this.email,
+            name: this.name,
             phone: this.phone,
             eventId: this.resolvedEventId, // Use resolvedEventId
           });
