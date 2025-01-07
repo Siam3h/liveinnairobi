@@ -22,7 +22,7 @@ const routes = [
     { path: '/events/verify-ticket', name: 'verify-ticket', component:TicketScanner },
     { path: '/events/event/:eventId', name: 'event-detail', component: EventDetail, props: true },
     { path: '/process-payment/:eventId', name: 'process-payment', component: ProcessPayment, props: true },
-    { path: '/payments/verify-payment', name: 'verify-payment', component: VerifyPayment, props: (route) => ({ reference: route.query.reference }) },
+    { path: '/payments/verify_payment', name: 'verify-payment', component: VerifyPayment, props: (route) => ({ reference: route.query.reference }) },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
 ];
 
