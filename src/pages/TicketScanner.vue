@@ -1,31 +1,31 @@
 <template>
+  <div>
+    <h1>Scan or Enter Ticket</h1>
+
+    <!-- QR Code Scanner -->
     <div>
-      <h1>Scan or Enter Ticket</h1>
-  
-      <!-- QR Code Scanner -->
-      <div>
-        <video id="scanner" autoplay muted playsinline></video>
-        <button @click="startScanner">Start Scanner</button>
-        <button @click="stopScanner">Stop Scanner</button>
-      </div>
-  
-      <!-- Manual Reference Code Input -->
-      <div>
-        <input
-          type="text"
-          v-model="referenceCode"
-          placeholder="Enter Reference Code"
-        />
-        <button @click="verifyReferenceCode">Verify Code</button>
-      </div>
-  
-      <!-- Status Message -->
-      <div v-if="loading">Verifying ticket...</div>
-      <div v-if="message" :class="{ success: success, error: !success }">
-        {{ message }}
-      </div>
+      <video id="scanner" autoplay muted playsinline></video>
+      <button @click="startScanner">Start Scanner</button>
+      <button @click="stopScanner">Stop Scanner</button>
     </div>
-  </template>
+
+    <!-- Manual Reference Code Input -->
+    <div>
+      <input
+        type="text"
+        v-model="referenceCode"
+        placeholder="Enter Reference Code"
+      />
+      <button @click="verifyReferenceCode">Verify Code</button>
+    </div>
+
+    <!-- Status Message -->
+    <div v-if="loading">Verifying ticket...</div>
+    <div v-if="message" :class="{ success: success, error: !success }">
+      {{ message }}
+    </div>
+  </div>
+</template>
 
 <script>
 import jsQR from "jsqr";
@@ -78,23 +78,36 @@ export default {
 
       const scan = () => {
         if (this.videoStream) {
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          if (video.videoWidth && video.videoHeight) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
 
-          const imageData = context.getImageData(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-          );
-          const qrCodeData = jsQR(imageData.data, imageData.width, imageData.height);
+            // Draw video frame to canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-          if (qrCodeData) {
-            this.stopScanner();
-            this.verifyTicket(qrCodeData.data);
+            // Flip canvas horizontally if needed (optional for mobile devices)
+            // context.save();
+            // context.scale(-1, 1);
+            // context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+            // context.restore();
+
+            // Get image data and try to decode QR code
+            const imageData = context.getImageData(
+              0,
+              0,
+              canvas.width,
+              canvas.height
+            );
+            const qrCodeData = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (qrCodeData) {
+              this.stopScanner();
+              this.verifyTicket(qrCodeData.data);
+            } else {
+              requestAnimationFrame(scan);
+            }
           } else {
-            requestAnimationFrame(scan);
+            requestAnimationFrame(scan); // Retry if video is not ready
           }
         }
       };
