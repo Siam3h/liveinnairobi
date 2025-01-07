@@ -1,4 +1,5 @@
 <template>
+  <section>
     <Navbar />
     <!-- Hero Section -->
     <div class="relative h-screen flex items-center justify-start bg-gradient-to-br from-blue-600 to-red-500 text-left overflow-hidden">
@@ -133,7 +134,8 @@
         </div>
       </div>
     </div>
-    <Footer />
+    <Footer/>
+    </section>
   </template>
   
   <script>

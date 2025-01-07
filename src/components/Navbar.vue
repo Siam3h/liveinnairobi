@@ -29,7 +29,8 @@
                             <a href="/events" class="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">Events</a>
                             <a href="/blogs" class="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">Blogs</a>
                             <a href="/contact" class="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">Contact</a>
-                            <a href="/auth/register" class="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">Sign Up</a>
+                            <a href="/auth/signin" class="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">Sign In</a>
+                            <a href="/auth/signup" class="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">Sign Up</a>
 
                             <div class="relative mt-4 lg:mt-0 lg:mx-4">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">

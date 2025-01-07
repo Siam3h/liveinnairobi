@@ -39,6 +39,23 @@ export default {
         return apiClient.get(`/payments/thankyou/${transactionId}/`);
     },
     
+    // Auth APIs
+    authSignUp(){
+        return apiClient.post(`/users/auth/signup/`)
+    },
+    authSignIn(){
+        return apiClient.post(`/users/auth/signup/`)
+    },
+    authSignOut(){
+        return apiClient.post(`/users/auth/signout/`)
+    },
+    updateProfile(){
+        return apiClient.put(`/update_profile/`)
+    },
+    deleteProfile(){
+        return apiClient.delete(`/delete_account/`)
+    },
+    
     // User APIs
     getUsers() {
         return apiClient.get('/users/');
