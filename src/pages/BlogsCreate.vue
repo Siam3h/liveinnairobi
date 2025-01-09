@@ -1,17 +1,34 @@
+// BlogsCreate.vue
 <template>
-    <div id="app" class="bg-gray-100 min-h-screen">
-        <Navbar />
-        <h1>Blogs Create</h1>
-    </div>
+  <div>
+    <h1>Create Blog</h1>
+    <form @submit.prevent="createBlog">
+      <input v-model="title" type="text" placeholder="Title" required />
+      <textarea v-model="content" placeholder="Content" required></textarea>
+      <button type="submit">Create Blog</button>
+    </form>
+  </div>
 </template>
 
 <script>
-    import Navbar from '../components/Navbar.vue';
+import apiClient from '@/services/apiClient';
 
-    export default {
-        components: {
-            Navbar,
-        }
+export default {
+  data() {
+    return {
+      title: '',
+      content: ''
     };
+  },
+  methods: {
+    async createBlog() {
+      try {
+        const response = await apiClient.post('/blogs/', { title: this.title, content: this.content });
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+};
 </script>
-
