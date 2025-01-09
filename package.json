@@ -13,7 +13,8 @@
     "axios": "^1.7.9",
     "jsqr": "^1.4.0",
     "vue": "^3.4.29",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "vue3-apexcharts": "^1.8.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
