@@ -1,10 +1,12 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const apiClient = axios.create({
   baseURL: 'https://liveinnbo-backend.onrender.com/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
   xsrfHeaderName: 'X-CSRFToken', 
   xsrfCookieName: 'csrftoken',     
 });
@@ -24,9 +26,18 @@ export default {
     getEvent(eventId) {
         return apiClient.get(`/events/${eventId}/`);
     },
+
     verifyTicket(ref) {
-        return apiClient.post(`/events/verify_ticket/${ref}`)
+        const csrfToken = Cookies.get('csrftoken'); 
+        return apiClient.post(`/events/verify_ticket/`,{ ref: ref },
+            {
+                headers: {
+                    'X-CSRFToken': csrfToken, 
+                },
+            }
+        );
     },
+
     // Payment APIs
     initializePayment(paymentData) {
         //console.log("Payment data:", paymentData); 
