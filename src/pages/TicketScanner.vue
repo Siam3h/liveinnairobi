@@ -112,7 +112,7 @@ export default {
         this.loading = true;
         this.message = "";
 
-        const response = await apiClient.verifyTicket('/events/verify_ticket/', { ref: ref }); 
+        const response = await apiClient.verifyTicket({ ref: ref }); 
         console.log(response);
         this.message = response.data.message;
         this.success = response.data.status === "success";
