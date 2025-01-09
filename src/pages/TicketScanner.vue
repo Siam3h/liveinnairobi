@@ -113,7 +113,7 @@ export default {
         this.message = "";
 
         const response = await apiClient.verifyTicket({ ref: ref }); 
-        console.log(response);
+        console.log("Response:",response);
         this.message = response.data.message;
         this.success = response.data.status === "success";
       } catch (error) {

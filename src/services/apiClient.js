@@ -27,9 +27,9 @@ export default {
         return apiClient.get(`/events/${eventId}/`);
     },
 
-    verifyTicket(ref) {
+    verifyTicket(data) {
         const csrfToken = Cookies.get('csrftoken'); 
-        return apiClient.post(`/events/verify_ticket/`,{ ref: ref },
+        return apiClient.post(`/payments/verify_ticket/`,data,
             {
                 headers: {
                     'X-CSRFToken': csrfToken, 
