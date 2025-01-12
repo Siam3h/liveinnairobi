@@ -29,7 +29,7 @@ export default {
 
     verifyTicket(data) {
         const csrfToken = Cookies.get('csrftoken'); 
-        return apiClient.post(`/payments/verify_ticket/`,data,
+        return apiClient.post(`/payments/verify_ticket/`, data,
             {
                 headers: {
                     'X-CSRFToken': csrfToken, 
@@ -51,11 +51,11 @@ export default {
     },
     
     // Auth APIs
-    authSignUp(){
-        return apiClient.post(`/users/auth/signup/`)
-    },
+    authSignUp(data) {
+        return apiClient.post('/api/v1/users/auth/signup/', data);
+    },      
     authSignIn(){
-        return apiClient.post(`/users/auth/signup/`)
+        return apiClient.post(`/users/auth/signin/`)
     },
     authSignOut(){
         return apiClient.post(`/users/auth/signout/`)

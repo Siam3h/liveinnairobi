@@ -25,46 +25,44 @@ export default {
   },
   methods: {
     async signUp() {
-      this.errorMessage = '';
+  this.errorMessage = '';
 
-      if (this.password1 !== this.password2) {
-        this.errorMessage = 'Passwords do not match';
-        return;
+  if (this.password1 !== this.password2) {
+    this.errorMessage = 'Passwords do not match';
+    return;
+  }
+
+  const payload = { email: this.email, password: this.password1 };
+  console.log('Payload:', payload); 
+
+  try {
+    const response = await apiClient.authSignUp(payload);
+    console.log('Signup successful:', response.data);
+
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
+
+    this.$router.push({ name: 'user-dashboard' });
+  } catch (error) {
+    console.error('Error during signup:', error.response?.data || error.message);
+
+    if (error.response?.data) {
+      const errors = error.response.data;
+      if (errors.email) {
+        this.errorMessage = `Email: ${errors.email[0]}`;
+      } else if (errors.password) {
+        this.errorMessage = `Password: ${errors.password[0]}`;
+      } else {
+        this.errorMessage = 'Signup failed. Please check your inputs and try again.';
       }
+    } else {
+      this.errorMessage = 'An unexpected error occurred. Please try again later.';
+    }
+  }
+}
 
-
-      try {
-        
-        const response = await apiClient.authSignUp({ email: this.email, password: this.password1 });
-
-        console.log('Signup successful:', response.data);
-
-        // Store the token if provided
-        if (response.data.token) {
-          localStorage.setItem('token', response.data.token);
-        }
-
-        // Redirect to the dashboard or another page after successful signup
-        this.$router.push({ name: 'user-dashboard' });
-      } catch (error) {
-        console.error('Error during signup:', error.response?.data || error.message);
-
-        // Display error message based on API response
-        if (error.response?.data) {
-          const errors = error.response.data;
-          if (errors.email) {
-            this.errorMessage = `Email: ${errors.email[0]}`;
-          } else if (errors.password) {
-            this.errorMessage = `Password: ${errors.password[0]}`;
-          } else {
-            this.errorMessage = 'Signup failed. Please check your inputs and try again.';
-          }
-        } else {
-          this.errorMessage = 'An unexpected error occurred. Please try again later.';
-        }
-      }
-    },
-  },
+  }
 };
 </script>
 
