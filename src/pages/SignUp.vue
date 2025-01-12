@@ -33,9 +33,6 @@ export default {
         console.error('Error during signup:', error.response?.data || error.message);
       }
     },
-    redirectToPayment() {
-      this.$router.push({ name: 'process-payment', params: { eventId: this.event.id } });
-    },
   },
 };
 </script>
