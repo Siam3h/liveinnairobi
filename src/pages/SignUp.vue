@@ -7,6 +7,7 @@
       <input v-model="phone_number" type="phone_number" placeholder="Phone Number" required />
       <input v-model="username" type="username" placeholder="username" required />
       <input v-model="password" type="password" placeholder="Password" required />
+      <input v-model="password" type="password" placeholder="Password" required />
       <button type="submit">Sign Up</button>
     </form>
   </div>
