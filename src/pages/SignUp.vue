@@ -20,33 +20,48 @@ export default {
       email: '',
       password1: '',
       password2: '',
-      errorMessage: ''
+      errorMessage: '',
     };
   },
   methods: {
     async signUp() {
-      // Clear any previous error messages
       this.errorMessage = '';
 
-      // Check if passwords match
       if (this.password1 !== this.password2) {
         this.errorMessage = 'Passwords do not match';
         return;
       }
 
+
       try {
-        const response = await apiClient.authSignUp({email: this.email, password: this.password1 });
+        
+        const response = await apiClient.authSignUp({ email: this.email, password: this.password1 });
 
         console.log('Signup successful:', response.data);
-        // Store the token if needed
+
+        // Store the token if provided
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
         }
+
+        // Redirect to the dashboard or another page after successful signup
         this.$router.push({ name: 'user-dashboard' });
       } catch (error) {
         console.error('Error during signup:', error.response?.data || error.message);
-        this.errorMessage = error.response?.data?.password?.[0] || 
-                           'An error occurred during signup. Please try again.';
+
+        // Display error message based on API response
+        if (error.response?.data) {
+          const errors = error.response.data;
+          if (errors.email) {
+            this.errorMessage = `Email: ${errors.email[0]}`;
+          } else if (errors.password) {
+            this.errorMessage = `Password: ${errors.password[0]}`;
+          } else {
+            this.errorMessage = 'Signup failed. Please check your inputs and try again.';
+          }
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again later.';
+        }
       }
     },
   },
@@ -59,3 +74,5 @@ export default {
   margin-top: 10px;
 }
 </style>
+
+
