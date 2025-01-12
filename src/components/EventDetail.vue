@@ -4,11 +4,7 @@
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+    
         <span className="absolute top-4 left-4 z-20 px-3 py-1 bg-event-primary/80 text-white text-sm rounded-full">
           {{event.category}}
         </span>
