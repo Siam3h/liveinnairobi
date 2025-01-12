@@ -4,7 +4,6 @@
     <h1>Sign Up</h1>
     <form @submit.prevent="signUp">
       <input v-model="email" type="email" placeholder="Email" required />
-      <input v-model="phone_number" type="phone_number" placeholder="Phone Number" required />
       <input v-model="username" type="username" placeholder="username" required />
       <input v-model="password" type="password" placeholder="Password" required />
       <input v-model="password" type="password" placeholder="Password" required />
