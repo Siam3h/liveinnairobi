@@ -35,10 +35,7 @@ export default {
       }
 
       try {
-        const response = await apiClient.authSignUp({
-          email: this.email,
-          password: this.password1,  // Send the first password
-        });
+        const response = await apiClient.authSignUp({email: this.email, password: this.password1 });
 
         console.log('Signup successful:', response.data);
         // Store the token if needed
