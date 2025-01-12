@@ -3,7 +3,7 @@
   <div>
     <h1>Sign Up</h1>
     <form @submit.prevent="signUp">
-    <input v-model="agency_name" type="event_organizer" placeholder="Event Organiser" required />
+    <input v-model="event_organizer" type="event_organizer" placeholder="Event Organiser" required />
       <input v-model="email" type="email" placeholder="Email" required />
       <input v-model="phone" type="phone" placeholder="Phone Number" required />
       <input v-model="username" type="username" placeholder="username" required />
@@ -21,12 +21,14 @@ export default {
     return {
       email: '',
       password: '',
+      phone:'',
+      event_organizer:''
     };
   },
   methods: {
     async signUp() {
       try {
-        const response = await apiClient.authSignUp({ email: this.email, password: this.password });
+        const response = await apiClient.authSignUp({ email: this.email, password: this.password, phone: this.phone, event_organizer: this.event_organizer, username: this.username });
         console.log('Signup successful:', response.data.message);
         this.$router.push({ name: 'user-dashboard' });
       } catch (error) {
