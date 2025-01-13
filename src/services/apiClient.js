@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 // Create axios instance
 const apiClient = axios.create({
@@ -9,69 +8,6 @@ const apiClient = axios.create({
   },
   withCredentials: true, 
 });
-
-
-async function fetchCSRFToken() {
-  try {
-    const response = await apiClient.get('/users/csrf/');
-    return response.data.csrfToken;  
-  } catch (error) {
-    console.error('Error fetching CSRF token:', error);
-    throw error;
-  }
-}
-
-// Request Interceptor: Adds CSRF token to headers
-apiClient.interceptors.request.use(
-  async (config) => {
-    let csrfToken = Cookies.get('csrftoken');  
-    if (!csrfToken) {
-      csrfToken = await fetchCSRFToken();  
-      Cookies.set('csrftoken', csrfToken);  
-    }
-    if (csrfToken) {
-      config.headers['X-CSRFToken'] = csrfToken;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Response Interceptor: Handles CSRF and authentication errors
-apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    // Handle CSRF token errors (403)
-    if (
-      error.response?.status === 403 &&
-      error.response?.data?.detail === 'CSRF Failed' &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-      let csrfToken = Cookies.get('csrftoken');  // Check cookies
-      if (!csrfToken) {
-        csrfToken = await fetchCSRFToken();  // Fetch if not in cookies
-        Cookies.set('csrftoken', csrfToken);  // Store in cookies
-      }
-      if (csrfToken) {
-        originalRequest.headers['X-CSRFToken'] = csrfToken;
-        return apiClient(originalRequest);
-      }
-    }
-
-    // Handle authentication errors (401)
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      // You might want to redirect to login or refresh token here
-      window.location.href = '/login';
-    }
-
-    return Promise.reject(error);
-  }
-);
 
 // Handle generic API errors
 const handleError = (error) => {
