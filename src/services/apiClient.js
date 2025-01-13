@@ -61,7 +61,19 @@ export default {
     return apiClient.get(`/blogs/?page=${page}`).catch(handleError);
   },
 
+  createBlog(data) {
+    return apiClient.get(`/blogs/`, data).catch(handleError);
+  },
+
   getBlog(slug) {
+    return apiClient.get(`/blogs/${slug}/`).catch(handleError);
+  },
+
+  updateBlog(slug) {
+    return apiClient.get(`/blogs/${slug}/`).catch(handleError);
+  },
+
+  deleteBlog(slug) {
     return apiClient.get(`/blogs/${slug}/`).catch(handleError);
   },
 
@@ -70,8 +82,20 @@ export default {
     return apiClient.get(`/events/?page=${page}`).catch(handleError);
   },
 
+  createEvent(data) {
+    return apiClient.post(`/events/`, data).catch(handleError);
+  },
+
   getEvent(eventId) {
     return apiClient.get(`/events/${eventId}/`).catch(handleError);
+  },
+
+  updateEvent(eventId) {
+    return apiClient.put(`/events/${eventId}/`).catch(handleError);
+  },
+
+  deleteEvent(eventId) {
+    return apiClient.delete(`/events/${eventId}/`).catch(handleError);
   },
 
   // Payment APIs
