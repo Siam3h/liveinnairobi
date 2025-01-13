@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie'; // Assuming js-cookie is being used for managing cookies
 
 // Create axios instance
 const apiClient = axios.create({
@@ -16,6 +17,75 @@ const handleError = (error) => {
   throw error;
 };
 
+// Fetch CSRF token
+async function fetchCSRFToken() {
+  try {
+    const response = await apiClient.get('/users/csrf/');
+    return response.data.csrfToken;
+  } catch (error) {
+    console.error('Error fetching CSRF token:', error);
+    throw error;
+  }
+}
+
+// Request Interceptor: Adds CSRF token to specific request methods (POST, PUT, DELETE)
+apiClient.interceptors.request.use(
+  async (config) => {
+    // Check if the request method is POST, PUT, or DELETE
+    if (['post', 'put', 'delete'].includes(config.method)) {
+      let csrfToken = Cookies.get('csrftoken');
+
+      if (!csrfToken) {
+        csrfToken = await fetchCSRFToken();
+        Cookies.set('csrftoken', csrfToken);
+      }
+
+      if (csrfToken) {
+        config.headers['X-CSRFToken'] = csrfToken;
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response Interceptor: Handles CSRF and authentication errors
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Handle CSRF token errors (403)
+    if (
+      error.response?.status === 403 &&
+      error.response?.data?.detail === 'CSRF Failed' &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+      let csrfToken = Cookies.get('csrftoken'); // Check cookies
+      if (!csrfToken) {
+        csrfToken = await fetchCSRFToken(); // Fetch if not in cookies
+        Cookies.set('csrftoken', csrfToken); // Store in cookies
+      }
+      if (csrfToken) {
+        originalRequest.headers['X-CSRFToken'] = csrfToken;
+        return apiClient(originalRequest);
+      }
+    }
+
+    // Handle authentication errors (401)
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      // You might want to redirect to login or refresh token here
+      window.location.href = '/login';
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+// Export the API functions
 export default {
   // Blog APIs
   getBlogs(page = 1) {
