@@ -3,8 +3,17 @@
     <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
       <div>
         <h1 class="mt-6 text-center text-3xl font-bold text-gray-900">
-          Sign Up | Live In Nairobi
+          Sign Up
         </h1>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Or
+          <router-link 
+            to="/auth/signin" 
+            class="font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            sign into an existing account.
+          </router-link>
+        </p>
       </div>
       <form class="mt-8 space-y-6" @submit.prevent="signUp">
         <div class="rounded-md shadow-sm space-y-4">
