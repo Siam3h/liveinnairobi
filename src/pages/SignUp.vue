@@ -97,7 +97,7 @@ export default {
       localStorage.setItem('token', response.data.token);
     }
 
-    this.$router.push({ name: 'user-dashboard' });
+    this.$router.push({ name: 'signin' });
   } catch (error) {
     console.error('Error during signup:', error.response?.data || error.message);
 
