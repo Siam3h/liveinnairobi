@@ -1,18 +1,34 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+// Create axios instance
 const apiClient = axios.create({
   baseURL: 'https://liveinnbo-backend.onrender.com/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true
+  withCredentials: true, // Ensures cookies (like CSRF) are sent
 });
 
-// RequestInterceptor
+// Fetch CSRF token from backend (call csrf endpoint)
+async function fetchCSRFToken() {
+  try {
+    const response = await apiClient.get('/users/csrf/');
+    return response.data.csrfToken;  // Assuming csrfToken is returned from the backend
+  } catch (error) {
+    console.error('Error fetching CSRF token:', error);
+    throw error;
+  }
+}
+
+// Request Interceptor: Adds CSRF token to headers
 apiClient.interceptors.request.use(
-  (config) => {
-    const csrfToken = Cookies.get('csrftoken');
+  async (config) => {
+    let csrfToken = Cookies.get('csrftoken');  // Check cookies first
+    if (!csrfToken) {
+      csrfToken = await fetchCSRFToken();  // If no token in cookies, fetch from backend
+      Cookies.set('csrftoken', csrfToken);  // Optionally store it in cookies
+    }
     if (csrfToken) {
       config.headers['X-CSRFToken'] = csrfToken;
     }
@@ -23,23 +39,31 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor
+// Response Interceptor: Handles CSRF and authentication errors
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // Handle CSRF token errors
-    if (error.response?.status === 403 && error.response?.data?.detail === 'CSRF Failed' && !originalRequest._retry) {
+    // Handle CSRF token errors (403)
+    if (
+      error.response?.status === 403 &&
+      error.response?.data?.detail === 'CSRF Failed' &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
-      const csrfToken = Cookies.get('csrftoken');
+      let csrfToken = Cookies.get('csrftoken');  // Check cookies
+      if (!csrfToken) {
+        csrfToken = await fetchCSRFToken();  // Fetch if not in cookies
+        Cookies.set('csrftoken', csrfToken);  // Store in cookies
+      }
       if (csrfToken) {
         originalRequest.headers['X-CSRFToken'] = csrfToken;
         return apiClient(originalRequest);
       }
     }
 
-    // Handle authentication errors
+    // Handle authentication errors (401)
     if (error.response?.status === 401 && !originalRequest._retry) {
       // You might want to redirect to login or refresh token here
       // window.location.href = '/login';
@@ -49,6 +73,7 @@ apiClient.interceptors.response.use(
   }
 );
 
+// Handle generic API errors
 const handleError = (error) => {
   const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
   console.error('API Error:', errorMessage);
@@ -62,19 +87,19 @@ export default {
   },
 
   createBlog(data) {
-    return apiClient.get(`/blogs/`, data).catch(handleError);
+    return apiClient.post(`/blogs/`, data).catch(handleError);
   },
 
   getBlog(slug) {
     return apiClient.get(`/blogs/${slug}/`).catch(handleError);
   },
 
-  updateBlog(slug) {
-    return apiClient.get(`/blogs/${slug}/`).catch(handleError);
+  updateBlog(slug, data) {
+    return apiClient.put(`/blogs/${slug}/`, data).catch(handleError);
   },
 
   deleteBlog(slug) {
-    return apiClient.get(`/blogs/${slug}/`).catch(handleError);
+    return apiClient.delete(`/blogs/${slug}/`).catch(handleError);
   },
 
   // Event APIs
@@ -90,8 +115,8 @@ export default {
     return apiClient.get(`/events/${eventId}/`).catch(handleError);
   },
 
-  updateEvent(eventId) {
-    return apiClient.put(`/events/${eventId}/`).catch(handleError);
+  updateEvent(eventId, data) {
+    return apiClient.put(`/events/${eventId}/`, data).catch(handleError);
   },
 
   deleteEvent(eventId) {
@@ -149,5 +174,5 @@ export default {
 
   getUser(userId) {
     return apiClient.get(`/users/${userId}/`).catch(handleError);
-  }
+  },
 };
