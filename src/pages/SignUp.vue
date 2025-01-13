@@ -107,6 +107,7 @@ export default {
     }
 
     this.$router.push({ name: 'signin' });
+    
   } catch (error) {
     console.error('Error during signup:', error.response?.data || error.message);
 
