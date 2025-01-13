@@ -9,7 +9,7 @@ const apiClient = axios.create({
   withCredentials: true
 });
 
-// Request interceptor
+// RequestInterceptor
 apiClient.interceptors.request.use(
   (config) => {
     const csrfToken = Cookies.get('csrftoken');
