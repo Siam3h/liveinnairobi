@@ -116,7 +116,7 @@ export default {
     },
     async fetchCurrentUser() {
       try {
-        const response = await apiClient.get("/auth/user/"); // Endpoint to get the current user
+        const response = await apiClient.getUser("/auth/user/"); // Endpoint to get the current user
         this.currentUserId = response.data.id;
       } catch (error) {
         console.error("Error fetching current user:", error);
