@@ -33,6 +33,7 @@ export default {
   }
 
   const payload = { email: this.email, password: this.password1 };
+  
   console.log('Payload:', payload); 
 
   try {
