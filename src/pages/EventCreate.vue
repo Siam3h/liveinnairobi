@@ -60,15 +60,6 @@
         min="0"
         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <select
-        v-model="event_organizer"
-        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <option disabled value="">Select Organizer</option>
-        <option v-for="user in users" :key="user.id" :value="user.id">
-          {{ user.username }}
-        </option>
-      </select>
       <button
         type="submit"
         class="w-full py-3 px-6 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300"
@@ -94,19 +85,10 @@ export default {
       thumbnail_url: "",
       event_date: "2025-01-01",
       price: 0,
-      event_organizer: "",
-      users: [],
+      currentUserId: null,
     };
   },
   methods: {
-    async fetchUsers() {
-      try {
-        const response = await apiClient.get("/users/");
-        this.users = response.data;
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    },
     handleFileUpload(event) {
       this.thumbnail_img = event.target.files[0];
     },
@@ -124,35 +106,29 @@ export default {
         formData.append("thumbnail_url", this.thumbnail_url);
         formData.append("event_date", this.event_date);
         formData.append("price", this.price);
-        formData.append("event_organizer", this.event_organizer);
+        formData.append("event_organizer", this.currentUserId); // Set organizer ID
 
-        const response = await apiClient.post("/events/", formData);
+        const response = await apiClient.createEvent("/events/", formData);
         console.log("Event created:", response.data);
       } catch (error) {
         console.error("Error creating event:", error);
       }
     },
+    async fetchCurrentUser() {
+      try {
+        const response = await apiClient.get("/auth/user/"); // Endpoint to get the current user
+        this.currentUserId = response.data.id;
+      } catch (error) {
+        console.error("Error fetching current user:", error);
+      }
+    },
   },
   mounted() {
-    this.fetchUsers();
+    this.fetchCurrentUser();
   },
 };
 </script>
 
 <style scoped>
-/* Optional: Adjust file input for consistent styling across browsers */
-input[type="file"]::-webkit-file-upload-button {
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  background-color: #f9fafb;
-  color: #4b5563;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-input[type="file"]::-webkit-file-upload-button:hover {
-  background-color: #f3f4f6;
-}
+/* Tailwind CSS classes used for styling */
 </style>
