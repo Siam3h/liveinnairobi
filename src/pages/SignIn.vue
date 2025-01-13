@@ -148,7 +148,7 @@ export default {
             localStorage.setItem('rememberedEmail', this.email);
           }
         }
-
+        //redirect
         this.$router.push({ name: 'user-dashboard' });
       } catch (error) {
         console.error('Error during sign in:', error);

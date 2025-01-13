@@ -31,8 +31,8 @@
           <div>
             <label for="password1" class="sr-only">Password</label>
             <input 
-              v-model="password1" 
-              id="password1"
+              v-model="password" 
+              id="password"
               type="password" 
               required
               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -89,12 +89,12 @@ export default {
     async signUp() {
   this.errorMessage = '';
 
-  if (this.password1 !== this.password2) {
+  if (this.password !== this.password2) {
     this.errorMessage = 'Passwords do not match';
     return;
   }
 
-  const payload = { email: this.email, password: this.password1 };
+  const payload = { email: this.email, password: this.password };
   
   console.log('Payload:', payload); 
 
