@@ -1,17 +1,4 @@
 <template>
-  <div>
-    <h1>Sign Up</h1>
-    <form @submit.prevent="signUp">
-      <input v-model="email" type="email" placeholder="Email" required />
-      <input v-model="password1" type="password" placeholder="Password" required />
-      <input v-model="password2" type="password" placeholder="Confirm Password" required />
-      <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
-      <button type="submit">Sign Up</button>
-    </form>
-  </div>
-</template>
-
-<template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
       <div>
