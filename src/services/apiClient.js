@@ -7,14 +7,14 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Ensures cookies (like CSRF) are sent
+  withCredentials: true, 
 });
 
-// Fetch CSRF token from backend (call csrf endpoint)
+
 async function fetchCSRFToken() {
   try {
     const response = await apiClient.get('/users/csrf/');
-    return response.data.csrfToken;  // Assuming csrfToken is returned from the backend
+    return response.data.csrfToken;  
   } catch (error) {
     console.error('Error fetching CSRF token:', error);
     throw error;
@@ -24,10 +24,10 @@ async function fetchCSRFToken() {
 // Request Interceptor: Adds CSRF token to headers
 apiClient.interceptors.request.use(
   async (config) => {
-    let csrfToken = Cookies.get('csrftoken');  // Check cookies first
+    let csrfToken = Cookies.get('csrftoken');  
     if (!csrfToken) {
-      csrfToken = await fetchCSRFToken();  // If no token in cookies, fetch from backend
-      Cookies.set('csrftoken', csrfToken);  // Optionally store it in cookies
+      csrfToken = await fetchCSRFToken();  
+      Cookies.set('csrftoken', csrfToken);  
     }
     if (csrfToken) {
       config.headers['X-CSRFToken'] = csrfToken;
@@ -66,7 +66,7 @@ apiClient.interceptors.response.use(
     // Handle authentication errors (401)
     if (error.response?.status === 401 && !originalRequest._retry) {
       // You might want to redirect to login or refresh token here
-      // window.location.href = '/login';
+      window.location.href = '/login';
     }
 
     return Promise.reject(error);
@@ -146,7 +146,7 @@ export default {
       .catch(handleError);
   },
 
-  // Auth APIs
+  // Authentication APIs
   authSignUp(data) {
     return apiClient.post('/users/auth/signup/', data).catch(handleError);
   },
