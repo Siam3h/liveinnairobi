@@ -6,7 +6,7 @@
       <!-- Background Image with Gradient -->
       <div 
         class="absolute inset-0 bg-cover bg-center opacity-50"
-        style="background-image: url('src/assets/images/bg.jpg');">
+        style="background-image: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070');">
       </div>
   
       <!-- Text Content -->
@@ -15,7 +15,7 @@
           Discover, Book, and Share Events Across Kenya
         </h1>
         <p class="text-white text-xl md:text-2xl lg:text-3xl mb-8">
-          Your Ultimate Guide to Nairobi's Hottest Events. Explore Events, Purchase Tickets, Post Your Own, and Read Exclusive Reviews!
+          <span class="italic font-playwrite">Your Ultimate Guide to Nairobi's Hottest Events.</span> <br> Explore Events, Purchase Tickets, Post Your Own, and Read Exclusive Reviews!
         </p>
         <div class="flex space-x-4">
           <a 
@@ -33,10 +33,10 @@
     </div>
   
     <!-- Trusted Partners Section -->
-    <div class="bg-yellow-400 py-8">
-      <div class="container mx-auto flex justify-center space-x-8">
-        <img src="https://www.pexels.com/photo/joyful-man-jumping-at-sydney-marathon-event-30061273/" alt="">
-        <img v-for="logo in logos" :key="logo.src" :src="logo.src" :alt="logo.alt" class="h-12 w-auto" />
+    <div class="bg-yellow-50 py-16">
+      <div class="container mx-auto">
+        <h2 class="text-center text-2xl font-semibold text-gray-800 mb-8">Trusted By Kenya's Leading Brands</h2>
+        <LogoScroller />
       </div>
     </div>
   
@@ -142,17 +142,15 @@
   <script>
   import Navbar from '../components/Navbar.vue';
   import Footer from '../components/Footer.vue';
-<<<<<<< HEAD
-  import apiClient from '@/services/apiClient';
-
-=======
   import apiClient from '../services/apiClient';
+  import LogoScroller from '../components/LogoScroller.vue';
   
->>>>>>> f002543c467163d6edb400225ddab78b86ffb8a5
+
   export default {
     components: {
       Navbar,
-      Footer
+      Footer,
+      LogoScroller,
     },
     data() {
       return {
@@ -202,5 +200,6 @@
   .bg-gradient-to-br {
     background: linear-gradient(to bottom right, var(--tw-gradient-stops));
   }
+
   </style>
   
