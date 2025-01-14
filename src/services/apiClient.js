@@ -174,9 +174,28 @@ export default {
   },
 
   async authSignIn(credentials) {
-    await this.fetchCSRFToken();
-    return apiClient.post('/users/auth/signin/', credentials).catch(handleError);
-  },
+    try {
+      // Make the API request to the new combined endpoint
+      const response = await apiClient.post('/users/auth/signin_dashboard/', credentials);
+  
+      // Extract token and dashboard data
+      const { token, user, dashboard } = response.data;
+  
+      // Save the token and user info in local storage or cookies
+      Cookies.set('token', token, { secure: true, sameSite: 'Strict' });
+      Cookies.set('csrftoken', dashboard.csrfToken, { secure: true, sameSite: 'Strict' });
+  
+      // Return the dashboard data to the component
+      return {
+        user,
+        events: dashboard.events,
+        blogs: dashboard.blogs,
+      };
+    } catch (error) {
+      console.error('Error during login:', error);
+      throw error;
+    }
+  },  
 
   async authSignOut() {
     await this.fetchCSRFToken();
