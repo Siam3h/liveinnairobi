@@ -39,23 +39,16 @@ async function fetchCSRFToken() {
 // Request Interceptor: Adds CSRF token to specific request methods (POST, PUT, DELETE)
 apiClient.interceptors.request.use(
   async (config) => {
-    // Check if the request method is POST, PUT, or DELETE
-    if (['post', 'put', 'delete'].includes(config.method)) {
-      let csrfToken = await fetchCSRFToken();
-      const token = Cookies.get('token');
-      Cookies.set('csrftoken', csrfToken);
-
-      if (!csrfToken) {
-        let csrfToken = Cookies.get('csrftoken');
-        console.log('csrfToken:',csrfToken);
-        console.log('Cookies:', Cookies)
-      }
+    let csrfToken = Cookies.get('csrftoken');
+    const token = Cookies.get('token');
 
       if (csrfToken) {
         config.headers['X-CSRFToken'] = csrfToken;
-        config.headers['Authorization'] = `Bearer ${token}`;
       }
-    }
+
+      if (token) {
+          config.headers['Authorization'] = `Bearer ${token}`;
+      }
     return config;
   },
   (error) => {
@@ -184,11 +177,14 @@ export default {
   },
 
   // User APIs
-  async getDashboard(){
-    await this.fetchCSRFToken();
-    return apiClient.get('/users/dashboard/').catch(handleError);
+  async getDashboard() {
+    try {
+        const response = await apiClient.get('/users/dashboard/'); 
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
   },
-
   async updateProfile(data) {
     await this.fetchCSRFToken();
     return apiClient.put('/users/update_profile/', data).catch(handleError);
