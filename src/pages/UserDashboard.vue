@@ -38,19 +38,22 @@ export default {
 
     // Fetch the dashboard data when the component is mounted
     onMounted(async () => {
-      try {
-        // Fetch dashboard data from the API
-        const response = await apiClient.getDashboard();
-        console.log("response:", response);
-        if (response.data.token){
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          // Fetch dashboard data from the API
+          const response = await apiClient.get('/user/dashboard');
+          console.log("response:", response);
           user.value = response.data.user;  // Set user data
           events.value = response.data.events;  // Set events data
-          blogs.value = response.data.blogs;
+          blogs.value = response.data.blogs;  // Set blogs data
+        } catch (error) {
+          console.error('Error fetching dashboard data:', error);
+          alert('There was an error fetching the dashboard data.');
         }
-      
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-        alert('There was an error fetching the dashboard data.');
+      } else {
+        // Redirect if no token is found
+        this.$router.push({ name: 'signin' });
       }
     });
 
