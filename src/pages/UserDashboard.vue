@@ -38,40 +38,37 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        withCredentials: true, 
+        withCredentials: true,
       });
   
       onMounted(async () => {
         try {
           const token = localStorage.getItem('token');
+          const userId = localStorage.getItem('user_id'); // Retrieve user ID from localStorage
+  
           console.log('Local token:', token);
-          // Retrieve the response from localStorage and ensure it's valid JSON
-    const responseData = localStorage.getItem('response_id');
-    let res = null;
-
-    if (responseData) {
-      try {
-        res = JSON.parse(responseData); // Try parsing the stringified object
-        console.log('response data:', res); // Check if the object is valid
-      } catch (error) {
-        console.error('Error parsing stored response data:', error);
-      }
-    } else {
-      console.log('No response data found in localStorage');
-    }
-          if (token) {
-            // Add the token to the Authorization header for this request
-            const response = await apiClient.get('/users/dashboard/', {
+          console.log('User ID:', userId);
+  
+          if (token && userId) {
+            // Fetch user details using the ID
+            const userResponse = await apiClient.get(`/users/${userId}/`, {
               headers: {
-                'Authorization': `Bearer ${token}`,
-              }
+                Authorization: `Bearer ${token}`,
+              },
             });
-            user.value = response.data.user;
-            events.value = response.data.events;
-            blogs.value = response.data.blogs;
+            user.value = userResponse.data;
+  
+            // Fetch dashboard data
+            const dashboardResponse = await apiClient.get('/users/dashboard/', {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            events.value = dashboardResponse.data.events;
+            blogs.value = dashboardResponse.data.blogs;
           } else {
-            console.error('No token found. Please log in.');
-            // Redirect to login or show an error message
+            console.error('Token or User ID not found. Please log in.');
+            // Handle redirection to login or error display
           }
         } catch (error) {
           console.error('Error fetching dashboard data:', error);
@@ -85,39 +82,39 @@
   </script>
   
   <style scoped>
-    /* Your styles */
-    .dashboard-container {
-      padding: 20px;
-    }
+  /* Your styles */
+  .dashboard-container {
+    padding: 20px;
+  }
   
-    .dashboard-card {
-      background: #f9f9f9;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+  .dashboard-card {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
   
-    h2 {
-      color: #333;
-    }
+  h2 {
+    color: #333;
+  }
   
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
   
-    li {
-      margin-bottom: 15px;
-    }
+  li {
+    margin-bottom: 15px;
+  }
   
-    h4 {
-      margin: 5px 0;
-      font-size: 1.2em;
-    }
+  h4 {
+    margin: 5px 0;
+    font-size: 1.2em;
+  }
   
-    p {
-      margin: 5px 0;
-      font-size: 1em;
-    }
+  p {
+    margin: 5px 0;
+    font-size: 1em;
+  }
   </style>
   
