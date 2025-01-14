@@ -45,6 +45,7 @@ export default {
         
         // Fetch dashboard data from the API
         const response = await apiClient.getDashboard(csrfToken);
+        console.log("response:", response);
         user.value = response.data.user;  // Set user data
         events.value = response.data.events;  // Set events data
         blogs.value = response.data.blogs;  // Set blogs data

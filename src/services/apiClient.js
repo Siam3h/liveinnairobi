@@ -42,6 +42,7 @@ apiClient.interceptors.request.use(
     // Check if the request method is POST, PUT, or DELETE
     if (['post', 'put', 'delete'].includes(config.method)) {
       let csrfToken = await fetchCSRFToken();
+      const token = Cookies.get('token');
       Cookies.set('csrftoken', csrfToken);
 
       if (!csrfToken) {
@@ -52,6 +53,7 @@ apiClient.interceptors.request.use(
 
       if (csrfToken) {
         config.headers['X-CSRFToken'] = csrfToken;
+        config.headers['Authorization'] = `Bearer ${token}`;
       }
     }
     return config;
