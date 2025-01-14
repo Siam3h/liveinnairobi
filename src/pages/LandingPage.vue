@@ -142,13 +142,8 @@
   <script>
   import Navbar from '../components/Navbar.vue';
   import Footer from '../components/Footer.vue';
-<<<<<<< HEAD
-  import apiClient from '@/services/apiClient';
-
-=======
   import apiClient from '../services/apiClient';
   
->>>>>>> f002543c467163d6edb400225ddab78b86ffb8a5
   export default {
     components: {
       Navbar,
