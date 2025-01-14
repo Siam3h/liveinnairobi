@@ -40,7 +40,11 @@ export default {
     // Fetch the dashboard data when the component is mounted
     onMounted(async () => {
       try {
-        const response = await apiClient.getDashboard();
+        // Make sure the CSRF token is set before making the request
+        const csrfToken = await apiClient.fetchCSRFToken();
+        
+        // Fetch dashboard data from the API
+        const response = await apiClient.getDashboard(csrfToken);
         user.value = response.data.user;  // Set user data
         events.value = response.data.events;  // Set events data
         blogs.value = response.data.blogs;  // Set blogs data
