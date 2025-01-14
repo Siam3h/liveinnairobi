@@ -93,6 +93,7 @@ apiClient.interceptors.response.use(
 
 // Export the API functions
 export default {
+  fetchCSRFToken,
   // Blog APIs
   getBlogs(page = 1) {
     return apiClient.get(`/blogs/?page=${page}`).catch(handleError);
