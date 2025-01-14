@@ -55,7 +55,7 @@ export default {
 
     async fetchCSRFToken() {
       try {
-        const response = await apiClient.get('/users/csrf/');
+        const response = await apiClient.authSignOut('/users/csrf/');
         const csrfToken = response.data.csrfToken;
         
         if (!csrfToken) {
