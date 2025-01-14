@@ -35,6 +35,7 @@
     <!-- Trusted Partners Section -->
     <div class="bg-yellow-400 py-8">
       <div class="container mx-auto flex justify-center space-x-8">
+        <img src="https://www.pexels.com/photo/joyful-man-jumping-at-sydney-marathon-event-30061273/" alt="">
         <img v-for="logo in logos" :key="logo.src" :src="logo.src" :alt="logo.alt" class="h-12 w-auto" />
       </div>
     </div>
@@ -141,7 +142,7 @@
   <script>
   import Navbar from '../components/Navbar.vue';
   import Footer from '../components/Footer.vue';
-  import apiClient from '@/services/apiClient';
+  import api from '../api';
   
   export default {
     components: {
@@ -155,7 +156,7 @@
         loadingBlogs: true,
         loadingEvents: true,
         logos: [
-          { src: "https://tailus.io/sources/blocks/company-site/preview/images/clients/airbnb.svg", alt: "Airbnb" },
+          { src: "https://www.pexels.com/photo/joyful-man-jumping-at-sydney-marathon-event-30061273/", alt: "Airbnb" },
           { src: "https://tailus.io/sources/blocks/company-site/preview/images/clients/client-8.png", alt: "Client 8" },
           { src: "https://tailus.io/sources/blocks/company-site/preview/images/clients/client-1.png", alt: "Client 1" },
           { src: "https://tailus.io/sources/blocks/company-site/preview/images/clients/client-3.png", alt: "Client 3" },
