@@ -186,7 +186,12 @@ export default {
   // User APIs
   async getDashboard(){
     await this.fetchCSRFToken();
-    return apiClient.get('/users/dashboard/').catch(handleError);
+    const csrfToken = Cookies.get('csrftoken');
+    return apiClient.get('/users/dashboard/',{
+      headers: {
+          'X-CSRFToken': csrfToken, 
+      },
+  }).catch(handleError);
   },
 
   async updateProfile(data) {
