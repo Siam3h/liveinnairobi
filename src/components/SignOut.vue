@@ -23,18 +23,23 @@ export default {
   name: 'SignOut',
   methods: {
     async signOut() {
+      this.loading = true;
+
       try {
         // Call the authSignOut method
         await this.authSignOut();
 
-        // Clear the auth token (if stored in cookies or local storage)
-        Cookies.remove('csrfToken'); // Optional, based on your implementation
+        // Clear the auth token and csrf token from cookies
+        Cookies.remove('token');
+        Cookies.remove('csrftoken');
 
-        // Redirect the user to the login page
-        this.$router.push({ name: 'login' });
+        // Redirect to the login page
+        this.$router.push({ name: 'landing' });
       } catch (error) {
         console.error('Logout failed:', error.message || error);
         alert('Error during logout. Please try again.');
+      } finally {
+        this.loading = false; // Hide loading message
       }
     },
     async authSignOut() {
