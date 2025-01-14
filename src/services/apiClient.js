@@ -46,7 +46,8 @@ apiClient.interceptors.request.use(
 
       if (!csrfToken) {
         let csrfToken = Cookies.get('csrftoken');
-        console.log(csrfToken);
+        console.log('csrfToken:',csrfToken);
+        console.log('Cookies:', Cookies)
       }
 
       if (csrfToken) {
