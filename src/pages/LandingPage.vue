@@ -1,4 +1,5 @@
 <template>
+  <section>
     <Navbar />
     <!-- Hero Section -->
     <div class="relative h-screen flex items-center justify-start bg-gradient-to-br from-blue-600 to-red-500 text-left overflow-hidden">
@@ -134,13 +135,14 @@
         </div>
       </div>
     </div>
-    <Footer />
+    <Footer/>
+    </section>
   </template>
   
   <script>
   import Navbar from '../components/Navbar.vue';
   import Footer from '../components/Footer.vue';
- 
+  import api from '../api';
   
   export default {
     components: {
@@ -169,7 +171,7 @@
     methods: {
       async fetchBlogs() {
         try {
-          const response = await api.getBlogs();
+          const response = await apiClient.getBlogs();
           this.blogs = response.data.results;
         } catch (error) {
           console.error('Error fetching blogs:', error);
@@ -179,7 +181,7 @@
       },
       async fetchEvents() {
         try {
-          const response = await api.getEvents();
+          const response = await apiClient.getEvents();
           this.events = response.data.results;
         } catch (error) {
           console.error('Error fetching events:', error);

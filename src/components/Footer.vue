@@ -18,6 +18,8 @@
           <a href="/events" class="mx-4 text-sm text-gray-300 hover:text-blue-400 transition-colors">Events</a>
           <a href="/blogs" class="mx-4 text-sm text-gray-300 hover:text-blue-400 transition-colors">Blogs</a>
           <a href="/contact" class="mx-4 text-sm text-gray-300 hover:text-blue-400 transition-colors">Contact</a>
+          <a href="/auth/signin" class="mx-4 text-sm text-gray-300 hover:text-blue-400 transition-colors">Sign In</a>
+          <a href="/auth/signup" class="mx-4 text-sm text-gray-300 hover:text-blue-400 transition-colors">Sign Up</a>
         </div>
   
         <hr class="my-8 border-gray-700" />
