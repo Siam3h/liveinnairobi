@@ -17,12 +17,12 @@ const VerifyPayment = () => import('../pages/VerifyPayment.vue');
 const TicketScanner = () => import('../pages/TicketScanner.vue');
 const SignUp = () => import('../pages/SignUp.vue');
 const SignIn = () => import('../pages/SignIn.vue');
-const SignOut = () => import('../pages/SignOut.vue');
 const UpdateProfile = () => import('../pages/UpdateProfile.vue');
 const Dashboard = () => import('../pages/Dashboard.vue');
 const NotFound = () => import('../pages/NotFound.vue');
 
 // Components
+const SignOut = () => import('../components/SignOut.vue');
 const BlogDelete = () => import('../components/BlogDelete.vue');
 const EventDelete = () => import('../components/EventDelete.vue');
 const DeleteProfile = () => import('../components/DeleteProfile.vue');
