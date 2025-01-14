@@ -2,10 +2,13 @@ import axios from 'axios';
 import Cookies from 'js-cookie'; // Assuming js-cookie is being used for managing cookies
 
 // Create axios instance
+const token = Cookies.get('token');
+
 const apiClient = axios.create({
   baseURL: 'https://liveinnbo-backend.onrender.com/api/v1',
   headers: {
     'Content-Type': 'application/json',
+    'Authorization': `Token ${token}`
   },
   withCredentials: true, 
 });
@@ -185,6 +188,7 @@ export default {
         handleError(error);
     }
   },
+  
   async updateProfile(data) {
     await this.fetchCSRFToken();
     return apiClient.put('/users/update_profile/', data).catch(handleError);
