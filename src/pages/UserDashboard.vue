@@ -45,9 +45,20 @@
         try {
           const token = localStorage.getItem('token');
           console.log('Local token:', token);
-          const res = JSON.parse(localStorage.getItem('response'));
-          console.log('response data:', res); // This should show 
-  
+          // Retrieve the response from localStorage and ensure it's valid JSON
+    const responseData = localStorage.getItem('response');
+    let res = null;
+
+    if (responseData) {
+      try {
+        res = JSON.parse(responseData); // Try parsing the stringified object
+        console.log('response data:', res); // Check if the object is valid
+      } catch (error) {
+        console.error('Error parsing stored response data:', error);
+      }
+    } else {
+      console.log('No response data found in localStorage');
+    }
           if (token) {
             // Add the token to the Authorization header for this request
             const response = await apiClient.get('/users/dashboard/', {
