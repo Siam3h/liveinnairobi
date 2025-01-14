@@ -45,8 +45,8 @@
         try {
           const token = localStorage.getItem('token');
           console.log('Local token:', token);
-          const res = localStorage.getItem('response');
-          console.log('response data:', res.data)
+          const res = JSON.parse(localStorage.getItem('response'));
+          console.log('response data:', res); // This should show 
   
           if (token) {
             // Add the token to the Authorization header for this request
