@@ -21,6 +21,7 @@ const handleError = (error) => {
 async function fetchCSRFToken() {
   try {
     const response = await apiClient.get('/users/csrf/');
+    console.log(response.data.csrfToken);
     const csrfToken = response.data.csrfToken;
     Cookies.set('csrftoken', csrfToken, {
       secure: true,
@@ -33,6 +34,7 @@ async function fetchCSRFToken() {
     throw error;
   }
 }
+
 
 // Request Interceptor: Adds CSRF token to specific request methods (POST, PUT, DELETE)
 apiClient.interceptors.request.use(
