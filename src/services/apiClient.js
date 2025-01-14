@@ -207,7 +207,7 @@ export default {
     return apiClient.get(`/users/${userId}/`).catch(handleError);
   },
 
-  //CSRF API
+  //CSRFAPI
   getCsrf(){
     return apiClient.get('/users/csrf').catch(handleError);
   }
