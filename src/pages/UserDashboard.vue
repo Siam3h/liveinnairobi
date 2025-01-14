@@ -23,7 +23,7 @@
   </template>
   
   <script>
-  import apiClient from '@/services/apiClient'; 
+  import axios from 'axios';
   import { ref, onMounted } from 'vue';
   
   export default {
@@ -33,14 +33,22 @@
       const events = ref([]);
       const blogs = ref([]);
   
+      const apiClient = axios.create({
+        baseURL: 'https://liveinnbo-backend.onrender.com/api/v1',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Add credentials if needed for the request
+      });
+  
       onMounted(async () => {
         try {
           const token = localStorage.getItem('token');
-          console.log('Local token:', token)
-          
+          console.log('Local token:', token);
+  
           if (token) {
             // Add the token to the Authorization header for this request
-            const response = await apiClient.getDashboard('/users/dashboard/', {
+            const response = await apiClient.get('/users/dashboard/', {
               headers: {
                 'Authorization': `Bearer ${token}`,
               }
@@ -65,5 +73,38 @@
   
   <style scoped>
     /* Your styles */
+    .dashboard-container {
+      padding: 20px;
+    }
+  
+    .dashboard-card {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  
+    h2 {
+      color: #333;
+    }
+  
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+  
+    li {
+      margin-bottom: 15px;
+    }
+  
+    h4 {
+      margin: 5px 0;
+      font-size: 1.2em;
+    }
+  
+    p {
+      margin: 5px 0;
+      font-size: 1em;
+    }
   </style>
   
