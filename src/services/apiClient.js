@@ -25,8 +25,8 @@ async function fetchCSRFToken() {
     const csrfToken = response.data.csrfToken;
     Cookies.set('csrftoken', csrfToken, {
       secure: true,
-      sameSite: 'Lax',
-      domain: '.onrender.com'
+      sameSite: 'None',
+      domain: 'None'
     });
     return csrfToken;
   } catch (error) {
@@ -41,11 +41,12 @@ apiClient.interceptors.request.use(
   async (config) => {
     // Check if the request method is POST, PUT, or DELETE
     if (['post', 'put', 'delete'].includes(config.method)) {
-      let csrfToken = Cookies.get('csrftoken');
+      let csrfToken = await fetchCSRFToken();
+      Cookies.set('csrftoken', csrfToken);
 
       if (!csrfToken) {
-        csrfToken = await fetchCSRFToken();
-        Cookies.set('csrftoken', csrfToken);
+        let csrfToken = Cookies.get('csrftoken');
+        console.log(csrfToken);
       }
 
       if (csrfToken) {
