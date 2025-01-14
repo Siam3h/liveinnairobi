@@ -35,15 +35,15 @@
   
       onMounted(async () => {
         try {
-          // Get the token from localStorage
           const token = localStorage.getItem('token');
           
           if (token) {
-            // Add the token to the Authorization header for the API request
-            apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  
-            // Fetch the user data, events, and blogs from the API
-            const response = await apiClient.getDashboard('/users/dashboard/'); // Adjust the URL accordingly
+            // Add the token to the Authorization header for this request
+            const response = await apiClient.getDashboard('/users/dashboard/', {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+              }
+            });
             user.value = response.data.user;
             events.value = response.data.events;
             blogs.value = response.data.blogs;

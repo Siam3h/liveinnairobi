@@ -177,12 +177,7 @@ export default {
 
   // User APIs
   async getDashboard() {
-    try {
-        const response = await apiClient.get('/users/dashboard/'); 
-        return response.data;
-    } catch (error) {
-        handleError(error);
-    }
+        return apiClient.get('/users/dashboard/'); 
   },
   
   async updateProfile(data) {
