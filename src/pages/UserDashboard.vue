@@ -1,9 +1,8 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-card">
-      <h2>Welcome, {{ user.username }}</h2>
+      <h2>Welcome</h2>
       <p>Email: {{ user.email }}</p>
-      <p>Full Name: {{ user.first_name }} {{ user.last_name }}</p>
 
       <h3>Your Events</h3>
       <ul>
@@ -40,11 +39,8 @@ export default {
     // Fetch the dashboard data when the component is mounted
     onMounted(async () => {
       try {
-        // Make sure the CSRF token is set before making the request
-        const csrfToken = await apiClient.fetchCSRFToken();
-        
         // Fetch dashboard data from the API
-        const response = await apiClient.getDashboard(csrfToken);
+        const response = await apiClient.getDashboard();
         console.log("response:", response);
         user.value = response.data.user;  // Set user data
         events.value = response.data.events;  // Set events data
