@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav x-data="{ isOpen: false }" class="bg-white shadow dark:bg-gray-800">
+        <nav x-data="{ isOpen: false }" class="fixed top-0 left-0 right-0 z-50 bg-white shadow dark:bg-gray-800">
             <div class="container px-6 py-4 mx-auto">
                 <div class="lg:flex lg:items-center">
                     <div class="flex items-center justify-between">
