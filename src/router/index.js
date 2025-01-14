@@ -27,8 +27,10 @@ const BlogDelete = () => import('../components/BlogDelete.vue');
 const EventDelete = () => import('../components/EventDelete.vue');
 const DeleteProfile = () => import('../components/DeleteProfile.vue');
 
+
 // Routes Configuration
 const routes = [
+
     // Landing and About Pages
     { path: '/', name: 'landing', component: LandingPage },
     { path: '/about', name: 'about', component: About },
