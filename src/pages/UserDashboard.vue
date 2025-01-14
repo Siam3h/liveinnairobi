@@ -36,6 +36,7 @@
       onMounted(async () => {
         try {
           const token = localStorage.getItem('token');
+          console.log('Local token:', token)
           
           if (token) {
             // Add the token to the Authorization header for this request
