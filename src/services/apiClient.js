@@ -183,7 +183,7 @@ export default {
     return apiClient.post('/users/auth/signout/').catch(handleError);
   },
 
-  // User APIs
+  // UserAPIs
   async getDashboard(){
     await this.fetchCSRFToken();
     return apiClient.get('/users/dashboard/').catch(handleError);

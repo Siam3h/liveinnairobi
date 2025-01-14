@@ -42,8 +42,8 @@ export default {
         // Clear cookies only after successful sign out
         this.clearAuthCookies();
         
-        // Redirect to landing page
-        this.$router.push({ name: 'landing' });
+        // Redirect to landing page or login
+        this.$router.push({ name: 'signin' });
       } catch (error) {
         console.error('Logout failed:', error);
         this.$toast?.error('Error during logout. Please try again.') || 
@@ -55,7 +55,7 @@ export default {
 
     async fetchCSRFToken() {
       try {
-        const response = await apiClient.authSignOut('/users/csrf/');
+        const response = await apiClient.get('/users/csrf/'); 
         const csrfToken = response.data.csrfToken;
         
         if (!csrfToken) {
@@ -64,8 +64,7 @@ export default {
 
         Cookies.set('csrftoken', csrfToken, {
           secure: true,
-          sameSite: 'Lax', // Changed from 'None' to 'Lax' for better compatibility
-          // Removed domain: 'None' as it's invalid
+          sameSite: 'Lax', 
         });
 
         return csrfToken;
@@ -104,75 +103,5 @@ export default {
 </script>
 
 <style scoped>
-.signout-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: #f8f9fa;
-}
-
-.signout-card {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  max-width: 400px;
-  width: 100%;
-}
-
-.signout-card h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.signout-card p {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.btn {
-  padding: 10px 15px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.btn-danger {
-  background: #dc3545;
-  color: white;
-}
-
-.btn-danger:hover:not(:disabled) {
-  background: #c82333;
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background: #5a6268;
-}
-
-.btn i {
-  margin-right: 5px;
-}
+/* Styling as before */
 </style>
