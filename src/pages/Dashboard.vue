@@ -97,9 +97,7 @@ export default {
         console.error(error);
       }
     },
-    logout() {
-      apiClient.authSignOut();
-    },
+  
     createBlog() {
       this.$router.push('/blogs/create');
     },

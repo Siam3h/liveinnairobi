@@ -87,7 +87,7 @@ apiClient.interceptors.response.use(
     // Handle authentication errors (401)
     if (error.response?.status === 401 && !originalRequest._retry) {
       // You might want to redirect to login or refresh token here
-      window.location.href = '/login';
+      window.location.href = '/auth/signin';
     }
 
     return Promise.reject(error);
