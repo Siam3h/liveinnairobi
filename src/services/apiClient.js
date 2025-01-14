@@ -123,7 +123,8 @@ export default {
     return apiClient.get(`/events/?page=${page}`).catch(handleError);
   },
 
-  createEvent(data) {
+  async createEvent(data) {
+    await this.fetchCSRFToken();
     return apiClient.post(`/events/`, data).catch(handleError);
   },
 
@@ -131,7 +132,8 @@ export default {
     return apiClient.get(`/events/${eventId}/`).catch(handleError);
   },
 
-  updateEvent(eventId, data) {
+  async updateEvent(eventId, data) {
+    await this.fetchCSRFToken();
     return apiClient.put(`/events/${eventId}/`, data).catch(handleError);
   },
 
@@ -173,16 +175,19 @@ export default {
     return apiClient.post('/users/auth/signin/', credentials).catch(handleError);
   },
 
-  authSignOut() {
+  async authSignOut() {
+    await this.fetchCSRFToken();
     return apiClient.post('/users/auth/signout/').catch(handleError);
   },
 
   // User APIs
-  updateProfile(data) {
+  async updateProfile(data) {
+    await this.fetchCSRFToken();
     return apiClient.put('/users/update_profile/', data).catch(handleError);
   },
 
-  deleteProfile() {
+  async deleteProfile() {
+    await this.fetchCSRFToken();
     return apiClient.delete('/users/delete_account/').catch(handleError);
   },
 

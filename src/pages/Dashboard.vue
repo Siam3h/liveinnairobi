@@ -3,7 +3,7 @@
     <h1>Admin Dashboard</h1>
     <div>
       <h2>Welcome, {{ user.name }}</h2>
-      <button @click="logout">Logout</button>
+      <li><router-link to="/auth/signout">Sign Out</router-link></li>
     </div>
 
     <section>
