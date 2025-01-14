@@ -39,10 +39,11 @@ export default {
     // Fetch the dashboard data when the component is mounted
     onMounted(async () => {
       const token = localStorage.getItem('token');
+      console.log("dashboard token:", token);
       if (token) {
         try {
           // Fetch dashboard data from the API
-          const response = await apiClient.get('/user/dashboard');
+          const response = await apiClient.getDashboard('/user/dashboard');
           console.log("response:", response);
           user.value = response.data.user;  // Set user data
           events.value = response.data.events;  // Set events data
