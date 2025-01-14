@@ -20,8 +20,14 @@ const handleError = (error) => {
 // Fetch CSRF token
 async function fetchCSRFToken() {
   try {
-    const response = await apiClient.getCsrf('/users/csrf/');
-    return response.data.csrfToken;
+    const response = await this.apiClient.get('/users/csrf/');
+    const csrfToken = response.data.csrfToken;
+    Cookies.set('csrftoken', csrfToken, {
+      secure: true,
+      sameSite: 'Lax',
+      domain: '.onrender.com'
+    });
+    return csrfToken;
   } catch (error) {
     console.error('Error fetching CSRF token:', error);
     throw error;
@@ -153,16 +159,13 @@ export default {
   },
 
   // Authentication APIs
-  authSignUp(data) {
-    const csrfToken = Cookies.get('csrftoken'); 
-    return apiClient.post('/users/auth/signup/', data, {
-      headers: {
-          'X-CSRFToken': csrfToken, 
-      },
-  }).catch(handleError);
+  async authSignUp(data) {
+    await this.fetchCSRFToken();
+    return apiClient.post('/users/auth/signup/', data).catch(handleError);
   },
 
-  authSignIn(credentials) {
+  async authSignIn(credentials) {
+    await this.fetchCSRFToken();
     return apiClient.post('/users/auth/signin/', credentials).catch(handleError);
   },
 
