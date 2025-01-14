@@ -154,7 +154,12 @@ export default {
 
   // Authentication APIs
   authSignUp(data) {
-    return apiClient.post('/users/auth/signup/', data).catch(handleError);
+    const csrfToken = Cookies.get('csrftoken'); 
+    return apiClient.post('/users/auth/signup/', data, {
+      headers: {
+          'X-CSRFToken': csrfToken, 
+      },
+  }).catch(handleError);
   },
 
   authSignIn(credentials) {
