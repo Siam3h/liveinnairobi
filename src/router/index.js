@@ -18,7 +18,7 @@ const TicketScanner = () => import('../pages/TicketScanner.vue');
 const SignUp = () => import('../pages/SignUp.vue');
 const SignIn = () => import('../pages/SignIn.vue');
 const UpdateProfile = () => import('../pages/UpdateProfile.vue');
-const Dashboard = () => import('../pages/Dashboard.vue');
+const UserDashboard = () => import('../pages/UserDashboard.vue');
 const NotFound = () => import('../pages/NotFound.vue');
 
 // Components
@@ -42,7 +42,7 @@ const routes = [
     // User Profile Routes
     { path: '/user/update-profile', name: 'update-profile', component: UpdateProfile },
     { path: '/user/delete-profile', name: 'delete-profile', component: DeleteProfile },
-    { path: '/user/dashboard', name: 'user-dashboard', component: Dashboard },
+    { path: '/user/dashboard', name: 'user-dashboard', component: UserDashboard },
 
     // Blog Routes
     { path: '/blogs', name: 'blogs', component: Blogs },

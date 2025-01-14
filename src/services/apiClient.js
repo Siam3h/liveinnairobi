@@ -182,6 +182,9 @@ export default {
   },
 
   // User APIs
+  getDashboard(){
+    return apiClient.get('users/dashboard/').catch(handleError);
+  },
   async updateProfile(data) {
     await this.fetchCSRFToken();
     return apiClient.put('/users/update_profile/', data).catch(handleError);
