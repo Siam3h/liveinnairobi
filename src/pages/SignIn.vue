@@ -144,8 +144,8 @@ export default {
         
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
-          localStorage.setItem('response', response.data);
-          console.log('response:', response.data)
+          localStorage.setItem('response_id',response.data.user.id );
+          //console.log('response:', response.data)
           if (this.rememberMe) {
             localStorage.setItem('rememberedEmail', this.email);
           }
