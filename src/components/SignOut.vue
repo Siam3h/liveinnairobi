@@ -28,7 +28,7 @@ export default {
         await this.authSignOut();
 
         // Clear the auth token (if stored in cookies or local storage)
-        Cookies.remove('token'); // Optional, based on your implementation
+        Cookies.remove('csrfToken'); // Optional, based on your implementation
 
         // Redirect the user to the login page
         this.$router.push({ name: 'login' });
