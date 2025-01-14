@@ -38,12 +38,15 @@
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true, 
       });
   
       onMounted(async () => {
         try {
           const token = localStorage.getItem('token');
           console.log('Local token:', token);
+          const res = localStorage.getItem('response');
+          console.log('response data:', res.data)
   
           if (token) {
             // Add the token to the Authorization header for this request
