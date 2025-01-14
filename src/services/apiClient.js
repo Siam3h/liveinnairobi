@@ -20,7 +20,7 @@ const handleError = (error) => {
 // Fetch CSRF token
 async function fetchCSRFToken() {
   try {
-    const response = await apiClient.get('/users/csrf/');
+    const response = await apiClient.getCsrf('/users/csrf/');
     return response.data.csrfToken;
   } catch (error) {
     console.error('Error fetching CSRF token:', error);
@@ -181,4 +181,9 @@ export default {
   getUser(userId) {
     return apiClient.get(`/users/${userId}/`).catch(handleError);
   },
+
+  //CSRF API
+  getCsrf(){
+    return apiClient.get('/users/csrf').catch(handleError);
+  }
 };
