@@ -20,7 +20,7 @@ const handleError = (error) => {
 // Fetch CSRF token
 async function fetchCSRFToken() {
   try {
-    const response = await this.apiClient.get('/users/csrf/');
+    const response = await apiClient.get('/users/csrf/');
     const csrfToken = response.data.csrfToken;
     Cookies.set('csrftoken', csrfToken, {
       secure: true,
