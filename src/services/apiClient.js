@@ -5,7 +5,6 @@ const apiClient = axios.create({
   baseURL: 'https://liveinnbo-backend.onrender.com/api/v1',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': `Token ${token}`
   },
   withCredentials: true, 
 });
