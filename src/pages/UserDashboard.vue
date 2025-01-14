@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import apiClient from '@/services/apiClient'; // Import the apiClient
-import { ref, onMounted } from 'vue'; // For managing component state
+import apiClient from '@/services/apiClient'; 
+import { ref, onMounted } from 'vue'; 
 
 export default {
   name: 'UserDashboard',
@@ -42,9 +42,12 @@ export default {
         // Fetch dashboard data from the API
         const response = await apiClient.getDashboard();
         console.log("response:", response);
-        user.value = response.data.user;  // Set user data
-        events.value = response.data.events;  // Set events data
-        blogs.value = response.data.blogs;  // Set blogs data
+        if (response.data.token){
+          user.value = response.data.user;  // Set user data
+          events.value = response.data.events;  // Set events data
+          blogs.value = response.data.blogs;
+        }
+      
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
         alert('There was an error fetching the dashboard data.');
