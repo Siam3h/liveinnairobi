@@ -1,67 +1,93 @@
 <template>
-  <div class="dashboard-container p-6 bg-gray-50">
+  <div class="dashboard-container p-8 bg-gray-50">
+    <!-- Loading and Error States -->
     <div v-if="isLoading" class="text-center text-gray-500">Loading...</div>
-    <div v-else-if="error" class="text-red-500">{{ error }}</div>
-    <div v-else class="dashboard-card bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Welcome</h2>
-      <router-link to="{ name: 'signout' }" class="inline-block px-6 py-2 text-lg font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none">
-        Sign Out
-      </router-link>
-      <router-link to="{ name: 'update-profile' }" class="inline-block px-6 py-2 text-lg font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none">
-        Update Profile
-      </router-link>
-      
-      <div class="mb-4"><strong>Role:</strong> {{ user.avatar }}</div>
-      <p class="mb-4"><strong>Role:</strong> {{ user.username }}</p>
-      <p class="mb-4"><strong>Role:</strong> {{ user.role }}</p>
-      <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
-      <p class="mb-2"><strong>Name:</strong> {{ user.agency_name }}</p>
-      <p class="mb-4"><strong>Role:</strong> {{ user.role }}</p>
-      <p class="mb-4"><strong>Role:</strong> {{ user.bio }} </p>
+    <div v-else-if="error" class="text-red-500 text-center">{{ error }}</div>
 
-      <h3 class="text-xl font-semibold mb-2 text-gray-700">Your Events</h3>
-      <ul v-if="events.length > 0" class="mb-4">
-        <li v-for="event in events" :key="event.title" class="mb-2 border-b pb-2">
-          <h4 class="font-medium text-gray-800">{{ event.title }}</h4>
-          <p class="text-gray-600">{{ event.description }}</p>
-          <p class="text-gray-600"><strong>Date:</strong> {{ event.date }}</p>
+    <!-- Dashboard Card -->
+    <div v-else class="dashboard-card bg-white p-8 rounded-lg shadow-lg max-w-7xl mx-auto">
+      <div class="flex items-center mb-6">
+        <img :src="user.avatar ? user.avatar : '/media/avatars/default_avatar.png'" 
+             alt="User Avatar" 
+             class="w-24 h-24 rounded-full border-4 border-gray-300 mr-6" />
+        <div>
+          <h2 class="text-3xl font-semibold text-gray-800">Welcome, {{ user.username }}</h2>
+          <p class="text-lg text-gray-600">{{ user.role }}</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex space-x-4 mb-6">
+        <router-link to="{ name: 'signout' }" class="inline-block px-6 py-3 text-lg font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none">
+          Sign Out
+        </router-link>
+        <router-link to="{ name: 'update-profile' }" class="inline-block px-6 py-3 text-lg font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none">
+          Update Profile
+        </router-link>
+      </div>
+
+      <!-- User Information -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-semibold mb-2 text-gray-700">Email</h3>
+          <p class="text-gray-600">{{ user.email }}</p>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-semibold mb-2 text-gray-700">Agency Name</h3>
+          <p class="text-gray-600">{{ user.agency_name }}</p>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-semibold mb-2 text-gray-700">Bio</h3>
+          <p class="text-gray-600">{{ user.bio }}</p>
+        </div>
+      </div>
+
+      <!-- Events Section -->
+      <h3 class="text-2xl font-semibold mb-4 text-gray-700">Your Events</h3>
+      <ul v-if="events.length > 0" class="space-y-4">
+        <li v-for="event in events" :key="event.title" class="bg-gray-50 p-6 rounded-lg shadow-md">
+          <h4 class="font-medium text-gray-800 text-xl">{{ event.title }}</h4>
+          <p class="text-gray-600 mt-2">{{ event.description }}</p>
+          <p class="text-gray-500 mt-2"><strong>Date:</strong> {{ event.date }}</p>
         </li>
       </ul>
-      <p v-else class="text-gray-500 italic mb-4">No events available at this time.</p>
+      <p v-else class="text-gray-500 italic mb-6">No events available at this time.</p>
 
-      <h3 class="text-xl font-semibold mb-2 text-gray-700">Your Blogs</h3>
-      <ul v-if="blogs.length > 0" class="mb-4">
-        <li v-for="blog in blogs" :key="blog.title" class="mb-2 border-b pb-2">
-          <h4 class="font-medium text-gray-800">{{ blog.title }}</h4>
-          <p class="text-gray-600">{{ blog.content }}</p>
+      <!-- Blogs Section -->
+      <h3 class="text-2xl font-semibold mb-4 text-gray-700">Your Blogs</h3>
+      <ul v-if="blogs.length > 0" class="space-y-4">
+        <li v-for="blog in blogs" :key="blog.title" class="bg-gray-50 p-6 rounded-lg shadow-md">
+          <h4 class="font-medium text-gray-800 text-xl">{{ blog.title }}</h4>
+          <p class="text-gray-600 mt-2">{{ blog.content }}</p>
         </li>
       </ul>
-      <p v-else class="text-gray-500 italic mb-4">No blogs available at this time.</p>
+      <p v-else class="text-gray-500 italic mb-6">No blogs available at this time.</p>
 
-      <h3 class="text-xl font-semibold mb-4 text-gray-700">Your Transactions</h3>
+      <!-- Transactions Section -->
+      <h3 class="text-2xl font-semibold mb-4 text-gray-700">Your Transactions</h3>
       <div v-if="transactions.length > 0">
-        <!-- Table -->
-        <table class="w-full border-collapse border border-gray-300 mb-6">
+        <!-- Transaction Table -->
+        <table class="w-full border-collapse border border-gray-300 mb-8 rounded-lg">
           <thead>
             <tr class="bg-gray-100">
-              <th class="border border-gray-300 p-2">Event</th>
-              <th class="border border-gray-300 p-2">Name</th>
-              <th class="border border-gray-300 p-2">Email</th>
-              <th class="border border-gray-300 p-2">Phone</th>
-              <th class="border border-gray-300 p-2">Amount</th>
-              <th class="border border-gray-300 p-2">Reference</th>
-              <th class="border border-gray-300 p-2">Verified</th>
+              <th class="border border-gray-300 p-4 text-left">Event</th>
+              <th class="border border-gray-300 p-4 text-left">Name</th>
+              <th class="border border-gray-300 p-4 text-left">Email</th>
+              <th class="border border-gray-300 p-4 text-left">Phone</th>
+              <th class="border border-gray-300 p-4 text-left">Amount</th>
+              <th class="border border-gray-300 p-4 text-left">Reference</th>
+              <th class="border border-gray-300 p-4 text-left">Verified</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="transaction in transactions" :key="transaction.id" class="text-gray-700">
-              <td class="border border-gray-300 p-2">{{ transaction.event.title }}</td>
-              <td class="border border-gray-300 p-2">{{ transaction.name }}</td>
-              <td class="border border-gray-300 p-2">{{ transaction.email }}</td>
-              <td class="border border-gray-300 p-2">{{ transaction.phone }}</td>
-              <td class="border border-gray-300 p-2">{{ transaction.amount }}</td>
-              <td class="border border-gray-300 p-2">{{ transaction.ref }}</td>
-              <td class="border border-gray-300 p-2">{{ transaction.is_verified ? 'Yes' : 'No' }}</td>
+              <td class="border border-gray-300 p-4">{{ transaction.event.title }}</td>
+              <td class="border border-gray-300 p-4">{{ transaction.name }}</td>
+              <td class="border border-gray-300 p-4">{{ transaction.email }}</td>
+              <td class="border border-gray-300 p-4">{{ transaction.phone }}</td>
+              <td class="border border-gray-300 p-4">{{ transaction.amount }}</td>
+              <td class="border border-gray-300 p-4">{{ transaction.ref }}</td>
+              <td class="border border-gray-300 p-4">{{ transaction.is_verified ? 'Yes' : 'No' }}</td>
             </tr>
           </tbody>
         </table>
@@ -69,18 +95,18 @@
         <!-- Charts Section -->
         <div class="charts flex flex-wrap gap-6">
           <!-- Total Amount Chart -->
-          <div class="w-full md:w-1/2 p-4 bg-white rounded shadow-md">
+          <div class="w-full md:w-1/2 p-4 bg-white rounded-lg shadow-md">
             <h4 class="text-lg font-semibold mb-2">Total Amount by Event</h4>
             <canvas id="amountChart"></canvas>
           </div>
           <!-- Transactions by Verification Status -->
-          <div class="w-full md:w-1/2 p-4 bg-white rounded shadow-md">
+          <div class="w-full md:w-1/2 p-4 bg-white rounded-lg shadow-md">
             <h4 class="text-lg font-semibold mb-2">Transactions by Verification</h4>
             <canvas id="verificationChart"></canvas>
           </div>
         </div>
       </div>
-      <p v-else class="text-gray-500 italic">No transactions available at this time.</p>
+      <p v-else class="text-gray-500 italic mb-6">No transactions available at this time.</p>
     </div>
   </div>
 </template>
