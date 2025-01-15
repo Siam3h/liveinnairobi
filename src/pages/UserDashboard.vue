@@ -1,8 +1,12 @@
 <template>
     <div class="dashboard-container">
-      <div class="dashboard-card">
+      <div v-if="isLoading">Loading...</div>
+      <div v-else-if="error">{{ error }}</div>
+      <div v-else class="dashboard-card">
         <h2>Welcome</h2>
-        <p>Email: {{ user.email }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Name:</strong> {{ user.name }}</p>
+        <p><strong>Role:</strong> {{ user.role }}</p>
         <h3>Your Events</h3>
         <ul>
           <li v-for="event in events" :key="event.title">
@@ -32,57 +36,53 @@
       const user = ref({});
       const events = ref([]);
       const blogs = ref([]);
+      const isLoading = ref(true);
+      const error = ref(null);
   
       const apiClient = axios.create({
         baseURL: 'https://liveinnbo-backend.onrender.com/api/v1',
         headers: {
           'Content-Type': 'application/json',
         },
-        withCredentials: true,
       });
   
       onMounted(async () => {
         try {
           const token = localStorage.getItem('token');
-          const userId = localStorage.getItem('user_id'); // Retrieve user ID from localStorage
-  
+          const userId = localStorage.getItem('user_id');
           console.log('Local token:', token);
-          console.log('User ID:', userId);
+          console.log('Local user_id:', userId);
   
           if (token && userId) {
-            // Fetch user details using the ID
-            const userResponse = await apiClient.get(`/users/${userId}/`, {
+            const response = await apiClient.get(`/users/dashboard/`, {
               headers: {
-                Authorization: `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`,
+              },
+              params: {
+                user_id: userId, // Sending user_id as a query parameter
               },
             });
-            user.value = userResponse.data;
-  
-            // Fetch dashboard data
-            const dashboardResponse = await apiClient.get('/users/dashboard/', {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            events.value = dashboardResponse.data.events;
-            blogs.value = dashboardResponse.data.blogs;
+            console.log('Dashboard data:', response.data);
+            user.value = response.data.user;
+            events.value = response.data.events;
+            blogs.value = response.data.blogs;
           } else {
-            console.error('Token or User ID not found. Please log in.');
-            // Handle redirection to login or error display
+            error.value = 'Token or user ID not found. Please log in.';
           }
-        } catch (error) {
-          console.error('Error fetching dashboard data:', error);
-          alert('There was an error fetching the dashboard data.');
+        } catch (err) {
+          error.value = 'Error fetching dashboard data.';
+          console.error(err);
+        } finally {
+          isLoading.value = false;
         }
       });
   
-      return { user, events, blogs };
+      return { user, events, blogs, isLoading, error };
     },
   };
   </script>
   
   <style scoped>
-  /* Your styles */
   .dashboard-container {
     padding: 20px;
   }
