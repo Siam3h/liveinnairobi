@@ -34,28 +34,31 @@ export default {
   },
   methods: {
     async updateProfile() {
-      const formData = new FormData();
-      formData.append('username', this.username);
-      formData.append('agency_name', this.agencyName);
-      formData.append('role', this.role);
-      formData.append('email', this.email);
-      formData.append('bio', this.bio);
-      if (this.avatar) formData.append('avatar', this.avatar);
-      if (this.password) formData.append('password', this.password);
+  const formData = new FormData();
+  formData.append('username', this.username);
+  formData.append('agency_name', this.agencyName);
+  formData.append('role', this.role);
+  formData.append('email', this.email);
+  formData.append('bio', this.bio);
+  if (this.avatar) formData.append('avatar', this.avatar);
+  if (this.password) formData.append('password', this.password);
 
-      try {
-        const response = await apiClient.updateProfile(formData);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    handleFileChange(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.avatar = file;
-      }
-    }
+  try {
+    const response = await apiClient.put('/users/update_profile/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Necessary for file uploads
+      },
+    });
+
+    // After the profile update, redirect to the updated profile page
+    this.$router.push({ name: 'user-dashboard', params: { userId: response.data.id } });
+
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+},
+
   }
 };
 </script>
