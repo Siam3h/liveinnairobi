@@ -189,8 +189,8 @@ export default {
         formData.append(key, data[key]);
       }
     }
-    
-      const response = await apiClient.put('/update_profile/', formData, {
+
+      const response = await apiClient.put('/users/update_profile/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Necessary for file uploads
         },

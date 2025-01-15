@@ -7,7 +7,7 @@
     <!-- Dashboard Card -->
     <div v-else class="dashboard-card bg-white p-8 rounded-lg shadow-lg max-w-7xl mx-auto">
       <div class="flex items-center mb-6">
-        <img :src="user.avatar ? user.avatar : '/media/avatars/default_avatar.png'" 
+        <img :src="user.avatar ? user.avatar : 'https://liveinnbo-backend.onrender.com/media/avatars/default_avatar.png'" 
              alt="User Avatar" 
              class="w-24 h-24 rounded-full border-4 border-gray-300 mr-6" />
         <div>
