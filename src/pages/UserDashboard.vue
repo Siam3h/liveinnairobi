@@ -30,29 +30,27 @@
       <h3 class="text-xl font-semibold mb-4 text-gray-700">Your Transactions</h3>
       <div v-if="transactions.length > 0">
         <!-- Table -->
-        <table class="w-full border-collapse border border-gray-300 mb-6 text-sm">
+        <table class="w-full border-collapse border border-gray-300 mb-6">
           <thead>
             <tr class="bg-gray-100">
-              <th class="border border-gray-300 p-2 text-left">Event</th>
-              <th class="border border-gray-300 p-2 text-left">Name</th>
-              <th class="border border-gray-300 p-2 text-left">Email</th>
-              <th class="border border-gray-300 p-2 text-left">Phone</th>
-              <th class="border border-gray-300 p-2 text-left">Amount</th>
-              <th class="border border-gray-300 p-2 text-left">Reference</th>
-              <th class="border border-gray-300 p-2 text-left">Verified</th>
+              <th class="border border-gray-300 p-2">Event</th>
+              <th class="border border-gray-300 p-2">Name</th>
+              <th class="border border-gray-300 p-2">Email</th>
+              <th class="border border-gray-300 p-2">Phone</th>
+              <th class="border border-gray-300 p-2">Amount</th>
+              <th class="border border-gray-300 p-2">Reference</th>
+              <th class="border border-gray-300 p-2">Verified</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="transaction in transactions" :key="transaction.id" class="text-gray-700 hover:bg-gray-50">
+            <tr v-for="transaction in transactions" :key="transaction.id" class="text-gray-700">
               <td class="border border-gray-300 p-2">{{ transaction.event.title }}</td>
               <td class="border border-gray-300 p-2">{{ transaction.name }}</td>
               <td class="border border-gray-300 p-2">{{ transaction.email }}</td>
               <td class="border border-gray-300 p-2">{{ transaction.phone }}</td>
               <td class="border border-gray-300 p-2">{{ transaction.amount }}</td>
               <td class="border border-gray-300 p-2">{{ transaction.ref }}</td>
-              <td class="border border-gray-300 p-2">
-                {{ transaction.is_verified ? "Yes" : "No" }}
-              </td>
+              <td class="border border-gray-300 p-2">{{ transaction.is_verified ? 'Yes' : 'No' }}</td>
             </tr>
           </tbody>
         </table>
@@ -78,7 +76,7 @@
 
 <script>
 import axios from "axios";
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick } from "vue";  // Import nextTick from vue
 import Chart from "chart.js/auto";
 
 export default {
@@ -100,61 +98,63 @@ export default {
     });
 
     const createCharts = () => {
-      const amountChartEl = document.getElementById("amountChart");
-      const verificationChartEl = document.getElementById("verificationChart");
+      nextTick(() => {
+        const amountChartEl = document.getElementById("amountChart");
+        const verificationChartEl = document.getElementById("verificationChart");
 
-      if (!amountChartEl || !verificationChartEl) {
-        console.error("Canvas elements for charts not found.");
-        return;
-      }
+        if (!amountChartEl || !verificationChartEl) {
+          console.error("Canvas elements for charts not found.");
+          return;
+        }
 
-      const eventLabels = transactions.value.map((t) => t.event.title);
-      const eventAmounts = transactions.value.map((t) => t.amount);
-      const verificationCounts = transactions.value.reduce(
-        (acc, t) => {
-          acc[t.is_verified ? "verified" : "unverified"]++;
-          return acc;
-        },
-        { verified: 0, unverified: 0 }
-      );
+        const eventLabels = transactions.value.map((t) => t.event.title);
+        const eventAmounts = transactions.value.map((t) => t.amount);
+        const verificationCounts = transactions.value.reduce(
+          (acc, t) => {
+            acc[t.is_verified ? "verified" : "unverified"]++;
+            return acc;
+          },
+          { verified: 0, unverified: 0 }
+        );
 
-      // Total Amount by Event Chart
-      new Chart(amountChartEl, {
-        type: "bar",
-        data: {
-          labels: eventLabels,
-          datasets: [
-            {
-              label: "Total Amount",
-              data: eventAmounts,
-              backgroundColor: "rgba(75, 192, 192, 0.5)",
-              borderColor: "rgba(75, 192, 192, 1)",
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-        },
-      });
+        // Total Amount by Event Chart
+        new Chart(amountChartEl, {
+          type: "bar",
+          data: {
+            labels: eventLabels,
+            datasets: [
+              {
+                label: "Total Amount",
+                data: eventAmounts,
+                backgroundColor: "rgba(75, 192, 192, 0.5)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        });
 
-      // Transactions by Verification Chart
-      new Chart(verificationChartEl, {
-        type: "pie",
-        data: {
-          labels: ["Verified", "Unverified"],
-          datasets: [
-            {
-              data: [verificationCounts.verified, verificationCounts.unverified],
-              backgroundColor: ["#4CAF50", "#F44336"],
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-        },
+        // Transactions by Verification Chart
+        new Chart(verificationChartEl, {
+          type: "pie",
+          data: {
+            labels: ["Verified", "Unverified"],
+            datasets: [
+              {
+                data: [verificationCounts.verified, verificationCounts.unverified],
+                backgroundColor: ["#4CAF50", "#F44336"],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        });
       });
     };
 
@@ -177,8 +177,6 @@ export default {
           blogs.value = response.data.blogs;
           transactions.value = response.data.transactions;
 
-          // Ensure DOM is updated before initializing charts
-          await nextTick();
           createCharts();
         } else {
           error.value = "Token or user ID not found. Please log in.";
@@ -195,44 +193,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.dashboard-container {
-  padding: 20px;
-}
-
-.dashboard-card {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  color: #333;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  margin-bottom: 15px;
-}
-
-h4 {
-  margin: 5px 0;
-  font-size: 1.2em;
-}
-
-p {
-  margin: 5px 0;
-  font-size: 1em;
-}
-
-.empty-state {
-  color: #888;
-  font-style: italic;
-}
-</style>
