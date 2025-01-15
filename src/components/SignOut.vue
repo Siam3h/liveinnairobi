@@ -15,7 +15,7 @@ export default {
       try {
         // Make a POST request to the logout endpoint
         await axios.post(
-          'https://liveinnbo-backend.onrender.com/api/v1/users/auth/signout',
+          'https://liveinnbo-backend.onrender.com/api/v1/users/auth/signout/',
           {},
           {
             withCredentials: true, // Ensure cookies are sent
