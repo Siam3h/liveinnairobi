@@ -18,10 +18,10 @@
 
       <!-- Action Buttons -->
       <div class="flex space-x-4 mb-6">
-        <router-link to="{ name: 'signout' }" class="inline-block px-6 py-3 text-lg font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none">
+        <router-link to="/auth/signout" class="inline-block px-6 py-3 text-lg font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none">
           Sign Out
         </router-link>
-        <router-link to="{ name: 'update-profile' }" class="inline-block px-6 py-3 text-lg font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none">
+        <router-link to="/user/update-profile" class="inline-block px-6 py-3 text-lg font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none">
           Update Profile
         </router-link>
       </div>
