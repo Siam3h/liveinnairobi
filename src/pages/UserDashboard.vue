@@ -44,6 +44,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true, 
       });
   
       onMounted(async () => {
