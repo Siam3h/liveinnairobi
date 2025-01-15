@@ -29,6 +29,28 @@
             />
           </div>
           <div>
+            <label for="username" class="sr-only">Username</label>
+            <input 
+              v-model="username" 
+              id="username"
+              type="username" 
+              required
+              class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Email address" 
+            />
+          </div>
+          <div>
+            <label for="agency_name" class="sr-only">Agency</label>
+            <input 
+              v-model="agency_name" 
+              id="agency_name"
+              type="agency_name" 
+              required
+              class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Email address" 
+            />
+          </div>
+          <div>
             <label for="password1" class="sr-only">Password</label>
             <input 
               v-model="password" 
