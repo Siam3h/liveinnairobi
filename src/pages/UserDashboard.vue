@@ -4,9 +4,20 @@
     <div v-else-if="error" class="text-red-500">{{ error }}</div>
     <div v-else class="dashboard-card bg-white p-6 rounded-lg shadow-md">
       <h2 class="text-2xl font-semibold mb-4 text-gray-800">Welcome</h2>
-      <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
-      <p class="mb-2"><strong>Name:</strong> {{ user.name }}</p>
+      <router-link to="{ name: 'signout' }" class="inline-block px-6 py-2 text-lg font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none">
+        Sign Out
+      </router-link>
+      <router-link to="{ name: 'update-profile' }" class="inline-block px-6 py-2 text-lg font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none">
+        Update Profile
+      </router-link>
+      
+      <div class="mb-4"><strong>Role:</strong> {{ user.avatar }}</div>
+      <p class="mb-4"><strong>Role:</strong> {{ user.username }}</p>
       <p class="mb-4"><strong>Role:</strong> {{ user.role }}</p>
+      <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
+      <p class="mb-2"><strong>Name:</strong> {{ user.agency_name }}</p>
+      <p class="mb-4"><strong>Role:</strong> {{ user.role }}</p>
+      <p class="mb-4"><strong>Role:</strong> {{ user.bio }} </p>
 
       <h3 class="text-xl font-semibold mb-2 text-gray-700">Your Events</h3>
       <ul v-if="events.length > 0" class="mb-4">

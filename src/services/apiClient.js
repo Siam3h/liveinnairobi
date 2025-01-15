@@ -6,7 +6,7 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, 
+  withCredentials: true, // This ensures cookies are sent with requests
 });
 
 // Handle generic API errors
@@ -25,7 +25,7 @@ async function fetchCSRFToken() {
     Cookies.set('csrftoken', csrfToken, {
       secure: true,
       sameSite: 'None',
-      domain: 'None'
+      domain: 'None',
     });
     return csrfToken;
   } catch (error) {
@@ -34,20 +34,19 @@ async function fetchCSRFToken() {
   }
 }
 
-
 // Request Interceptor: Adds CSRF token to specific request methods (POST, PUT, DELETE)
 apiClient.interceptors.request.use(
   async (config) => {
     let csrfToken = Cookies.get('csrftoken');
     const token = Cookies.get('token');
 
-      if (csrfToken) {
-        config.headers['X-CSRFToken'] = csrfToken;
-      }
+    if (csrfToken) {
+      config.headers['X-CSRFToken'] = csrfToken;
+    }
 
-      if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`;
-      }
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -177,12 +176,26 @@ export default {
 
   // User APIs
   async getDashboard() {
-        return apiClient.get('/users/dashboard/'); 
+    return apiClient.get('/users/dashboard/');
   },
-  
+
+  // Update the profile with the new data
   async updateProfile(data) {
-    await this.fetchCSRFToken();
-    return apiClient.put('/users/update_profile/', data).catch(handleError);
+    const formData = new FormData();
+    
+    // Add fields to FormData
+    for (const key in data) {
+      if (data[key] !== undefined && data[key] !== null) {
+        formData.append(key, data[key]);
+      }
+    }
+    
+      const response = await apiClient.put('/update_profile/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Necessary for file uploads
+        },
+      });
+      return response;
   },
 
   async deleteProfile() {
@@ -198,8 +211,8 @@ export default {
     return apiClient.get(`/users/${userId}/`).catch(handleError);
   },
 
-  //CSRFAPI
-  getCsrf(){
+  // CSRF API
+  getCsrf() {
     return apiClient.get('/users/csrf').catch(handleError);
-  }
+  },
 };
