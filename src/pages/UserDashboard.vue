@@ -1,30 +1,35 @@
 <template>
-    <div class="dashboard-container">
-      <div v-if="isLoading">Loading...</div>
-      <div v-else-if="error">{{ error }}</div>
-      <div v-else class="dashboard-card">
-        <h2>Welcome</h2>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Name:</strong> {{ user.name }}</p>
-        <p><strong>Role:</strong> {{ user.role }}</p>
-        <h3>Your Events</h3>
-        <ul>
-          <li v-for="event in events" :key="event.title">
-            <h4>{{ event.title }}</h4>
-            <p>{{ event.description }}</p>
-            <p><strong>Date:</strong> {{ event.date }}</p>
-          </li>
-        </ul>
-        <h3>Your Blogs</h3>
-        <ul>
-          <li v-for="blog in blogs" :key="blog.title">
-            <h4>{{ blog.title }}</h4>
-            <p>{{ blog.content }}</p>
-          </li>
-        </ul>
-      </div>
+  <div class="dashboard-container">
+    <div v-if="isLoading">Loading...</div>
+    <div v-else-if="error">{{ error }}</div>
+    <div v-else class="dashboard-card">
+      <h2>Welcome</h2>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Name:</strong> {{ user.name }}</p>
+      <p><strong>Role:</strong> {{ user.role }}</p>
+
+      <h3>Your Events</h3>
+      <ul v-if="events.length > 0">
+        <li v-for="event in events" :key="event.title">
+          <h4>{{ event.title }}</h4>
+          <p>{{ event.description }}</p>
+          <p><strong>Date:</strong> {{ event.date }}</p>
+        </li>
+      </ul>
+      <p v-else class="empty-state">No events available at this time.</p>
+
+      <h3>Your Blogs</h3>
+      <ul v-if="blogs.length > 0">
+        <li v-for="blog in blogs" :key="blog.title">
+          <h4>{{ blog.title }}</h4>
+          <p>{{ blog.content }}</p>
+        </li>
+      </ul>
+      <p v-else class="empty-state">No blogs available at this time.</p>
     </div>
-  </template>
+  </div>
+</template>
+
   
   <script>
   import axios from 'axios';
@@ -60,7 +65,7 @@
                 'Authorization': `Bearer ${token}`,
               },
               params: {
-                user_id: userId, // Sending user_id as a query parameter
+                user_id: userId, 
               },
             });
             console.log('Dashboard data:', response.data);
@@ -117,5 +122,11 @@
     margin: 5px 0;
     font-size: 1em;
   }
+
+  .empty-state {
+    color: #888;
+    font-style: italic;
+}
+
   </style>
   
