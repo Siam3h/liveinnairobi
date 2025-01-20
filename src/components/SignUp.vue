@@ -137,8 +137,16 @@
         document.head.appendChild(script);
 
         script.onload = () => {
+          const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+          
+          if (!clientId) {
+            console.error('Google Client ID not found in environment variables');
+            errorMessage.value = 'Google Sign-In is currently unavailable';
+            return;
+          }
+
           window.google.accounts.id.initialize({
-            client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+            client_id: clientId,
             callback: handleGoogleResponse
           });
         };

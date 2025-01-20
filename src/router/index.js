@@ -18,7 +18,7 @@ const TicketScanner = () => import('../pages/TicketScanner.vue');
 const SignUp = () => import('../components/SignUp.vue');
 const SignIn = () => import('../pages/SignIn.vue');
 const UpdateProfile = () => import('../pages/UpdateProfile.vue');
-const UserDashboard = () => import('../pages/UserDashboard.vue');
+const UserDashboard = () => import('../pages/Dashboard.vue');
 const NotFound = () => import('../pages/NotFound.vue');
 
 // Components
