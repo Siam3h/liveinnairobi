@@ -38,14 +38,14 @@ async function fetchCSRFToken() {
 apiClient.interceptors.request.use(
   async (config) => {
     let csrfToken = Cookies.get('csrftoken');
-    const token = Cookies.get('token');
+    const token = localStorage.getItem('token');
 
     if (csrfToken) {
       config.headers['X-CSRFToken'] = csrfToken;
     }
 
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers['Authorization'] = `Token ${token}`;
     }
     return config;
   },
@@ -93,23 +93,39 @@ export default {
   fetchCSRFToken,
   // Blog APIs
   getBlogs(page = 1) {
-    return apiClient.get(`/blogs/?page=${page}`).catch(handleError);
-  },
-
-  createBlog(data) {
-    return apiClient.post(`/blogs/`, data).catch(handleError);
+    return apiClient.get(`/blog/?page=${page}`).catch(handleError);
   },
 
   getBlog(slug) {
-    return apiClient.get(`/blogs/${slug}/`).catch(handleError);
+    return apiClient.get(`/blog/${slug}/`).catch(handleError);
   },
 
-  updateBlog(slug, data) {
-    return apiClient.put(`/blogs/${slug}/`, data).catch(handleError);
+  async createBlog(data) {
+    const formData = new FormData();
+    for (const key in data) {
+      if (data[key] !== undefined && data[key] !== null) {
+        formData.append(key, data[key]);
+      }
+    }
+    return apiClient.post('/blog/', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).catch(handleError);
+  },
+
+  async updateBlog(slug, data) {
+    const formData = new FormData();
+    for (const key in data) {
+      if (data[key] !== undefined && data[key] !== null) {
+        formData.append(key, data[key]);
+      }
+    }
+    return apiClient.patch(`/blog/${slug}/`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).catch(handleError);
   },
 
   deleteBlog(slug) {
-    return apiClient.delete(`/blogs/${slug}/`).catch(handleError);
+    return apiClient.delete(`/blog/${slug}/`).catch(handleError);
   },
 
   // Event APIs
@@ -117,18 +133,32 @@ export default {
     return apiClient.get(`/events/?page=${page}`).catch(handleError);
   },
 
-  async createEvent(data) {
-    await this.fetchCSRFToken();
-    return apiClient.post(`/events/`, data).catch(handleError);
-  },
-
   getEvent(eventId) {
     return apiClient.get(`/events/${eventId}/`).catch(handleError);
   },
 
+  async createEvent(data) {
+    const formData = new FormData();
+    for (const key in data) {
+      if (data[key] !== undefined && data[key] !== null) {
+        formData.append(key, data[key]);
+      }
+    }
+    return apiClient.post('/events/', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).catch(handleError);
+  },
+
   async updateEvent(eventId, data) {
-    await this.fetchCSRFToken();
-    return apiClient.put(`/events/${eventId}/`, data).catch(handleError);
+    const formData = new FormData();
+    for (const key in data) {
+      if (data[key] !== undefined && data[key] !== null) {
+        formData.append(key, data[key]);
+      }
+    }
+    return apiClient.put(`/events/${eventId}/`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).catch(handleError);
   },
 
   deleteEvent(eventId) {
@@ -141,21 +171,15 @@ export default {
   },
 
   initializePayment(paymentData) {
-    return apiClient
-      .post(`/payments/process/${paymentData.eventId}/`, paymentData)
-      .catch(handleError);
+    return apiClient.post(`/payments/process/${paymentData.eventId}/`, paymentData).catch(handleError);
   },
 
   verifyPayment(reference) {
-    return apiClient
-      .get(`/payments/verify_payment/?reference=${reference}`)
-      .catch(handleError);
+    return apiClient.get(`/payments/verify_payment/?reference=${reference}`).catch(handleError);
   },
 
   thankYou(transactionId) {
-    return apiClient
-      .get(`/payments/thankyou/${transactionId}/`)
-      .catch(handleError);
+    return apiClient.get(`/payments/thankyou/${transactionId}/`).catch(handleError);
   },
 
   // Authentication APIs
@@ -176,7 +200,7 @@ export default {
 
   // User APIs
   async getDashboard() {
-    return apiClient.get('/users/dashboard/');
+    return apiClient.get('/users/dashboard/').catch(handleError);
   },
 
   // Update the profile with the new data
