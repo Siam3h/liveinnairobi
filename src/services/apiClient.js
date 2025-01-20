@@ -203,11 +203,13 @@ export default {
     return apiClient.delete('/users/delete_account/').catch(handleError);
   },
 
-  getUsers() {
+  async getUsers() {
+    await this.fetchCSRFToken();
     return apiClient.get('/users/').catch(handleError);
   },
 
-  getUser(userId) {
+  async getUser(userId) {
+    await this.fetchCSRFToken();
     return apiClient.get(`/users/${userId}/`).catch(handleError);
   },
 
