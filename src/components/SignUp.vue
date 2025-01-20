@@ -137,7 +137,7 @@
         document.head.appendChild(script);
 
         script.onload = () => {
-          const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+        const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '830795346343-7uajlpulc4tne0f07vt39hlg0ie0n82l.apps.googleusercontent.com';
           
           if (!clientId) {
             console.error('Google Client ID not found in environment variables');
