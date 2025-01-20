@@ -157,7 +157,7 @@
           isLoading.value = true;
           errorMessage.value = '';
 
-          const result = await apiClient.post('/accounts/google/', {
+          const result = await apiClient.post('/auth/register/', {
             access_token: response.credential
           });
 
