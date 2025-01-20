@@ -63,6 +63,7 @@
       <button
         type="submit"
         class="w-full py-3 px-6 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300"
+        :disabled="!currentUserId"
       >
         Create Event
       </button>
@@ -77,8 +78,8 @@ export default {
   data() {
     return {
       title: "",
-      location: "N/A",
-      town: "N/A",
+      location: "",
+      town: "",
       country: "Kenya",
       content: "",
       thumbnail_img: null,
@@ -94,6 +95,10 @@ export default {
     },
     async createEvent() {
       try {
+        if (!this.currentUserId) {
+          throw new Error("User not authenticated");
+        }
+
         const formData = new FormData();
         formData.append("title", this.title);
         formData.append("location", this.location);
@@ -116,7 +121,7 @@ export default {
     },
     async fetchCurrentUser() {
       try {
-        const response = await apiClient.getUser("/auth/user/"); // Endpoint to get the current user
+        const response = await apiClient.getUser("/auth/user/me/"); // Endpoint to get the current user
         this.currentUserId = response.data.id;
       } catch (error) {
         console.error("Error fetching current user:", error);
