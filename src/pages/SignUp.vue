@@ -96,12 +96,19 @@
 
 <script>
 import apiClient from '@/services/apiClient';
+import { useRouter } from 'vue-router';
 
 export default {
+  setup() {
+    const router = useRouter();
+    return { router };
+  },
   data() {
     return {
       email: '',
-      password1: '',
+      username: '',
+      agency_name: '',
+      password: '',
       password2: '',
       errorMessage: '',
     };
@@ -115,7 +122,12 @@ export default {
     return;
   }
 
-  const payload = { email: this.email, password: this.password };
+      const payload = {
+        email: this.email,
+        username: this.username,
+        agency_name: this.agency_name,
+        password: this.password,
+      };
   
   console.log('Payload:', payload); 
 
@@ -127,7 +139,7 @@ export default {
       localStorage.setItem('token', response.data.token);
     }
 
-    this.$router.push({ name: 'signin' });
+        this.router.push('/auth/signin');
     
   } catch (error) {
     console.error('Error during signup:', error.response?.data || error.message);
@@ -146,7 +158,6 @@ export default {
     }
   }
 }
-
   }
 };
 </script>

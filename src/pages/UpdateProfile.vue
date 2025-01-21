@@ -181,7 +181,7 @@ export default {
         messageClass.value = 'bg-green-50 text-green-800';
         
         setTimeout(() => {
-          router.push({ name: 'dashboard' });
+          router.push({ name: 'user-dashboard' });
         }, 1500);
 
       } catch (error) {
