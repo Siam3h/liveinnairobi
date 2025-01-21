@@ -136,6 +136,7 @@ import apiClient from '@/services/apiClient';
 
 export default {
   setup() {
+    const router = useRouter();
     const username = ref('');
     const agencyName = ref('');
     const role = ref('event_organizer');
@@ -178,9 +179,6 @@ export default {
 
         message.value = 'Profile updated successfully!';
         messageClass.value = 'bg-green-50 text-green-800';
-        
-        // Use router from Vue composition API
-        const router = useRouter();
         
         // Redirect after a short delay
         setTimeout(() => {
