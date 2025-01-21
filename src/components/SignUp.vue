@@ -137,7 +137,7 @@
           if (response.data.token) {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
-            router.push('/auth/signin');
+            this.router.push('/auth/signin');
           }
         } catch (error) {
           console.error('Signup error:', error.response?.data || error);

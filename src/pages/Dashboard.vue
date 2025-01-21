@@ -21,26 +21,17 @@
       <div class="mb-6">
         <nav class="flex space-x-4">
           <button 
-            @click="activeTab = 'blogs'"
+            v-for="tab in ['blogs', 'events', 'transactions']" 
+            :key="tab"
+            @click="activeTab = tab"
             :class="[
               'px-3 py-2 rounded-md text-sm font-medium',
-              activeTab === 'blogs' 
+              activeTab === tab 
                 ? 'bg-indigo-100 text-indigo-700' 
                 : 'text-gray-500 hover:text-gray-700'
             ]"
           >
-            My Blogs
-          </button>
-          <button 
-            @click="activeTab = 'events'"
-            :class="[
-              'px-3 py-2 rounded-md text-sm font-medium',
-              activeTab === 'events' 
-                ? 'bg-indigo-100 text-indigo-700' 
-                : 'text-gray-500 hover:text-gray-700'
-            ]"
-          >
-            My Events
+            {{ tab.charAt(0).toUpperCase() + tab.slice(1) }}
           </button>
         </nav>
       </div>
@@ -97,7 +88,7 @@
       </div>
 
       <!-- Events Tab Content -->
-      <div v-else class="space-y-6">
+      <div v-else-if="activeTab === 'events'" class="space-y-6">
         <div class="flex justify-between items-center">
           <h2 class="text-xl font-semibold text-gray-900">My Events</h2>
           <router-link 
@@ -142,22 +133,114 @@
           </div>
         </div>
       </div>
+
+      <!-- Transactions Tab Content -->
+      <div v-else-if="activeTab === 'transactions'" class="space-y-6">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-semibold text-gray-900">Transactions</h2>
+          <div class="text-lg font-medium text-green-600">
+            Total Earnings: {{ formatCurrency(totalEarnings) }}
+          </div>
+        </div>
+
+        <div v-if="transactions.length === 0" class="text-center py-12 bg-white rounded-lg">
+          <p class="text-gray-500">No transactions recorded yet.</p>
+        </div>
+
+        <template v-else>
+          <!-- Transaction Charts -->
+          <div class="grid gap-6 md:grid-cols-2">
+            <!-- Monthly Revenue Chart -->
+            <div class="bg-white p-6 rounded-lg shadow">
+              <h3 class="text-lg font-medium text-gray-900 mb-4">Monthly Revenue</h3>
+              <MonthlyRevenueChart :chart-data="monthlyRevenueData" />
+            </div>
+            
+            <!-- Transaction Status Chart -->
+            <div class="bg-white p-6 rounded-lg shadow">
+              <h3 class="text-lg font-medium text-gray-900 mb-4">Transaction Status</h3>
+              <TransactionStatusChart :chart-data="transactionStatusData" />
+            </div>
+          </div>
+
+          <!-- Transaction Table -->
+          <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+              <h3 class="text-lg font-medium text-gray-900">Transaction History</h3>
+              <div class="flex space-x-2">
+                <select 
+                  v-model="transactionFilter" 
+                  class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                >
+                  <option value="all">All</option>
+                  <option value="completed">Completed</option>
+                  <option value="pending">Pending</option>
+                </select>
+              </div>
+            </div>
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buyer</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr v-for="transaction in filteredTransactions" :key="transaction.id">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {{ transaction.event_title }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ transaction.buyer_email }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ formatDate(transaction.created_at) }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {{ formatCurrency(transaction.amount) }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span :class="[
+                      'px-2 py-1 text-xs font-medium rounded-full',
+                      transaction.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                    ]">
+                      {{ transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1) }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import apiClient from '@/services/apiClient';
+import { MonthlyRevenueChart, TransactionStatusChart } from '@/components/charts';
 
 export default {
+  components: {
+    MonthlyRevenueChart,
+    TransactionStatusChart
+  },
+  
   setup() {
     const user = ref(null);
     const blogs = ref([]);
     const events = ref([]);
+    const transactions = ref([]);
+    const totalEarnings = ref(0);
     const activeTab = ref('blogs');
     const isLoading = ref(true);
     const error = ref(null);
+    const transactionFilter = ref('all');
 
     const loadDashboardData = async () => {
       try {
@@ -167,14 +250,11 @@ export default {
         const response = await apiClient.getDashboard();
         const data = response.data;
         
-        // Update user data
         user.value = data.user;
-        
-        // Update blogs and events directly from the response
         blogs.value = data.blogs;
         events.value = data.events;
-
-        console.log('Dashboard data loaded:', data); // Debug log
+        transactions.value = data.transactions;
+        totalEarnings.value = data.total_earnings;
 
       } catch (err) {
         console.error('Error loading dashboard data:', err);
@@ -208,13 +288,63 @@ export default {
       }
     };
 
+    const formatCurrency = (amount) => {
+      return new Intl.NumberFormat('en-KE', {
+        style: 'currency',
+        currency: 'KES'
+      }).format(amount);
+    };
+
     const formatDate = (date) => {
       return new Date(date).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
       });
     };
+
+    // Computed properties for charts and filtered transactions
+    const monthlyRevenueData = computed(() => {
+      const monthlyData = {};
+      transactions.value.forEach(transaction => {
+        const date = new Date(transaction.created_at);
+        const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
+        monthlyData[monthYear] = (monthlyData[monthYear] || 0) + transaction.amount;
+      });
+      return {
+        labels: Object.keys(monthlyData),
+        datasets: [{
+          label: 'Revenue',
+          data: Object.values(monthlyData),
+          backgroundColor: 'rgba(79, 70, 229, 0.2)',
+          borderColor: 'rgba(79, 70, 229, 1)',
+          borderWidth: 1
+        }]
+      };
+    });
+
+    const transactionStatusData = computed(() => {
+      const statusCount = {
+        completed: transactions.value.filter(t => t.status === 'completed').length,
+        pending: transactions.value.filter(t => t.status === 'pending').length
+      };
+      return {
+        labels: ['Completed', 'Pending'],
+        datasets: [{
+          data: [statusCount.completed, statusCount.pending],
+          backgroundColor: ['rgba(34, 197, 94, 0.2)', 'rgba(234, 179, 8, 0.2)'],
+          borderColor: ['rgba(34, 197, 94, 1)', 'rgba(234, 179, 8, 1)'],
+          borderWidth: 1
+        }]
+      };
+    });
+
+    const filteredTransactions = computed(() => {
+      if (transactionFilter.value === 'all') return transactions.value;
+      return transactions.value.filter(t => t.status === transactionFilter.value);
+    });
 
     onMounted(loadDashboardData);
 
@@ -222,12 +352,19 @@ export default {
       user,
       blogs,
       events,
+      transactions,
+      totalEarnings,
       activeTab,
       isLoading,
       error,
+      formatCurrency,
+      formatDate,
       deleteBlog,
       deleteEvent,
-      formatDate
+      transactionFilter,
+      filteredTransactions,
+      monthlyRevenueData,
+      transactionStatusData
     };
   }
 };
