@@ -177,7 +177,7 @@ export default {
         });
 
         // Send request to create blog
-        const response = await apiClient.post('/blog/', formData, {
+        const response = await apiClient.createBlog('/blog/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Token ${token}`
