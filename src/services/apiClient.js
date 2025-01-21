@@ -189,7 +189,7 @@ export default {
   },
 
   async authSignIn(credentials) {
-    return apiClient.post('/users/auth/signin/', credentials).catch(handleError);
+    return apiClient.post('/auth/login/', credentials).catch(handleError);
   },
 
   async authSignOut() {
