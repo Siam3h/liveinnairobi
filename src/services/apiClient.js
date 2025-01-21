@@ -210,7 +210,7 @@ export default {
 
   // User APIs
   async getDashboard() {
-    return apiClient.get('auth/dashboard/').catch(handleError);
+    return apiClient.get('auth/dashboard/');
   },
 
   // Update the profile with the new data

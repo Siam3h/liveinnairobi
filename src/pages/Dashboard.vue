@@ -164,23 +164,17 @@ export default {
         isLoading.value = true;
         error.value = null;
 
-        // Load user data
-        const userData = JSON.parse(localStorage.getItem('user'));
-        user.value = userData;
+        const response = await apiClient.getDashboard();
+        const data = response.data;
+        
+        // Update user data
+        user.value = data.user;
+        
+        // Update blogs and events directly from the response
+        blogs.value = data.blogs;
+        events.value = data.events;
 
-        // Load blogs and events in parallel
-        const [blogsResponse, eventsResponse] = await Promise.all([
-          apiClient.getBlogs(),
-          apiClient.getEvents()
-        ]);
-
-        // Filter for user's content
-        blogs.value = blogsResponse.data.results.filter(
-          blog => blog.author === user.value.id
-        );
-        events.value = eventsResponse.data.results.filter(
-          event => event.organizer === user.value.id
-        );
+        console.log('Dashboard data loaded:', data); // Debug log
 
       } catch (err) {
         console.error('Error loading dashboard data:', err);
