@@ -171,7 +171,7 @@ export default {
       if (password.value) formData.append('password', password.value);
 
       try {
-        const response = await apiClient.updateProfile('/auth/update_profile/', formData, {
+        await apiClient.updateProfile('/auth/update_profile/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -180,15 +180,12 @@ export default {
         message.value = 'Profile updated successfully!';
         messageClass.value = 'bg-green-50 text-green-800';
         
-        // Redirect after a short delay
         setTimeout(() => {
-          router.push({ 
-            name: 'user-dashboard', 
-            params: { userId: response.data.user.id } 
-          });
+          router.push({ name: 'dashboard' });
         }, 1500);
 
       } catch (error) {
+        console.error('Update profile error:', error);
         message.value = error.response?.data?.error || 'An error occurred while updating your profile';
         messageClass.value = 'bg-red-50 text-red-800';
       } finally {
