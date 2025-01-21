@@ -87,7 +87,7 @@
             ></textarea>
           </div>
 
-          <!-- Password Field -->
+          <!-- Password Field for signing in -->
           <div>
             <label for="password" class="block text-sm font-medium text-gray-700">New Password (optional)</label>
             <input
@@ -131,6 +131,7 @@
 
 <script>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import apiClient from '@/services/apiClient';
 
 export default {
@@ -169,7 +170,7 @@ export default {
       if (password.value) formData.append('password', password.value);
 
       try {
-        const response = await apiClient.put('/users/update_profile/', formData, {
+        const response = await apiClient.updateProfile('/auth/update_profile/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -178,16 +179,19 @@ export default {
         message.value = 'Profile updated successfully!';
         messageClass.value = 'bg-green-50 text-green-800';
         
+        // Use router from Vue composition API
+        const router = useRouter();
+        
         // Redirect after a short delay
         setTimeout(() => {
-          this.$router.push({ 
+          router.push({ 
             name: 'user-dashboard', 
-            params: { userId: response.data.id } 
+            params: { userId: response.data.user.id } 
           });
         }, 1500);
 
       } catch (error) {
-        message.value = error.response?.data?.message || 'An error occurred while updating your profile';
+        message.value = error.response?.data?.error || 'An error occurred while updating your profile';
         messageClass.value = 'bg-red-50 text-red-800';
       } finally {
         isLoading.value = false;
