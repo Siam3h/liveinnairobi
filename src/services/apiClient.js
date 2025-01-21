@@ -80,7 +80,8 @@ apiClient.interceptors.response.use(
 
     // Handle authentication errors (401)
     if (error.response?.status === 401 && !originalRequest._retry) {
-      // You might want to redirect to login or refresh token here
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       window.location.href = '/auth/signin';
     }
 
