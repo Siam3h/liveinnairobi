@@ -133,7 +133,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import apiClient from '@/services/apiClient';
-import store from '@/store';
+import store from '../store';
 
 export default {
   setup() {
