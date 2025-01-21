@@ -82,40 +82,12 @@
             </button>
           </div>
         </form>
-
-        <!-- Divider -->
-        <div class="relative my-6">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray-500">Or continue with</span>
-          </div>
-        </div>
-
-        <!-- Google Sign Up Button -->
-        <div>
-          <div id="google-signin-button"></div>
-          <button
-            v-if="!window.google"
-            @click="handleGoogleSignUp"
-            class="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            :disabled="isLoading"
-          >
-            <img
-              class="h-5 w-5 mr-2"
-              src="@/assets/google-icon.svg"
-              alt="Google logo"
-            />
-            Sign up with Google
-          </button>
-        </div>
       </div>
     </div>
   </template>
   
   <script>
-  import { ref, onMounted } from 'vue';
+  import { ref } from 'vue';
   import { useRouter } from 'vue-router';
   import apiClient from '@/services/apiClient';
   
@@ -128,112 +100,6 @@
       const password2 = ref('');
       const errorMessage = ref('');
       const isLoading = ref(false);
-
-      // Initialize Google Sign-In
-      onMounted(() => {
-        // Load Google Sign-In API
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-
-        script.onload = () => {
-          const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-          
-          if (!clientId) {
-            console.error('Google Client ID not found in environment variables');
-            errorMessage.value = 'Google Sign-In is currently unavailable';
-            return;
-          }
-
-          window.google.accounts.id.initialize({
-            client_id: clientId,
-            callback: handleGoogleResponse,
-            auto_select: false,
-            cancel_on_tap_outside: true,
-            context: 'signup',
-            use_fedcm_for_prompt: true,
-            prompt_parent_id: 'google-signin-button',
-            state_cookie_domain: window.location.hostname,
-            itp_support: true
-          });
-
-          // Render the button with updated configuration
-          window.google.accounts.id.renderButton(
-            document.getElementById('google-signin-button'),
-            {
-              type: 'standard',
-              theme: 'outline',
-              size: 'large',
-              text: 'signup_with',
-              shape: 'rectangular',
-              width: '100%',
-              logo_alignment: 'left'
-            }
-          );
-
-          // Pre-warm the sign-in state
-          window.google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed()) {
-              console.info('Prompt not displayed:', notification.getNotDisplayedReason());
-            } else if (notification.isSkippedMoment()) {
-              console.info('Prompt skipped:', notification.getSkippedReason());
-            } else if (notification.isDismissedMoment()) {
-              console.info('Prompt dismissed:', notification.getDismissedReason());
-            }
-          });
-        };
-
-        script.onerror = () => {
-          console.error('Failed to load Google Sign-In script');
-          errorMessage.value = 'Google Sign-In is currently unavailable';
-        };
-      });
-
-      const handleGoogleResponse = async (response) => {
-        try {
-          if (!response.credential) {
-            throw new Error('No credential received from Google');
-          }
-
-          isLoading.value = true;
-          errorMessage.value = '';
-
-          const result = await apiClient.authSignUp('/auth/register/', {
-            credential: response.credential
-          });
-
-          if (result.data.token) {
-            localStorage.setItem('token', result.data.token);
-            localStorage.setItem('user', JSON.stringify(result.data.user));
-            router.push('/auth/signin');
-          }
-        } catch (error) {
-          console.error('Google sign-up error:', error);
-          errorMessage.value = error.response?.data?.error || 
-                              'Failed to sign up with Google. Please try again.';
-        } finally {
-          isLoading.value = false;
-        }
-      };
-
-      const handleGoogleSignUp = () => {
-        try {
-          if (!window.google?.accounts?.id) {
-            throw new Error('Google Sign-In not initialized');
-          }
-          window.google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-              console.error('Google Sign-In prompt not displayed:', notification.getNotDisplayedReason());
-              errorMessage.value = 'Unable to show Google Sign-In. Please try again.';
-            }
-          });
-        } catch (error) {
-          console.error('Google Sign-In error:', error);
-          errorMessage.value = 'Google Sign-In is currently unavailable';
-        }
-      };
 
       const signUp = async () => {
         try {
@@ -256,7 +122,7 @@
             password: password.value
           };
 
-          const response = await apiClient.authSignUp('/users/register/', payload);
+          const response = await apiClient.authSignUp('/auth/register/', payload);
 
           if (response.data.token) {
             localStorage.setItem('token', response.data.token);
@@ -294,8 +160,7 @@
         password2,
         errorMessage,
         isLoading,
-        signUp,
-        handleGoogleSignUp
+        signUp
       };
     }
   };
