@@ -133,7 +133,6 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import apiClient from '@/services/apiClient';
-import store from '../store';
 
 export default {
   setup() {
@@ -180,9 +179,6 @@ export default {
 
         message.value = 'Profile updated successfully!';
         messageClass.value = 'bg-green-50 text-green-800';
-        
-        // Refresh user data in store if using Vuex
-        await store.dispatch('/user/dashboard');  // Adjust action name as needed
         
         setTimeout(() => {
           router.push({ name: 'user-dashboard' });
