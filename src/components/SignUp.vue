@@ -106,6 +106,11 @@
           errorMessage.value = '';
           isLoading.value = true;
 
+          if (!email.value || !username.value || !password.value || !password2.value) {
+            errorMessage.value = 'All fields are required';
+            return;
+          }
+
           if (password.value !== password2.value) {
             errorMessage.value = 'Passwords do not match';
             return;
@@ -116,13 +121,18 @@
             return;
           }
 
-          const payload = {
+          const registrationData = {
             email: email.value,
             username: username.value,
-            password: password.value
+            password: password.value,
+            password2: password2.value
           };
 
-          const response = await apiClient.authSignUp('/auth/register/', payload);
+          console.log('Sending registration data:', registrationData);
+
+          const response = await apiClient.authSignUp(registrationData);
+
+          console.log('Registration response:', response.data);
 
           if (response.data.token) {
             localStorage.setItem('token', response.data.token);
@@ -130,7 +140,7 @@
             router.push('/auth/signin');
           }
         } catch (error) {
-          console.error('Signup error:', error);
+          console.error('Signup error:', error.response?.data || error);
           
           if (error.response?.data) {
             const errors = error.response.data;
@@ -140,8 +150,12 @@
               errorMessage.value = `Username: ${errors.username[0]}`;
             } else if (errors.password) {
               errorMessage.value = `Password: ${errors.password[0]}`;
+            } else if (errors.password2) {
+              errorMessage.value = `Confirm Password: ${errors.password2[0]}`;
             } else if (errors.error) {
               errorMessage.value = errors.error;
+            } else if (typeof errors === 'string') {
+              errorMessage.value = errors;
             } else {
               errorMessage.value = 'Registration failed. Please check your inputs and try again.';
             }

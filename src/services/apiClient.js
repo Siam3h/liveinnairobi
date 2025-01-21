@@ -185,7 +185,13 @@ export default {
 
   // Authentication APIs
   async authSignUp(data) {
-    return apiClient.post('auth/register/', data).catch(handleError);
+    console.log('Sending registration data to API:', data); // Debug log
+    return apiClient.post('auth/register/', {
+      email: data.email,
+      username: data.username,
+      password: data.password,
+      password2: data.password2
+    });
   },
 
   async authSignIn(credentials) {
