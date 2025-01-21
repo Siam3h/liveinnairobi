@@ -224,7 +224,7 @@ export default {
       }
     }
 
-      const response = await apiClient.patch('auth/update_profile/', formData, {
+      const response = await apiClient.put('auth/update_profile/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Necessary for file uploads
         },

@@ -4,6 +4,7 @@
       <!-- User Profile Section -->
       <div class="bg-white shadow rounded-lg mb-6">
         <div class="px-4 py-5 sm:p-6">
+          <!-- Profile Header -->
           <div class="flex items-center space-x-6">
             <div class="shrink-0">
               <img 
@@ -12,28 +13,38 @@
                 alt="Profile avatar"
               />
             </div>
-            <div>
-              <h2 class="text-2xl font-bold text-gray-900">{{ userData?.username }}</h2>
-              <p class="text-sm text-gray-500">{{ userData?.email }}</p>
-              <p class="text-sm text-gray-600 mt-1">{{ userData?.agency_name }}</p>
-              <p class="text-sm text-indigo-600">{{ formatRole(userData?.role) }}</p>
+            <div class="flex-1">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h2 class="text-2xl font-bold text-gray-900">{{ userData?.username }}</h2>
+                  <p class="text-sm text-gray-500">{{ userData?.email }}</p>
+                  <p class="text-sm text-gray-600 mt-1">
+                    {{ userData?.agency_name ? `Agency: ${userData.agency_name}` : '' }}
+                  </p>
+                  <span 
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    :class="{
+                      'bg-blue-100 text-blue-800': userData?.role === 'event_organizer',
+                      'bg-green-100 text-green-800': userData?.role === 'author'
+                    }"
+                  >
+                    {{ formatRole(userData?.role) }}
+                  </span>
+                </div>
+                <router-link 
+                  :to="{ name: 'update-profile' }" 
+                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Edit Profile
+                </router-link>
+              </div>
             </div>
           </div>
-          
+
           <!-- Bio Section -->
           <div class="mt-6" v-if="userData?.bio">
             <h3 class="text-lg font-medium text-gray-900">About</h3>
-            <p class="mt-2 text-gray-600">{{ userData?.bio }}</p>
-          </div>
-          
-          <!-- Edit Profile Button -->
-          <div class="mt-6">
-            <router-link 
-              :to="{ name: 'update-profile' }" 
-              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Edit Profile
-            </router-link>
+            <p class="mt-2 text-gray-600 whitespace-pre-line">{{ userData.bio }}</p>
           </div>
         </div>
       </div>
@@ -58,14 +69,13 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="isLoading" class="text-center py-12">
-        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-500 border-t-transparent"></div>
-        <p class="mt-2 text-gray-600">Loading...</p>
+      <div v-if="isLoading" class="text-center py-4">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500 mx-auto"></div>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="bg-red-50 p-4 rounded-md">
-        <p class="text-red-700">{{ error }}</p>
+      <div v-if="error" class="bg-red-50 text-red-800 p-4 rounded-md mb-6">
+        {{ error }}
       </div>
 
       <!-- Blogs Tab Content -->
