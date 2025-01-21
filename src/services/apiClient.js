@@ -189,12 +189,17 @@ export default {
   },
 
   async authSignIn(credentials) {
-    return apiClient.post('/auth/login/', credentials).catch(handleError);
+    return apiClient.post('/auth/login/', {
+      username: credentials.email, // backend expects username field
+      password: credentials.password
+    }).catch(handleError);
   },
 
   async authSignOut() {
-    await this.fetchCSRFToken();
-    return apiClient.post('/users/auth/signout/').catch(handleError);
+    const response = await apiClient.post('/auth/logout/').catch(handleError);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    return response;
   },
 
   // User APIs
