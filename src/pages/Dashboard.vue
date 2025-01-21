@@ -2,18 +2,39 @@
   <div class="min-h-screen bg-gray-100 py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- User Profile Section -->
-      <div class="bg-white rounded-lg shadow p-6 mb-6">
-        <div class="flex items-center space-x-4">
-          <div class="flex-1">
-            <h1 class="text-2xl font-bold text-gray-900">Welcome, {{ user?.username }}</h1>
-            <p class="text-gray-600">{{ user?.email }}</p>
+      <div class="bg-white shadow rounded-lg mb-6">
+        <div class="px-4 py-5 sm:p-6">
+          <div class="flex items-center space-x-6">
+            <div class="shrink-0">
+              <img 
+                :src="userData?.avatar || '/default-avatar.png'" 
+                class="h-24 w-24 object-cover rounded-full"
+                alt="Profile avatar"
+              />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-gray-900">{{ userData?.username }}</h2>
+              <p class="text-sm text-gray-500">{{ userData?.email }}</p>
+              <p class="text-sm text-gray-600 mt-1">{{ userData?.agency_name }}</p>
+              <p class="text-sm text-indigo-600">{{ formatRole(userData?.role) }}</p>
+            </div>
           </div>
-          <router-link 
-            to="/user/update-profile"
-            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-          >
-            Edit Profile
-          </router-link>
+          
+          <!-- Bio Section -->
+          <div class="mt-6" v-if="userData?.bio">
+            <h3 class="text-lg font-medium text-gray-900">About</h3>
+            <p class="mt-2 text-gray-600">{{ userData?.bio }}</p>
+          </div>
+          
+          <!-- Edit Profile Button -->
+          <div class="mt-6">
+            <router-link 
+              :to="{ name: 'update-profile' }" 
+              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Edit Profile
+            </router-link>
+          </div>
         </div>
       </div>
 
@@ -232,7 +253,7 @@ export default {
   },
   
   setup() {
-    const user = ref(null);
+    const userData = ref(null);
     const blogs = ref([]);
     const events = ref([]);
     const transactions = ref([]);
@@ -242,6 +263,13 @@ export default {
     const error = ref(null);
     const transactionFilter = ref('all');
 
+    const formatRole = (role) => {
+      if (!role) return '';
+      return role.split('_').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ');
+    };
+
     const loadDashboardData = async () => {
       try {
         isLoading.value = true;
@@ -250,7 +278,7 @@ export default {
         const response = await apiClient.getDashboard();
         const data = response.data;
         
-        user.value = data.user;
+        userData.value = data.user;
         blogs.value = data.blogs;
         events.value = data.events;
         transactions.value = data.transactions;
@@ -349,7 +377,7 @@ export default {
     onMounted(loadDashboardData);
 
     return {
-      user,
+      userData,
       blogs,
       events,
       transactions,
@@ -364,7 +392,8 @@ export default {
       transactionFilter,
       filteredTransactions,
       monthlyRevenueData,
-      transactionStatusData
+      transactionStatusData,
+      formatRole
     };
   }
 };
