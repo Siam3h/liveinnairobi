@@ -44,7 +44,7 @@ const routes = [
     // User Profile Routes
     { path: '/user/update-profile', name: 'update-profile', component: UpdateProfile },
     { path: '/user/delete-profile', name: 'delete-profile', component: DeleteProfile },
-    { path: '/user/dashboard', name: 'user-dashboard', component: UserDashboard },
+    { path: '/user/dashboard', name: 'user-dashboard', component: UserDashboard, meta: { requiresAuth: true } },
 
     // Blog Routes
     { path: '/blogs', name: 'blogs', component: Blogs },
