@@ -150,17 +150,39 @@
           window.google.accounts.id.initialize({
             client_id: clientId,
             callback: handleGoogleResponse,
-            auto_select: false, // Prevent auto-selection of account
-            cancel_on_tap_outside: true, // Allow closing the popup by clicking outside
-            context: 'signup', // Specify the context as signup
-            ux_mode: 'popup', // Use popup mode instead of redirect
+            auto_select: false,
+            cancel_on_tap_outside: true,
+            context: 'signup',
+            use_fedcm_for_prompt: true,
+            prompt_parent_id: 'google-signin-button',
+            state_cookie_domain: window.location.hostname,
+            itp_support: true
           });
 
-          // Pre-render the button (optional)
+          // Render the button with updated configuration
           window.google.accounts.id.renderButton(
             document.getElementById('google-signin-button'),
-            { theme: 'outline', size: 'large', width: '100%' }
+            {
+              type: 'standard',
+              theme: 'outline',
+              size: 'large',
+              text: 'signup_with',
+              shape: 'rectangular',
+              width: '100%',
+              logo_alignment: 'left'
+            }
           );
+
+          // Pre-warm the sign-in state
+          window.google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed()) {
+              console.info('Prompt not displayed:', notification.getNotDisplayedReason());
+            } else if (notification.isSkippedMoment()) {
+              console.info('Prompt skipped:', notification.getSkippedReason());
+            } else if (notification.isDismissedMoment()) {
+              console.info('Prompt dismissed:', notification.getDismissedReason());
+            }
+          });
         };
 
         script.onerror = () => {
