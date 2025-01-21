@@ -95,7 +95,9 @@
 
         <!-- Google Sign Up Button -->
         <div>
+          <div id="google-signin-button"></div>
           <button
+            v-if="!window.google"
             @click="handleGoogleSignUp"
             class="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             :disabled="isLoading"
@@ -137,7 +139,7 @@
         document.head.appendChild(script);
 
         script.onload = () => {
-        const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '830795346343-7uajlpulc4tne0f07vt39hlg0ie0n82l.apps.googleusercontent.com';
+          const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
           
           if (!clientId) {
             console.error('Google Client ID not found in environment variables');
@@ -147,18 +149,37 @@
 
           window.google.accounts.id.initialize({
             client_id: clientId,
-            callback: handleGoogleResponse
+            callback: handleGoogleResponse,
+            auto_select: false, // Prevent auto-selection of account
+            cancel_on_tap_outside: true, // Allow closing the popup by clicking outside
+            context: 'signup', // Specify the context as signup
+            ux_mode: 'popup', // Use popup mode instead of redirect
           });
+
+          // Pre-render the button (optional)
+          window.google.accounts.id.renderButton(
+            document.getElementById('google-signin-button'),
+            { theme: 'outline', size: 'large', width: '100%' }
+          );
+        };
+
+        script.onerror = () => {
+          console.error('Failed to load Google Sign-In script');
+          errorMessage.value = 'Google Sign-In is currently unavailable';
         };
       });
 
       const handleGoogleResponse = async (response) => {
         try {
+          if (!response.credential) {
+            throw new Error('No credential received from Google');
+          }
+
           isLoading.value = true;
           errorMessage.value = '';
 
-          const result = await apiClient.post('/auth/register/', {
-            access_token: response.credential
+          const result = await apiClient.post('/auth/google/', {
+            credential: response.credential
           });
 
           if (result.data.token) {
@@ -168,14 +189,28 @@
           }
         } catch (error) {
           console.error('Google sign-up error:', error);
-          errorMessage.value = 'Failed to sign up with Google. Please try again.';
+          errorMessage.value = error.response?.data?.error || 
+                              'Failed to sign up with Google. Please try again.';
         } finally {
           isLoading.value = false;
         }
       };
 
       const handleGoogleSignUp = () => {
-        window.google.accounts.id.prompt();
+        try {
+          if (!window.google?.accounts?.id) {
+            throw new Error('Google Sign-In not initialized');
+          }
+          window.google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              console.error('Google Sign-In prompt not displayed:', notification.getNotDisplayedReason());
+              errorMessage.value = 'Unable to show Google Sign-In. Please try again.';
+            }
+          });
+        } catch (error) {
+          console.error('Google Sign-In error:', error);
+          errorMessage.value = 'Google Sign-In is currently unavailable';
+        }
       };
 
       const signUp = async () => {
