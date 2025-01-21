@@ -185,12 +185,10 @@ export default {
 
   // Authentication APIs
   async authSignUp(data) {
-    await this.fetchCSRFToken();
-    return apiClient.post('/users/auth/signup/', data).catch(handleError);
+    return apiClient.post('/auth/register/', data).catch(handleError);
   },
 
   async authSignIn(credentials) {
-    await this.fetchCSRFToken();
     return apiClient.post('/users/auth/signin/', credentials).catch(handleError);
   },
 
