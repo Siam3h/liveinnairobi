@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie'; // Assuming js-cookie is being used for managing cookies
 
 const apiClient = axios.create({
-  baseURL: 'https://liveinnbo-backend.onrender.com/api/v1',
+  baseURL: 'https://liveinnbo-backend.onrender.com/api/',
   headers: {
     'Content-Type': 'application/json',
   },

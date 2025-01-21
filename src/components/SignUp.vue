@@ -178,7 +178,7 @@
           isLoading.value = true;
           errorMessage.value = '';
 
-          const result = await apiClient.post('/auth/google/', {
+          const result = await apiClient.authSignUp('/auth/register/', {
             credential: response.credential
           });
 
@@ -234,7 +234,7 @@
             password: password.value
           };
 
-          const response = await apiClient.post('/accounts/register/', payload);
+          const response = await apiClient.authSignUp('/users/register/', payload);
 
           if (response.data.token) {
             localStorage.setItem('token', response.data.token);
