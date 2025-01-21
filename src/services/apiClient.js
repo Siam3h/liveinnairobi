@@ -94,11 +94,11 @@ export default {
   fetchCSRFToken,
   // Blog APIs
   getBlogs(page = 1) {
-    return apiClient.get(`/blog/?page=${page}`).catch(handleError);
+    return apiClient.get(`blogs/?page=${page}`).catch(handleError);
   },
 
   getBlog(slug) {
-    return apiClient.get(`/blog/${slug}/`).catch(handleError);
+    return apiClient.get(`blogs/${slug}/`).catch(handleError);
   },
 
   async createBlog(data) {
@@ -108,7 +108,7 @@ export default {
         formData.append(key, data[key]);
       }
     }
-    return apiClient.post('/blog/', formData, {
+    return apiClient.post('blogs/', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).catch(handleError);
   },
@@ -120,22 +120,22 @@ export default {
         formData.append(key, data[key]);
       }
     }
-    return apiClient.patch(`/blog/${slug}/`, formData, {
+    return apiClient.patch(`blogs/${slug}/`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).catch(handleError);
   },
 
   deleteBlog(slug) {
-    return apiClient.delete(`/blog/${slug}/`).catch(handleError);
+    return apiClient.delete(`blogs/${slug}/`).catch(handleError);
   },
 
   // Event APIs
   getEvents(page = 1) {
-    return apiClient.get(`/events/?page=${page}`).catch(handleError);
+    return apiClient.get(`events/?page=${page}`).catch(handleError);
   },
 
   getEvent(eventId) {
-    return apiClient.get(`/events/${eventId}/`).catch(handleError);
+    return apiClient.get(`events/${eventId}/`).catch(handleError);
   },
 
   async createEvent(data) {
@@ -145,7 +145,7 @@ export default {
         formData.append(key, data[key]);
       }
     }
-    return apiClient.post('/events/', formData, {
+    return apiClient.post('events/', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).catch(handleError);
   },
@@ -157,26 +157,26 @@ export default {
         formData.append(key, data[key]);
       }
     }
-    return apiClient.put(`/events/${eventId}/`, formData, {
+    return apiClient.put(`events/${eventId}/`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).catch(handleError);
   },
 
   deleteEvent(eventId) {
-    return apiClient.delete(`/events/${eventId}/`).catch(handleError);
+    return apiClient.delete(`events/${eventId}/`).catch(handleError);
   },
 
   // Payment APIs
   verifyTicket(data) {
-    return apiClient.post('/payments/verify_ticket/', data).catch(handleError);
+    return apiClient.post('payments/verify_ticket/', data).catch(handleError);
   },
 
   initializePayment(paymentData) {
-    return apiClient.post(`/payments/process/${paymentData.eventId}/`, paymentData).catch(handleError);
+    return apiClient.post(`payments/process/${paymentData.eventId}/`, paymentData).catch(handleError);
   },
 
   verifyPayment(reference) {
-    return apiClient.get(`/payments/verify_payment/?reference=${reference}`).catch(handleError);
+    return apiClient.get(`payments/verify_payment/?reference=${reference}`).catch(handleError);
   },
 
   thankYou(transactionId) {
@@ -185,18 +185,18 @@ export default {
 
   // Authentication APIs
   async authSignUp(data) {
-    return apiClient.post('/auth/register/', data).catch(handleError);
+    return apiClient.post('auth/register/', data).catch(handleError);
   },
 
   async authSignIn(credentials) {
-    return apiClient.post('/auth/login/', {
-      username: credentials.email, // backend expects username field
+    return apiClient.post('auth/login/', {
+      username: credentials.email,
       password: credentials.password
     }).catch(handleError);
   },
 
   async authSignOut() {
-    const response = await apiClient.post('/auth/logout/').catch(handleError);
+    const response = await apiClient.post('auth/logout/').catch(handleError);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     return response;
@@ -204,7 +204,7 @@ export default {
 
   // User APIs
   async getDashboard() {
-    return apiClient.get('/users/dashboard/').catch(handleError);
+    return apiClient.get('auth/dashboard/').catch(handleError);
   },
 
   // Update the profile with the new data
@@ -218,7 +218,7 @@ export default {
       }
     }
 
-      const response = await apiClient.put('/users/update_profile/', formData, {
+      const response = await apiClient.put('auth/update_profile/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Necessary for file uploads
         },
@@ -228,7 +228,7 @@ export default {
 
   async deleteProfile() {
     await this.fetchCSRFToken();
-    return apiClient.delete('/users/delete_account/').catch(handleError);
+    return apiClient.delete('auth/delete_account/').catch(handleError);
   },
 
   async getUsers() {
