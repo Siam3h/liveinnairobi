@@ -22,7 +22,7 @@
             <div v-if="event" class="mt-3 p-3 bg-gray-50 rounded-md">
               <p class="font-medium text-gray-900">{{ event.title }}</p>
               <p class="text-sm text-gray-500">Date: {{ formatDate(event.event_date) }}</p>
-              <p class="text-sm text-gray-500">Location: {{ event.location }}</p>
+              <p class="text-sm text-gray-500">Location: {{ event.location }}, {{ event.town }}</p>
             </div>
           </div>
         </div>
@@ -78,7 +78,9 @@ export default {
       return new Date(dateString).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
       });
     };
 

@@ -82,7 +82,7 @@
                 </div>
 
                 <!-- Events Grid -->
-                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 slide-in">
                     <div
                         v-for="event in filteredEvents"
                         :key="event.id"
@@ -174,6 +174,50 @@ export default {
                 loading.value = true;
                 const response = await apiClient.get('/events/');
                 events.value = response.data.results || response.data;
+
+                // Add sample events around Nairobi
+                events.value = [
+                    {
+                        id: 1,
+                        title: "Nairobi Food Festival",
+                        content: "Join us for a culinary journey through Nairobi's finest cuisines. Experience a variety of dishes from local and international chefs.",
+                        event_date: "2023-12-15T10:00:00",
+                        location: "Nairobi, Kenya",
+                        price: 1500,
+                        thumbnail_url: "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                        town: "Nairobi"
+                    },
+                    {
+                        id: 2,
+                        title: "Nairobi Marathon 2023",
+                        content: "Lace up your running shoes for the annual Nairobi Marathon. Whether you're a seasoned runner or a beginner, this event is for everyone.",
+                        event_date: "2023-11-25T07:00:00",
+                        location: "Nairobi, Kenya",
+                        price: 2000,
+                        thumbnail_url: "https://images.pexels.com/photos/618612/pexels-photo-618612.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                        town: "Nairobi"
+                    },
+                    {
+                        id: 3,
+                        title: "Nairobi Art Expo",
+                        content: "Explore the vibrant art scene of Nairobi at the annual Art Expo. Featuring works from local and international artists.",
+                        event_date: "2023-12-10T09:00:00",
+                        location: "Nairobi, Kenya",
+                        price: 1000,
+                        thumbnail_url: "https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                        town: "Nairobi"
+                    },
+                    {
+                        id: 4,
+                        title: "Nairobi Music Festival",
+                        content: "Get ready for a night of incredible music at the Nairobi Music Festival. Featuring top artists from across the globe.",
+                        event_date: "2023-12-20T18:00:00",
+                        location: "Nairobi, Kenya",
+                        price: 2500,
+                        thumbnail_url: "https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                        town: "Nairobi"
+                    }
+                ];
             } catch (err) {
                 console.error('Error fetching events:', err);
                 error.value = 'Failed to load events';
@@ -220,5 +264,23 @@ export default {
 <style scoped>
 .container {
     max-width: 1280px;
+}
+
+/* Slide-in animation for events grid */
+.slide-in {
+    animation: slideIn 1s ease-out forwards;
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 </style>
