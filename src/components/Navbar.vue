@@ -2,14 +2,14 @@
   <div>
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow dark:bg-gray-800">
       <div class="container px-6 py-1 mx-auto">
-        <div class="flex items-center justify-between">
+        <div class="lg:flex lg:items-center lg:justify-between">
           <!-- Logo -->
           <a href="/" class="text-2xl font-bold text-blue-600" style="font-family: 'Montserrat', sans-serif;">
             Live In NBO
           </a>
 
           <!-- Mobile Menu Button -->
-          <div class="flex lg:hidden">
+          <div class="flex lg:hidden ml-auto">
             <button
               @click="toggleMenu"
               type="button"
