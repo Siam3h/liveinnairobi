@@ -170,11 +170,15 @@ export default {
 
         // Create FormData object
         const formData = new FormData();
-        Object.keys(blogData).forEach(key => {
-          if (key !== 'thumbnail_url' && blogData[key] !== null) {
-            formData.append(key, blogData[key]);
-          }
-        });
+        formData.append('title', blogData.title);
+        formData.append('content', blogData.content);
+        formData.append('category', blogData.category);
+        if (blogData.meta) {
+          formData.append('meta', blogData.meta);
+        }
+        if (blogData.thumbnail_img) {
+          formData.append('thumbnail_img', blogData.thumbnail_img);
+        }
 
         // Send request to create blog
         const response = await apiClient.createBlog('/blog/', formData, {
@@ -190,7 +194,7 @@ export default {
         }
       } catch (error) {
         console.error('Blog creation error:', error);
-        
+
         if (error.response?.data) {
           const errors = error.response.data;
           if (typeof errors === 'object') {
