@@ -72,14 +72,14 @@
             <label for="event_date" class="block text-sm font-medium text-gray-700">Event Date</label>
             <input
               v-model="eventData.event_date"
-              type="date"
+              type="datetime-local"
               id="event_date"
               required
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </div>
           <div>
-            <label for="price" class="block text-sm font-medium text-gray-700">Price (KSH)</label>
+            <label for="price" class="block text-sm font-medium text-gray-700">Price (KES)</label>
             <input
               v-model.number="eventData.price"
               type="number"
