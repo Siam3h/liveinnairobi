@@ -182,12 +182,7 @@ export default {
           }
         });
 
-        const response = await apiClient.post('/events/', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Token ${token}`
-          }
-        });
+        const response = await apiClient.createEvent(eventData);
 
         if (response.data) {
           router.push('/events');
