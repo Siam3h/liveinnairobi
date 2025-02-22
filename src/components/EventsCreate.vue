@@ -2,7 +2,6 @@
     <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
             <h1 class="text-3xl font-bold text-center mb-8">Create New Event</h1>
-
             <form @submit.prevent="createEvent" class="space-y-6">
                 <!-- Title -->
                 <div>
@@ -156,16 +155,9 @@
                         return;
                     }
 
-                    // Create FormData object to handle file upload; skip thumbnail_url since it's for preview only
-                    const formData = new FormData();
-                    Object.keys(eventData).forEach(key => {
-                        if (key !== 'thumbnail_url') {
-                            formData.append(key, eventData[key]);
-                        }
-                    });
-
-                    // Send the FormData payload using the API client's createEvent method
-                    const response = await apiClient.createEvent(formData);
+                    // Pass the plain eventData object to the API client's createEvent method.
+                    // The API client should construct the FormData internally.
+                    const response = await apiClient.createEvent(eventData);
 
                     if (response.data) {
                         router.push('/events');

@@ -138,17 +138,20 @@ export default {
     return apiClient.get(`events/${eventId}/`).catch(handleError);
   },
 
-  async createEvent(data) {
-    const formData = new FormData();
-    for (const key in data) {
-      if (data[key] !== undefined && data[key] !== null) {
-        formData.append(key, data[key]);
-      }
+
+    async createEvent(data) {
+        const formData = new FormData();
+        Object.keys(data).forEach(key => {
+            if (key !== 'thumbnail_url' && data[key] !== undefined && data[key] !== null) {
+                formData.append(key, data[key]);
+            }
+        });
+        return apiClient.post('events/', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        }).catch(handleError);
     }
-    return apiClient.post('events/', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }).catch(handleError);
-  },
+
+
 
   async updateEvent(eventId, data) {
     const formData = new FormData();
