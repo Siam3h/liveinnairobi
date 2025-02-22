@@ -52,7 +52,9 @@
                                         </svg>
                                     </div>
                                     <div class="ml-4">
-                                        <p class="text-sm font-medium text-gray-900">{{ event.event_organizer?.email || 'Event Organizer' }}</p>
+                                        <p class="text-sm font-medium text-gray-900">
+                                            {{ event.event_organizer?.email || 'Event Organizer' }}
+                                        </p>
                                         <p class="text-sm text-gray-500">Organizer</p>
                                     </div>
                                 </div>
@@ -139,7 +141,7 @@
             const loading = ref(true);
             const errorMessage = ref('');
 
-            // Determine if the current user can edit the event
+            // Check if the current user can edit the event
             const canEditEvent = computed(() => {
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
                 return event.value && (
@@ -160,9 +162,15 @@
 
             // Fetch the event using the API client's getEvent method
             const fetchEvent = async () => {
+                const id = route.params.id;
+                if (!id) {
+                    errorMessage.value = "No event ID provided in the URL.";
+                    loading.value = false;
+                    return;
+                }
                 try {
                     loading.value = true;
-                    const response = await apiClient.getEvent(route.params.id);
+                    const response = await apiClient.getEvent(id);
                     event.value = response.data;
                 } catch (error) {
                     console.error('Error fetching event:', error);
