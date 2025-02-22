@@ -149,9 +149,7 @@ export default {
         return apiClient.post('events/', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         }).catch(handleError);
-    }
-
-
+    },
 
   async updateEvent(eventId, data) {
     const formData = new FormData();
