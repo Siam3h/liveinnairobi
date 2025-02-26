@@ -171,15 +171,22 @@
                 try {
                     loading.value = true;
                     const response = await apiClient.getEvent(id);
-                    console.log(response)
-                    event.value = response.data;
+                    console.log('API Response:', response); // Inspect the full response structure
+
+                    // Try both ways of accessing the data
+                    if (response.data) {
+                        event.value = response.data;
+                    } else {
+                        event.value = response; // In case response is already the data
+                    }
+
                 } catch (error) {
                     console.error('Error fetching event:', error);
-                    errorMessage.value = 'Failed to load event details';
+                    errorMessage.value = 'Failed to load event details. ' + (error.response?.data?.message || error.message);
                 } finally {
                     loading.value = false;
                 }
-            };
+            }; 
 
             // Redirect to the payment process route
             const redirectToPayment = () => {
