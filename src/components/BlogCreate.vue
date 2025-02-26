@@ -181,12 +181,7 @@ export default {
         }
 
         // Send request to create blog
-        const response = await apiClient.createBlog('/blog/', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Token ${token}`
-          }
-        });
+        const response = await apiClient.createBlog(formData);
 
         if (response.data) {
           // Redirect to the blog detail page or blog list

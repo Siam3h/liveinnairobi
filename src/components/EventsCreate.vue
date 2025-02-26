@@ -154,9 +154,7 @@
                         router.push('/auth/signin');
                         return;
                     }
-
-                    // Pass the plain eventData object to the API client's createEvent method.
-                    // The API client should construct the FormData internally.
+                    
                     const response = await apiClient.createEvent(eventData);
 
                     if (response.data) {
