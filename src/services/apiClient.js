@@ -135,7 +135,7 @@ export default {
   },
 
   getEvent(eventId) {
-    return apiClient.get(`events/${eventId}/`).catch(handleError);
+    return apiClient.get(`events/event/${eventId}/`).catch(handleError);
   },
 
 
