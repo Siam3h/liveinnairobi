@@ -171,6 +171,7 @@
                 try {
                     loading.value = true;
                     const response = await apiClient.getEvent(id);
+                    console.log(response)
                     event.value = response.data;
                 } catch (error) {
                     console.error('Error fetching event:', error);
