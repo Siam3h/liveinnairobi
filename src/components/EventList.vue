@@ -27,7 +27,7 @@
                                 <div class="uppercase tracking-wide text-sm text-indigo-600 font-semibold">
                                     {{ formatDate(mostRecentEvent.event_date) }}
                                 </div>
-                                <router-link :to="`/events/${mostRecentEvent.id}`"
+                                <router-link :to="`/events/${mostRecentEvent.slug}`"
                                              class="block mt-1 text-2xl font-semibold text-gray-900 hover:text-indigo-600">
                                     {{ mostRecentEvent.title }}
                                 </router-link>
@@ -84,7 +84,7 @@
                         <div class="p-6">
                             <div class="flex justify-between items-start mb-2">
                                 <h3 class="text-xl font-semibold text-gray-900">
-                                    <router-link :to="`/events/${event.id}`"
+                                    <router-link :to="`/events/${event.slug}`"
                                                  class="hover:text-indigo-600">
                                         {{ event.title }}
                                     </router-link>
