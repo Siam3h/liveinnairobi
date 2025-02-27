@@ -160,33 +160,24 @@
                 });
             };
 
-            // Fetch the event using the API client's getEvent method
             const fetchEvent = async () => {
-                const id = route.params.id;
-                if (!id) {
-                    errorMessage.value = "No event ID provided in the URL.";
+                const slug = route.params.slug; 
+                if (!slug) {
+                    errorMessage.value = "No event slug provided in the URL.";
                     loading.value = false;
                     return;
                 }
                 try {
                     loading.value = true;
-                    const response = await apiClient.getEvent(id);
-                    console.log('API Response:', response); // Inspect the full response structure
-
-                    // Try both ways of accessing the data
-                    if (response.data) {
-                        event.value = response.data;
-                    } else {
-                        event.value = response; // In case response is already the data
-                    }
-
+                    const response = await apiClient.getEvent(slug);
+                    event.value = response.data;
                 } catch (error) {
                     console.error('Error fetching event:', error);
-                    errorMessage.value = 'Failed to load event details. ' + (error.response?.data?.message || error.message);
+                    errorMessage.value = 'Failed to load event details. ' + (error.response?.data?.detail || error.message);
                 } finally {
                     loading.value = false;
                 }
-            }; 
+            };
 
             // Redirect to the payment process route
             const redirectToPayment = () => {

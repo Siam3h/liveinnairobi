@@ -55,7 +55,7 @@ const routes = [
 
     // Event Routes
     { path: '/events', name: 'events', component: Events },
-    { path: '/events/:eventId', name: 'event-detail', component: EventDetail, props: true },
+    { path: '/events/:slug', name: 'event-detail', component: EventDetail, props: true },
     { path: '/events/create', name: 'event-create', component: EventCreate },
     { path: '/events/update/:eventId', name: 'event-update', component: EventUpdate, props: true },
     { path: '/events/delete/:eventId', name: 'event-delete', component: EventDelete, props: true },

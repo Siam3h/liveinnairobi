@@ -134,8 +134,8 @@ export default {
     return apiClient.get(`events/?page=${page}`).catch(handleError);
   },
 
-  getEvent(eventId) {
-    return apiClient.get(`events/event/${eventId}/`).catch(handleError);
+  getEvent(slug) {
+    return apiClient.get(`events/event/${slug}/`).catch(handleError);
   },
 
 
