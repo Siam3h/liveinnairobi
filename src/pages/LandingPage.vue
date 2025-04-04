@@ -67,22 +67,23 @@
           </a>
           
          <!-- Animated Circular Play Button -->
-<button @click="showVideo = true" class="group flex items-center ml-4">
-  <div class="relative">
-    <!-- Pulsing outer circle -->
-    <div class="absolute inset-0 bg-yellow-400/30 animate-ping group-hover:animate-none transition-all duration-300 rounded-full"></div>
-    <!-- Main circle -->
-    <div class="relative w-16 h-16 bg-yellow-400 group-hover:bg-yellow-500 flex items-center justify-center shadow-xl transition-all duration-300 transform group-hover:scale-110 rounded-full">
-      <!-- Play icon -->
-      <svg class="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M6.5 5.5v9l7-4.5-7-4.5z" />
-      </svg>
-    </div>
-    <!-- Glow effect -->
-    <div class="absolute inset-0 bg-yellow-400/20 group-hover:bg-yellow-400/40 blur-sm transition-all duration-300 rounded-full"></div>
-  </div>
-  <span class="ml-3 text-white font-medium text-base sm:text-lg">Watch Video</span>
-</button>
+         <button @click="showVideo = true" class="group flex items-center mt-4 sm:mt-0 sm:ml-4">
+        <div class="relative">
+          <div class="absolute inset-0 bg-yellow-400/30 animate-ping rounded-full"></div>
+          <div
+            class="relative w-14 h-14 sm:w-16 sm:h-16 bg-yellow-400 hover:bg-yellow-500 flex items-center justify-center shadow-xl transition-all duration-300 transform hover:scale-110 rounded-full">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white transition-transform duration-300"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M6.5 5.5v9l7-4.5-7-4.5z" />
+            </svg>
+          </div>
+          <div
+            class="absolute inset-0 bg-yellow-400/20 hover:bg-yellow-400/40 blur-sm transition-all duration-300 rounded-full">
+          </div>
+        </div>
+        <span class="ml-3 text-white font-medium text-base sm:text-lg">Watch Video</span>
+      </button>
+      
         </div>
       </div>
     </div>
