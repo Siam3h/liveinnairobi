@@ -9,34 +9,42 @@
         <div class="absolute inset-0 bg-black/50"></div>
       </div>
       
-      <!-- Video Modal (hidden by default) -->
-      <div v-if="showVideo" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
-        <div class="relative w-full max-w-4xl">
-         <!-- Play Video Button -->
-<button 
-  @click="showVideo = true" 
-  class="group relative z-40 flex items-center justify-center w-16 h-16 rounded-full bg-yellow-400 hover:bg-yellow-500 transition-all duration-300 shadow-lg hover:scale-110">
-  <svg 
-    class="w-8 h-8 text-white group-hover:scale-110 transition-transform duration-300" 
-    xmlns="http://www.w3.org/2000/svg" 
-    fill="currentColor" 
-    viewBox="0 0 24 24">
-    <path d="M8 5v14l11-7z"/>
-  </svg>
-</button>
+     
+<!-- Video Modal -->
+<div 
+  v-if="showVideo" 
+  @click.self="showVideo = false" 
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
 
-          <div class="aspect-w-16 aspect-h-9">
-            <iframe 
-              class="w-full h-full" 
-              src="https://www.youtube.com/embed/I4BUfnTkKz8?autoplay=1" 
-              title="EventPlatform Introduction"
-              frameborder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen>
-            </iframe>
-          </div>
-        </div>
-      </div>
+  <div class="relative w-full max-w-4xl">
+    <!-- ❌ Close Button -->
+    <button 
+      @click="showVideo = false" 
+      class="absolute -top-10 right-0 text-white hover:text-yellow-400 transition-colors z-50">
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        class="h-10 w-10" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Video iframe -->
+    <div class="aspect-w-16 aspect-h-9">
+      <iframe 
+        class="w-full h-full" 
+        src="https://www.youtube.com/embed/I4BUfnTkKz8?autoplay=1" 
+        title="EventPlatform Introduction"
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+
 
       <!-- Text Content with Play Button -->
       <div class="relative z-10 w-full lg:w-2/3 px-8 sm:px-16 lg:px-24 py-20 md:py-32 lg:py-48">
@@ -73,7 +81,7 @@
     <!-- Glow effect -->
     <div class="absolute inset-0 bg-yellow-400/20 group-hover:bg-yellow-400/40 blur-sm transition-all duration-300 rounded-full"></div>
   </div>
-  <span class="ml-3 text-white font-medium text-lg">Watch Video</span>
+  <span class="ml-3 text-white font-medium text-base sm:text-lg">Watch Video</span>
 </button>
         </div>
       </div>
