@@ -9,7 +9,7 @@
         <div v-if="isAuthor" class="mt-6">
           <router-link 
             to="/blog/create"
-            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300"
           >
             Create New Blog Post
           </router-link>
@@ -30,39 +30,147 @@
       <div v-else>
         <!-- Most Recent Blog (Featured) -->
         <div v-if="mostRecentBlog" class="mb-16">
-          <h2 class="text-2xl font-bold text-gray-900 mb-8">Latest Post</h2>
-          <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+          <h2 class="text-2xl font-bold text-gray-900 mb-8">Featured Post</h2>
+          <div class="bg-white rounded-xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl">
             <div class="md:flex">
-              <div class="md:flex-shrink-0">
+              <div class="md:flex-shrink-0 md:w-1/2">
                 <img 
-                  :src="mostRecentBlog.thumbnail_url || '/default-blog.jpg'" 
+                  :src="mostRecentBlog.thumbnail_url || 'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'" 
                   :alt="mostRecentBlog.title"
-                  class="h-64 w-full object-cover md:w-96"
+                  class="w-full h-64 md:h-full object-cover"
                 >
               </div>
-              <div class="p-8">
-                <div class="uppercase tracking-wide text-sm text-indigo-600 font-semibold">
+              <div class="p-8 md:w-1/2">
+                <div class="inline-block px-3 py-1 mb-4 text-xs font-semibold text-indigo-600 bg-indigo-100 rounded-full">
                   {{ mostRecentBlog.category }}
                 </div>
                 <router-link 
                   :to="`/blog/${mostRecentBlog.slug}`"
-                  class="block mt-1 text-2xl font-semibold text-gray-900 hover:text-indigo-600"
+                  class="block mt-1 text-3xl font-bold text-gray-900 hover:text-indigo-600 transition-colors duration-300"
                 >
                   {{ mostRecentBlog.title }}
                 </router-link>
-                <p class="mt-2 text-gray-500">{{ mostRecentBlog.meta || truncateText(mostRecentBlog.content, 200) }}</p>
-                <div class="mt-4 flex items-center">
+                <p class="mt-4 text-gray-600">{{ mostRecentBlog.meta || truncateText(mostRecentBlog.content, 200) }}</p>
+                <div class="mt-8 flex items-center justify-between">
                   <div class="flex items-center">
-                    <svg class="h-5 w-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                    </svg>
-                    <span class="text-gray-600">{{ mostRecentBlog.author }}</span>
+                    <div class="flex-shrink-0">
+                      <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                      </svg>
+                    </div>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900">{{ mostRecentBlog.author }}</p>
+                      <p class="text-sm text-gray-500">{{ formatDate(mostRecentBlog.created_at) }}</p>
+                    </div>
                   </div>
-                  <span class="mx-2 text-gray-500">•</span>
-                  <time class="text-gray-500">{{ formatDate(mostRecentBlog.created_at) }}</time>
+                  <router-link 
+                    :to="`/blog/${mostRecentBlog.slug}`"
+                    class="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-white border border-indigo-600 hover:bg-indigo-600 rounded-full transition-colors duration-300"
+                  >
+                    Read More →
+                  </router-link>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Popular Blog Posts Section -->
+        <div class="mb-16">
+          <h2 class="text-2xl font-bold text-gray-900 mb-8">Popular Reads</h2>
+          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <!-- Blog Card 1 -->
+            <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <img 
+                src="https://images.pexels.com/photos/5904932/pexels-photo-5904932.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                alt="Tech Trends"
+                class="w-full h-48 object-cover"
+              >
+              <div class="p-6">
+                <div class="inline-block px-3 py-1 mb-3 text-xs font-semibold text-indigo-600 bg-indigo-100 rounded-full">
+                  Technology
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
+                  <router-link to="/blog/tech-trends-2023" class="hover:text-indigo-600 transition-colors duration-300">
+                    Emerging Tech Trends in 2023
+                  </router-link>
+                </h3>
+                <p class="text-gray-600 mb-4 line-clamp-2">
+                  Discover the most exciting technological advancements that will shape our future this year and beyond.
+                </p>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-500">Sarah Johnson</span>
+                  <router-link 
+                    to="/blog/tech-trends-2023"
+                    class="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-300"
+                  >
+                    Read More →
+                  </router-link>
+                </div>
+              </div>
+            </article>
+
+            <!-- Blog Card 2 -->
+            <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <img 
+                src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                alt="Remote Work"
+                class="w-full h-48 object-cover"
+              >
+              <div class="p-6">
+                <div class="inline-block px-3 py-1 mb-3 text-xs font-semibold text-green-600 bg-green-100 rounded-full">
+                  Business
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
+                  <router-link to="/blog/remote-work-strategies" class="hover:text-green-600 transition-colors duration-300">
+                    Mastering Remote Work Strategies
+                  </router-link>
+                </h3>
+                <p class="text-gray-600 mb-4 line-clamp-2">
+                  Essential tips and tools to boost productivity and maintain work-life balance in remote settings.
+                </p>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-500">Michael Chen</span>
+                  <router-link 
+                    to="/blog/remote-work-strategies"
+                    class="text-sm font-medium text-green-600 hover:text-green-500 transition-colors duration-300"
+                  >
+                    Read More →
+                  </router-link>
+                </div>
+              </div>
+            </article>
+
+            <!-- Blog Card 3 -->
+            <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <img 
+                src="https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                alt="Health Tips"
+                class="w-full h-48 object-cover"
+              >
+              <div class="p-6">
+                <div class="inline-block px-3 py-1 mb-3 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full">
+                  Health
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
+                  <router-link to="/blog/mental-health-tips" class="hover:text-blue-600 transition-colors duration-300">
+                    Mental Health Tips for Professionals
+                  </router-link>
+                </h3>
+                <p class="text-gray-600 mb-4 line-clamp-2">
+                  Practical advice to manage stress and maintain mental wellbeing in high-pressure work environments.
+                </p>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-500">Dr. Emily Wilson</span>
+                  <router-link 
+                    to="/blog/mental-health-tips"
+                    class="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors duration-300"
+                  >
+                    Read More →
+                  </router-link>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
 
@@ -72,7 +180,7 @@
             <h2 class="text-2xl font-bold text-gray-900">{{ category }}</h2>
             <router-link 
               :to="{ path: '/blog', query: { category }}"
-              class="text-indigo-600 hover:text-indigo-500 text-sm font-medium"
+              class="text-indigo-600 hover:text-indigo-500 text-sm font-medium transition-colors duration-300"
             >
               View all
             </router-link>
@@ -82,23 +190,21 @@
             <article 
               v-for="blog in getBlogsByCategory(category)" 
               :key="blog.id"
-              class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
             >
-              <div class="aspect-w-16 aspect-h-9">
-                <img 
-                  :src="blog.thumbnail_url || '/default-blog.jpg'" 
-                  :alt="blog.title"
-                  class="w-full h-48 object-cover"
-                >
-              </div>
+              <img 
+                :src="blog.thumbnail_url || getDefaultImage(blog.category)" 
+                :alt="blog.title"
+                class="w-full h-48 object-cover"
+              >
               <div class="p-6">
-                <div class="text-sm font-medium text-indigo-600 mb-2">
+                <div class="inline-block px-3 py-1 mb-3 text-xs font-semibold text-indigo-600 bg-indigo-100 rounded-full">
                   {{ blog.category }}
                 </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
                   <router-link 
                     :to="`/blog/${blog.slug}`"
-                    class="hover:text-indigo-600 transition-colors"
+                    class="hover:text-indigo-600 transition-colors duration-300"
                   >
                     {{ blog.title }}
                   </router-link>
@@ -106,9 +212,19 @@
                 <p class="text-gray-600 mb-4 line-clamp-2">
                   {{ blog.meta || truncateText(blog.content, 150) }}
                 </p>
-                <div class="flex items-center justify-between text-sm text-gray-500">
-                  <span>{{ blog.author }}</span>
-                  <time>{{ formatDate(blog.created_at) }}</time>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <svg class="h-4 w-4 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    <span class="text-sm text-gray-500">{{ blog.author }}</span>
+                  </div>
+                  <router-link 
+                    :to="`/blog/${blog.slug}`"
+                    class="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-300"
+                  >
+                    Read More →
+                  </router-link>
                 </div>
               </div>
             </article>
@@ -147,6 +263,16 @@ export default {
       return blogs.value
         .filter(blog => blog.category === category && blog.id !== mostRecentBlog.value?.id)
         .slice(0, 3); // Show only 3 blogs per category
+    };
+
+    const getDefaultImage = (category) => {
+      const images = {
+        'Technology': 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg',
+        'Business': 'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg',
+        'Health': 'https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg',
+        'Lifestyle': 'https://images.pexels.com/photos/3182796/pexels-photo-3182796.jpeg'
+      };
+      return images[category] || 'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg';
     };
 
     const fetchBlogs = async () => {
@@ -190,6 +316,7 @@ export default {
       mostRecentBlog,
       isAuthor,
       getBlogsByCategory,
+      getDefaultImage,
       formatDate,
       truncateText
     };
@@ -203,5 +330,9 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.article:hover {
+  transform: translateY(-5px);
 }
 </style>
