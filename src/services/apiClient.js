@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const apiClient = axios.create({
-  baseURL: 'https://liveinnbo-backend-npgz.onrender.com/api/',
+  baseURL: 'https://liveinnbo-backend.onrender.com/api/',
   headers: {
     'Content-Type': 'application/json',
   },
